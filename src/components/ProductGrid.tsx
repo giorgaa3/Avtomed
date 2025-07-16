@@ -1,4 +1,4 @@
-import { Star, Heart, ShoppingCart, Package, Syringe, TestTube2 } from "lucide-react";
+import { Star, Heart, ShoppingCart, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -7,7 +7,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const ProductGrid = () => {
   const { t } = useLanguage();
 
-  const equipment = [
+  const products = [
     {
       id: 1,
       name: "Digital Stethoscope Pro",
@@ -18,8 +18,7 @@ const ProductGrid = () => {
       reviews: 124,
       condition: t('products.condition.new'),
       conditionColor: "bg-medical-green text-white",
-      category: "Diagnostic",
-      icon: Package
+      category: "Diagnostic"
     },
     {
       id: 2,
@@ -31,8 +30,7 @@ const ProductGrid = () => {
       reviews: 89,
       condition: t('products.condition.new'),
       conditionColor: "bg-medical-green text-white",
-      category: "Surgical",
-      icon: Package
+      category: "Surgical"
     },
     {
       id: 3,
@@ -44,8 +42,7 @@ const ProductGrid = () => {
       reviews: 67,
       condition: t('products.condition.refurbished'),
       conditionColor: "bg-medical-blue text-white",
-      category: "Imaging",
-      icon: Package
+      category: "Imaging"
     },
     {
       id: 4,
@@ -57,63 +54,55 @@ const ProductGrid = () => {
       reviews: 203,
       condition: t('products.condition.new'),
       conditionColor: "bg-medical-green text-white",
-      category: "Monitoring",
-      icon: Package
-    }
-  ];
-
-  const consumables = [
+      category: "Monitoring"
+    },
     {
       id: 5,
-      name: "Disposable Syringes 10ml (100 pack)",
-      price: "$24.99",
-      originalPrice: null,
+      name: "Defibrillator AED",
+      price: "$2,199.99",
+      originalPrice: "$2,599.99",
       image: "/placeholder.svg",
       rating: 4.9,
-      reviews: 312,
-      condition: t('products.condition.new'),
-      conditionColor: "bg-medical-green text-white",
-      category: "Disposables",
-      icon: Syringe
+      reviews: 45,
+      condition: t('products.condition.refurbished'),
+      conditionColor: "bg-medical-blue text-white",
+      category: "Emergency"
     },
     {
       id: 6,
-      name: "Medical Grade Gloves (500 box)",
-      price: "$89.99",
-      originalPrice: "$99.99",
+      name: "X-Ray Film Viewer",
+      price: "$189.99",
+      originalPrice: null,
       image: "/placeholder.svg",
-      rating: 4.8,
-      reviews: 456,
+      rating: 4.5,
+      reviews: 78,
       condition: t('products.condition.new'),
       conditionColor: "bg-medical-green text-white",
-      category: "Protection",
-      icon: Package
+      category: "Imaging"
     },
     {
       id: 7,
-      name: "Surgical Sutures Multipack",
-      price: "$159.99",
-      originalPrice: null,
+      name: "Otoscope Professional",
+      price: "$149.99",
+      originalPrice: "$199.99",
       image: "/placeholder.svg",
       rating: 4.7,
-      reviews: 89,
+      reviews: 156,
       condition: t('products.condition.new'),
       conditionColor: "bg-medical-green text-white",
-      category: "Surgical",
-      icon: Package
+      category: "Diagnostic"
     },
     {
       id: 8,
-      name: "Lab Test Tubes (250 pack)",
-      price: "$34.99",
-      originalPrice: "$39.99",
+      name: "Thermometer Digital",
+      price: "$24.99",
+      originalPrice: null,
       image: "/placeholder.svg",
-      rating: 4.6,
-      reviews: 178,
+      rating: 4.4,
+      reviews: 234,
       condition: t('products.condition.new'),
       conditionColor: "bg-medical-green text-white",
-      category: "Laboratory",
-      icon: TestTube2
+      category: "Diagnostic"
     }
   ];
 
@@ -130,7 +119,7 @@ const ProductGrid = () => {
             <Badge className={product.conditionColor}>{product.condition}</Badge>
           </div>
           <div className="absolute top-2 right-2">
-            <product.icon className="w-5 h-5 text-muted-foreground" />
+            <Package className="w-5 h-5 text-muted-foreground" />
           </div>
           {product.originalPrice && (
             <div className="absolute bottom-2 right-2">
@@ -185,30 +174,15 @@ const ProductGrid = () => {
   return (
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
-        {/* Equipment Section */}
         <div className="text-center mb-12 animate-fade-in">
-          <h2 className="text-4xl font-bold mb-4 font-display">{t('products.featuredEquipment')}</h2>
+          <h2 className="text-4xl font-bold mb-4 font-display">{t('products.featured')}</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('products.equipmentDescription')}
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {equipment.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-
-        {/* Consumables Section */}
-        <div className="text-center mb-12 animate-fade-in">
-          <h2 className="text-4xl font-bold mb-4 font-display">{t('products.featuredConsumables')}</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('products.consumablesDescription')}
+            {t('products.description')}
           </p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {consumables.map((product) => (
+          {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>

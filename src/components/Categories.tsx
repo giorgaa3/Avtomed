@@ -1,11 +1,11 @@
-import { Stethoscope, Scissors, Camera, TestTube, Activity, RefreshCw, Syringe, Bandage, Shield, Pill } from "lucide-react";
+import { Stethoscope, Scissors, Camera, TestTube, Activity, RefreshCw } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Categories = () => {
   const { t } = useLanguage();
 
-  const equipmentCategories = [
+  const categories = [
     {
       icon: Stethoscope,
       title: t('categories.diagnostic'),
@@ -50,70 +50,18 @@ const Categories = () => {
     }
   ];
 
-  const consumableCategories = [
-    {
-      icon: Syringe,
-      title: t('categories.disposables'),
-      description: "Syringes, Needles, IV sets",
-      color: "text-medical-blue",
-      bgColor: "bg-medical-blue/10"
-    },
-    {
-      icon: Bandage,
-      title: t('categories.woundCare'),
-      description: "Bandages, Gauze, Dressings",
-      color: "text-medical-red",
-      bgColor: "bg-medical-red/10"
-    },
-    {
-      icon: Shield,
-      title: t('categories.protection'),
-      description: "Gloves, Masks, Gowns",
-      color: "text-medical-green",
-      bgColor: "bg-medical-green/10"
-    },
-    {
-      icon: Pill,
-      title: t('categories.pharmaceuticals'),
-      description: "Medications, Supplements",
-      color: "text-primary",
-      bgColor: "bg-primary/10"
-    }
-  ];
-
   return (
     <section className="py-16 bg-muted/30">
       <div className="container mx-auto px-4">
-        {/* Medical Equipment Section */}
         <div className="text-center mb-12 animate-fade-in">
-          <h2 className="text-4xl font-bold mb-4 font-display">{t('categories.equipmentTitle')}</h2>
+          <h2 className="text-4xl font-bold mb-4 font-display">{t('categories.title')}</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('categories.equipmentDescription')}
+            {t('categories.description')}
           </p>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-16">
-          {equipmentCategories.map((category, index) => (
-            <Card key={index} className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-elegant group animate-fade-in ${category.bgColor}`}>
-              <CardContent className="p-6 text-center">
-                <category.icon className={`w-12 h-12 mx-auto mb-4 ${category.color} group-hover:animate-bounce-gentle transition-colors`} />
-                <h3 className="font-semibold mb-2">{category.title}</h3>
-                <p className="text-sm text-muted-foreground">{category.description}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Medical Consumables Section */}
-        <div className="text-center mb-12 animate-fade-in">
-          <h2 className="text-4xl font-bold mb-4 font-display">{t('categories.consumablesTitle')}</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('categories.consumablesDescription')}
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {consumableCategories.map((category, index) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          {categories.map((category, index) => (
             <Card key={index} className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-elegant group animate-fade-in ${category.bgColor}`}>
               <CardContent className="p-6 text-center">
                 <category.icon className={`w-12 h-12 mx-auto mb-4 ${category.color} group-hover:animate-bounce-gentle transition-colors`} />
