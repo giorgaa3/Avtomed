@@ -12,7 +12,7 @@ const Footer = () => {
               <img 
                 src="/lovable-uploads/29063f06-8447-4719-96af-dddba4e78f67.png" 
                 alt="AvtoMed Logo" 
-                className="h-8 w-auto"
+                className="h-10 w-auto"
               />
               <div className="text-2xl font-bold">
                 AvtoMed
