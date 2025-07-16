@@ -18,7 +18,9 @@ const Footer = () => {
               from verified sellers with full warranty support.
             </p>
             <div className="flex gap-4">
-              <Facebook className="w-5 h-5 text-background/60 hover:text-background cursor-pointer" />
+              <a href="https://www.facebook.com/anarmedgeorgia" target="_blank" rel="noopener noreferrer">
+                <Facebook className="w-5 h-5 text-background/60 hover:text-background cursor-pointer" />
+              </a>
               <Twitter className="w-5 h-5 text-background/60 hover:text-background cursor-pointer" />
               <Linkedin className="w-5 h-5 text-background/60 hover:text-background cursor-pointer" />
             </div>
