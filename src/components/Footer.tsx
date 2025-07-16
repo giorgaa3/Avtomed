@@ -66,6 +66,13 @@ const Footer = () => {
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4" />
                 <span>avtandilzviadadze@yahho.com</span>
+                <a 
+                  href="mailto:avtandilzviadadze@yahho.com" 
+                  className="ml-2 text-red-500 hover:text-red-600 transition-colors"
+                  title="Send email"
+                >
+                  📧
+                </a>
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="w-4 h-4" />
