@@ -41,7 +41,8 @@ const Contact = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative bg-gradient-hero text-primary-foreground py-20">
+      <section className="relative bg-gradient-hero text-primary-foreground py-20 overflow-hidden">
+        <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: 'url(/lovable-uploads/d9102eed-b6d7-4377-b46d-94339fab845f.png)' }}></div>
         <div className="absolute inset-0 bg-primary/20"></div>
         <div className="relative container mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold mb-6 font-display animate-fade-in">
