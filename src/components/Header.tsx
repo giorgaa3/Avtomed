@@ -22,7 +22,7 @@ const Header = () => {
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <div className="flex items-center">
-            <div className="text-2xl font-bold text-primary">
+            <div className="text-2xl font-bold text-primary font-display animate-fade-in">
               🏥 MedicalMarket
             </div>
           </div>
@@ -40,15 +40,15 @@ const Header = () => {
 
           {/* Right actions */}
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="transition-all duration-300 hover:scale-105">
               <User className="w-4 h-4 mr-2" />
               Account
             </Button>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="transition-all duration-300 hover:scale-105">
               <ShoppingCart className="w-4 h-4 mr-2" />
               Cart (0)
             </Button>
-            <Button className="bg-gradient-hero">
+            <Button className="bg-gradient-hero transition-all duration-300 hover:scale-105 hover:shadow-lg animate-glow">
               List Equipment
             </Button>
           </div>
@@ -61,11 +61,11 @@ const Header = () => {
             Categories
           </Button>
           <div className="flex items-center gap-6">
-            <a href="#" className="text-sm hover:text-primary transition-colors">Main</a>
-            <a href="#" className="text-sm hover:text-primary transition-colors">About Us</a>
-            <a href="#" className="text-sm hover:text-primary transition-colors">Production</a>
-            <a href="#" className="text-sm hover:text-primary transition-colors">Catalogue</a>
-            <a href="#" className="text-sm hover:text-primary transition-colors">Contact</a>
+            <a href="#" className="text-sm hover:text-primary transition-all duration-300 hover:scale-105 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100">Main</a>
+            <a href="#" className="text-sm hover:text-primary transition-all duration-300 hover:scale-105 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100">About Us</a>
+            <a href="#" className="text-sm hover:text-primary transition-all duration-300 hover:scale-105 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100">Production</a>
+            <a href="#" className="text-sm hover:text-primary transition-all duration-300 hover:scale-105 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100">Catalogue</a>
+            <a href="#" className="text-sm hover:text-primary transition-all duration-300 hover:scale-105 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100">Contact</a>
           </div>
         </nav>
       </div>
