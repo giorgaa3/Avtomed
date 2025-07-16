@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const ProductGrid = () => {
+  // Updated component
   const { t } = useLanguage();
 
   const products = [

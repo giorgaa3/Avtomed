@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Categories = () => {
+  // Updated component
   const { t } = useLanguage();
 
   const categories = [
