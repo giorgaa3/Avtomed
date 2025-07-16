@@ -22,9 +22,9 @@ const Header = () => {
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <div className="flex items-center">
-            <div className="text-2xl font-bold text-primary font-display animate-fade-in">
-              🏥 MedicalMarket
-            </div>
+            <a href="/" className="text-2xl font-bold text-primary font-display animate-fade-in hover:scale-105 transition-transform duration-300">
+              🏥 AvtoMed
+            </a>
           </div>
 
           {/* Search bar */}
