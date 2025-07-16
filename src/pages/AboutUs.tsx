@@ -64,7 +64,8 @@ const AboutUs = () => {
       
       {/* Hero Section */}
       <section className="relative bg-gradient-hero text-primary-foreground py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-primary/10"></div>
+        <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: 'url(/lovable-uploads/a3a950e7-d676-4901-8bfe-01e863642249.png)' }}></div>
+        <div className="absolute inset-0 bg-primary/20"></div>
         <div className="relative container mx-auto px-4 text-center">
           <div className="animate-fade-in-up">
             <h1 className="text-5xl font-bold mb-6 font-display">
