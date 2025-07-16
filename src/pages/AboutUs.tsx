@@ -89,8 +89,8 @@ const AboutUs = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 animate-fade-in">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center group">
-                <div className="bg-card rounded-lg p-6 shadow-medical hover:shadow-elegant transition-all duration-300 hover:scale-105">
+              <div key={index} className="text-center group h-full">
+                <div className="bg-card rounded-lg p-6 shadow-medical hover:shadow-elegant transition-all duration-300 hover:scale-105 h-full flex flex-col justify-center">
                   <stat.icon className={`w-12 h-12 mx-auto mb-4 ${stat.color} group-hover:animate-bounce-gentle`} />
                   <div className={`text-3xl font-bold mb-2 font-display ${language === 'ka' ? 'text-4xl' : ''}`}>{stat.number}</div>
                   <div className={`text-muted-foreground ${language === 'ka' ? 'text-lg' : ''}`}>{stat.label}</div>
