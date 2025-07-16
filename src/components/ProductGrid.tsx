@@ -1,4 +1,5 @@
 import { Star, Heart, ShoppingCart, Package } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -189,8 +190,10 @@ const ProductGrid = () => {
         </div>
 
         <div className="text-center animate-fade-in">
-          <Button size="lg" variant="outline" className="hover:scale-105 transition-transform">
-            {t('products.viewAll')}
+          <Button size="lg" variant="outline" className="hover:scale-105 transition-transform" asChild>
+            <Link to="/products">
+              {t('products.viewAll')}
+            </Link>
           </Button>
         </div>
       </div>
