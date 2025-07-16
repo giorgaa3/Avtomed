@@ -1,4 +1,4 @@
-import { Search, ShoppingCart, User, Menu } from "lucide-react";
+import { Search, ShoppingCart, User, Menu, Facebook } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -15,6 +15,14 @@ const Header = () => {
           <div className="flex items-center gap-4">
             <span>📧 {t('header.support')}</span>
             <span>📞 {t('header.phone')}</span>
+            <a 
+              href="https://www.facebook.com/anarmedgeorgia" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors duration-300 hover:scale-105"
+            >
+              <Facebook className="w-4 h-4" />
+            </a>
           </div>
           <div className="flex items-center gap-4">
             <span>{t('header.freeShipping')}</span>
