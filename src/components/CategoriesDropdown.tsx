@@ -68,6 +68,20 @@ const CategoriesDropdown = () => {
 
   return (
     <div className="w-80 p-4 space-y-3">
+      {/* All Products Section */}
+      <div className="border-b border-border pb-3">
+        <h3 className="font-semibold text-sm text-muted-foreground mb-2 uppercase tracking-wide">All Products</h3>
+        <div className="grid grid-cols-2 gap-2">
+          {categories.map((category, index) => (
+            <div key={`all-${index}`} className="flex items-center gap-2 p-2 rounded hover:bg-muted cursor-pointer transition-colors">
+              <category.icon className={`w-4 h-4 ${category.color}`} />
+              <span className="text-sm font-medium">{category.title}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Individual Categories */}
       {categories.map((category, index) => (
         <div key={index} className="space-y-2">
           <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors">
