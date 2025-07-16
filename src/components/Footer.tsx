@@ -69,7 +69,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="w-4 h-4" />
-                <span>123 Medical Center Dr, Healthcare City, HC 12345</span>
+                <span>Lubliana St. 38b, Tbilisi, Georgia</span>
               </div>
             </div>
             
