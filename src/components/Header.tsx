@@ -61,12 +61,11 @@ const Header = () => {
             Categories
           </Button>
           <div className="flex items-center gap-6 ml-6">
-            <a href="#" className="text-sm hover:text-primary transition-colors">Diagnostic Equipment</a>
-            <a href="#" className="text-sm hover:text-primary transition-colors">Surgical Instruments</a>
-            <a href="#" className="text-sm hover:text-primary transition-colors">Imaging Equipment</a>
-            <a href="#" className="text-sm hover:text-primary transition-colors">Laboratory</a>
-            <a href="#" className="text-sm hover:text-primary transition-colors">Patient Monitoring</a>
-            <a href="#" className="text-sm hover:text-primary transition-colors">Refurbished</a>
+            <a href="#" className="text-sm hover:text-primary transition-colors">Main</a>
+            <a href="#" className="text-sm hover:text-primary transition-colors">About Us</a>
+            <a href="#" className="text-sm hover:text-primary transition-colors">Production</a>
+            <a href="#" className="text-sm hover:text-primary transition-colors">Catalogue</a>
+            <a href="#" className="text-sm hover:text-primary transition-colors">Contact</a>
           </div>
         </nav>
       </div>
