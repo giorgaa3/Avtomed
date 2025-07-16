@@ -36,15 +36,23 @@ const Header = () => {
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center gap-3 hover:scale-105 transition-transform duration-300">
-              <img 
-                src="/lovable-uploads/29063f06-8447-4719-96af-dddba4e78f67.png" 
-                alt="AvtoMed Logo" 
-                className="h-12 w-auto"
-              />
-              <span className="text-2xl font-bold text-primary font-display animate-fade-in">
-                AvtoMed
-              </span>
+            <Link to="/" className="group flex items-center gap-3 hover:scale-105 transition-all duration-300 ease-in-out">
+              <div className="relative">
+                <img 
+                  src="/lovable-uploads/29063f06-8447-4719-96af-dddba4e78f67.png" 
+                  alt="AvtoMed Logo" 
+                  className="h-12 w-auto transform transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-primary/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 scale-110"></div>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-2xl font-bold text-primary font-display animate-fade-in group-hover:text-primary/90 transition-colors duration-300">
+                  AvtoMed
+                </span>
+                <span className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transform translate-y-1 group-hover:translate-y-0 transition-all duration-300 font-medium">
+                  Medical Excellence
+                </span>
+              </div>
             </Link>
           </div>
 
