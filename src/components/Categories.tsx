@@ -1,9 +1,40 @@
-import { Scissors, Stethoscope, Baby, Bone, HeartPulse, Zap, Activity } from "lucide-react";
+import { Heart, Scissors, Bandage, Package, Stethoscope, Baby, Bone, HeartPulse, Zap, Activity } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Categories = () => {
   const { t } = useLanguage();
+
+  const mainCategories = [
+    {
+      icon: Heart,
+      title: t('categories.resuscitation'),
+      description: "Emergency resuscitation equipment",
+      color: "text-red-500",
+      bgColor: "bg-red-50"
+    },
+    {
+      icon: Scissors,
+      title: t('categories.suture'),
+      description: "Surgical sutures and materials",
+      color: "text-blue-500",
+      bgColor: "bg-blue-50"
+    },
+    {
+      icon: Bandage,
+      title: t('categories.bandage'),
+      description: "Medical bandages and dressings",
+      color: "text-green-500",
+      bgColor: "bg-green-50"
+    },
+    {
+      icon: Package,
+      title: t('categories.consumables'),
+      description: "Medical consumable supplies",
+      color: "text-purple-500",
+      bgColor: "bg-purple-50"
+    }
+  ];
 
   const metalInstruments = {
     icon: Scissors,
@@ -55,8 +86,22 @@ const Categories = () => {
           </p>
         </div>
         
-        <div className="max-w-4xl mx-auto">
-          <div className="space-y-8">
+        <div className="space-y-12">
+          {/* Main Categories */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {mainCategories.map((category, index) => (
+              <Card key={index} className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-elegant group animate-fade-in ${category.bgColor}`}>
+                <CardContent className="p-6 text-center">
+                  <category.icon className={`w-12 h-12 mx-auto mb-4 ${category.color} group-hover:animate-bounce-gentle transition-colors`} />
+                  <h3 className="font-semibold mb-2">{category.title}</h3>
+                  <p className="text-sm text-muted-foreground">{category.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Metal Instruments Section */}
+          <div className="max-w-4xl mx-auto">
             <Card className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-elegant group animate-fade-in ${metalInstruments.bgColor} border-2 border-primary/20`}>
               <CardContent className="p-8 text-center">
                 <metalInstruments.icon className={`w-16 h-16 mx-auto mb-6 ${metalInstruments.color} group-hover:animate-bounce-gentle transition-colors`} />
