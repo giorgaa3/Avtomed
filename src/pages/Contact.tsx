@@ -180,11 +180,11 @@ const Contact = () => {
                 <Card className="mt-6 p-4">
                   <CardContent className="p-0">
                     <h4 className="font-semibold mb-2">
-                      {language === 'ka' ? 'როგორ მოვიდეთ ჩვენთან' : 'How to Find Us'}
+                      {language === 'ka' ? 'როგორ მოხვიდეთ ჩვენთან' : 'How to Find Us'}
                     </h4>
                     <p className="text-muted-foreground text-sm">
                       {language === 'ka'
-                        ? 'ჩვენი ოფისი მდებარეობს ლუბლიანას ქუჩაზე 38ბ-ში, თბილისის ცენტრში. ადვილად მისაღწევია საზოგადოებრივი ტრანსპორტით და მანქანით.'
+                        ? 'ჩვენი ოფისი მდებარეობს ლუბლიანას ქუჩაზე 38ბ-ში. ადვილად მისაღწევია საზოგადოებრივი ტრანსპორტით და მანქანით.'
                         : 'Our office is located at Lubliana Street 38b in central Tbilisi. Easily accessible by public transport and car with nearby parking available.'
                       }
                     </p>
