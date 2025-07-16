@@ -40,20 +40,30 @@ const translations = {
     'hero.warrantyDescription': 'Up to 2 years coverage',
     
     // Categories
-    'categories.title': 'Browse by Category',
+    'categories.equipmentTitle': 'Medical Equipment',
+    'categories.equipmentDescription': 'Find the medical equipment you need from our comprehensive categories',
+    'categories.consumablesTitle': 'Medical Consumables & Supplies',
+    'categories.consumablesDescription': 'High-quality disposable medical supplies and consumables for daily healthcare operations',
     'categories.diagnostic': 'Diagnostic Equipment',
     'categories.surgical': 'Surgical Instruments',
     'categories.imaging': 'Imaging Equipment',
     'categories.laboratory': 'Laboratory',
     'categories.monitoring': 'Patient Monitoring',
     'categories.refurbished': 'Refurbished',
+    'categories.disposables': 'Disposable Medical Supplies',
+    'categories.woundCare': 'Wound Care Products',
+    'categories.protection': 'Protective Equipment',
+    'categories.pharmaceuticals': 'Pharmaceuticals',
     
     // Products
-    'products.featured': 'Featured Medical Equipment',
+    'products.featuredEquipment': 'Featured Medical Equipment',
+    'products.equipmentDescription': 'Discover our top-rated medical instruments from trusted manufacturers',
+    'products.featuredConsumables': 'Featured Medical Consumables',
+    'products.consumablesDescription': 'Essential medical supplies and consumables for daily healthcare operations',
     'products.condition.new': 'New',
     'products.condition.refurbished': 'Refurbished',
     'products.condition.used': 'Used',
-    'products.viewAll': 'View All Equipment',
+    'products.viewAll': 'View All Products',
     
     // Footer
     'footer.company': 'Company',
@@ -128,16 +138,26 @@ const translations = {
     'hero.warrantyDescription': '2 წლამდე დაფარვა',
     
     // Categories
-    'categories.title': 'კატეგორიების მიხედვით',
+    'categories.equipmentTitle': 'სამედიცინო აღჭურვილობა',
+    'categories.equipmentDescription': 'იპოვეთ საჭირო სამედიცინო აღჭურვილობა ჩვენი ფართო კატეგორიებიდან',
+    'categories.consumablesTitle': 'სამედიცინო მასალები და მარაგები',
+    'categories.consumablesDescription': 'მაღალი ხარისხის ერთჯერადი სამედიცინო მასალები და სახარჯი მასალები ყოველდღიური ჯანდაცვის ოპერაციებისთვის',
     'categories.diagnostic': 'დიაგნოსტიკური აღჭურვილობა',
     'categories.surgical': 'ქირურგიული ინსტრუმენტები',
     'categories.imaging': 'გამოსახულების აღჭურვილობა',
     'categories.laboratory': 'ლაბორატორია',
     'categories.monitoring': 'პაციენტის მონიტორინგი',
     'categories.refurbished': 'განახლებული',
+    'categories.disposables': 'ერთჯერადი სამედიცინო მასალები',
+    'categories.woundCare': 'ჭრილობის მოვლის პროდუქტები',
+    'categories.protection': 'დამცავი აღჭურვილობა',
+    'categories.pharmaceuticals': 'ფარმაცევტული პროდუქტები',
     
     // Products
-    'products.featured': 'რჩეული სამედიცინო აღჭურვილობა',
+    'products.featuredEquipment': 'რჩეული სამედიცინო აღჭურვილობა',
+    'products.equipmentDescription': 'აღმოაჩინეთ ჩვენი ყველაზე მაღალ რეიტინგულ სამედიცინო ინსტრუმენტები სანდო მწარმოებლებისგან',
+    'products.featuredConsumables': 'რჩეული სამედიცინო მასალები',
+    'products.consumablesDescription': 'აუცილებელი სამედიცინო მასალები და სახარჯი მასალები ყოველდღიური ჯანდაცვის ოპერაციებისთვის',
     'products.condition.new': 'ახალი',
     'products.condition.refurbished': 'განახლებული',
     'products.condition.used': 'გამოყენებული',

@@ -1,85 +1,127 @@
-import { Stethoscope, Activity, Microscope, Heart, Brain, Thermometer } from "lucide-react";
+import { Stethoscope, Scissors, Camera, TestTube, Activity, RefreshCw, Syringe, Bandage, Shield, Pill } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-
-const categories = [
-  {
-    name: "Diagnostic Equipment",
-    icon: Stethoscope,
-    count: 1247,
-    description: "Stethoscopes, thermometers, blood pressure monitors"
-  },
-  {
-    name: "Patient Monitoring",
-    icon: Activity,
-    count: 892,
-    description: "Vital signs monitors, ECG machines, pulse oximeters"
-  },
-  {
-    name: "Laboratory Equipment",
-    icon: Microscope,
-    count: 654,
-    description: "Microscopes, centrifuges, analyzers, test equipment"
-  },
-  {
-    name: "Cardiovascular",
-    icon: Heart,
-    count: 438,
-    description: "EKG machines, defibrillators, cardiac monitors"
-  },
-  {
-    name: "Imaging Equipment",
-    icon: Brain,
-    count: 321,
-    description: "Ultrasound, X-ray, MRI, CT scan equipment"
-  },
-  {
-    name: "Surgical Instruments",
-    icon: Thermometer,
-    count: 976,
-    description: "Surgical tools, endoscopes, operating equipment"
-  }
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Categories = () => {
+  const { t } = useLanguage();
+
+  const equipmentCategories = [
+    {
+      icon: Stethoscope,
+      title: t('categories.diagnostic'),
+      description: "ECG, Ultrasound, X-ray machines",
+      color: "text-medical-blue",
+      bgColor: "bg-medical-blue/10"
+    },
+    {
+      icon: Scissors,
+      title: t('categories.surgical'),
+      description: "Forceps, Scalpels, Surgical sets",
+      color: "text-medical-red",
+      bgColor: "bg-medical-red/10"
+    },
+    {
+      icon: Camera,
+      title: t('categories.imaging'),
+      description: "MRI, CT, Mammography systems",
+      color: "text-medical-green",
+      bgColor: "bg-medical-green/10"
+    },
+    {
+      icon: TestTube,
+      title: t('categories.laboratory'),
+      description: "Analyzers, Microscopes, Centrifuges",
+      color: "text-primary",
+      bgColor: "bg-primary/10"
+    },
+    {
+      icon: Activity,
+      title: t('categories.monitoring'),
+      description: "Patient monitors, Ventilators",
+      color: "text-accent",
+      bgColor: "bg-accent/10"
+    },
+    {
+      icon: RefreshCw,
+      title: t('categories.refurbished'),
+      description: "Certified pre-owned equipment",
+      color: "text-secondary",
+      bgColor: "bg-secondary/10"
+    }
+  ];
+
+  const consumableCategories = [
+    {
+      icon: Syringe,
+      title: t('categories.disposables'),
+      description: "Syringes, Needles, IV sets",
+      color: "text-medical-blue",
+      bgColor: "bg-medical-blue/10"
+    },
+    {
+      icon: Bandage,
+      title: t('categories.woundCare'),
+      description: "Bandages, Gauze, Dressings",
+      color: "text-medical-red",
+      bgColor: "bg-medical-red/10"
+    },
+    {
+      icon: Shield,
+      title: t('categories.protection'),
+      description: "Gloves, Masks, Gowns",
+      color: "text-medical-green",
+      bgColor: "bg-medical-green/10"
+    },
+    {
+      icon: Pill,
+      title: t('categories.pharmaceuticals'),
+      description: "Medications, Supplements",
+      color: "text-primary",
+      bgColor: "bg-primary/10"
+    }
+  ];
+
   return (
-    <section className="py-16 bg-background">
+    <section className="py-16 bg-muted/30">
       <div className="container mx-auto px-4">
-        {/* Section header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-foreground mb-4">
-            Browse by Category
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            Find the exact medical equipment you need from our comprehensive categories
+        {/* Medical Equipment Section */}
+        <div className="text-center mb-12 animate-fade-in">
+          <h2 className="text-4xl font-bold mb-4 font-display">{t('categories.equipmentTitle')}</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            {t('categories.equipmentDescription')}
           </p>
         </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-16">
+          {equipmentCategories.map((category, index) => (
+            <Card key={index} className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-elegant group animate-fade-in ${category.bgColor}`}>
+              <CardContent className="p-6 text-center">
+                <category.icon className={`w-12 h-12 mx-auto mb-4 ${category.color} group-hover:animate-bounce-gentle transition-colors`} />
+                <h3 className="font-semibold mb-2">{category.title}</h3>
+                <p className="text-sm text-muted-foreground">{category.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
 
-        {/* Categories grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categories.map((category, index) => {
-            const IconComponent = category.icon;
-            return (
-              <Card 
-                key={index} 
-                className="group hover:shadow-medical transition-all duration-300 cursor-pointer bg-gradient-card border-0 hover:scale-105"
-              >
-                <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-primary-light rounded-full flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                    <IconComponent className="w-8 h-8 text-primary group-hover:text-white" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
-                    {category.name}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    {category.description}
-                  </p>
-                  <div className="text-primary font-medium">
-                    {category.count.toLocaleString()} items available
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+        {/* Medical Consumables Section */}
+        <div className="text-center mb-12 animate-fade-in">
+          <h2 className="text-4xl font-bold mb-4 font-display">{t('categories.consumablesTitle')}</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            {t('categories.consumablesDescription')}
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {consumableCategories.map((category, index) => (
+            <Card key={index} className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-elegant group animate-fade-in ${category.bgColor}`}>
+              <CardContent className="p-6 text-center">
+                <category.icon className={`w-12 h-12 mx-auto mb-4 ${category.color} group-hover:animate-bounce-gentle transition-colors`} />
+                <h3 className="font-semibold mb-2">{category.title}</h3>
+                <p className="text-sm text-muted-foreground">{category.description}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </section>

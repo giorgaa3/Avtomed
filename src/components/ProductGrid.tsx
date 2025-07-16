@@ -1,198 +1,221 @@
-import { Heart, Eye, ShoppingCart } from "lucide-react";
+import { Star, Heart, ShoppingCart, Package, Syringe, TestTube2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-// Sample product data
-const products = [
-  {
-    id: 1,
-    name: "Digital Stethoscope Pro",
-    brand: "CardioTech",
-    price: 1299,
-    originalPrice: 1599,
-    condition: "New",
-    image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400",
-    category: "Diagnostic",
-    rating: 4.8,
-    reviews: 124
-  },
-  {
-    id: 2,
-    name: "Portable Ultrasound Scanner",
-    brand: "UltraSound Pro",
-    price: 15999,
-    condition: "Refurbished",
-    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=400",
-    category: "Imaging",
-    rating: 4.6,
-    reviews: 89
-  },
-  {
-    id: 3,
-    name: "Surgical Instrument Set",
-    brand: "SurgiPrecision",
-    price: 899,
-    condition: "New",
-    image: "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=400",
-    category: "Surgical",
-    rating: 4.9,
-    reviews: 156
-  },
-  {
-    id: 4,
-    name: "Patient Monitor 12-Lead",
-    brand: "VitalWatch",
-    price: 8999,
-    originalPrice: 12999,
-    condition: "Used",
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400",
-    category: "Monitoring",
-    rating: 4.5,
-    reviews: 67
-  },
-  {
-    id: 5,
-    name: "Ventilator System Advanced",
-    brand: "RespiCare",
-    price: 25999,
-    condition: "Refurbished",
-    image: "https://images.unsplash.com/photo-1606153216591-5e7a9b4a5c8d?w=400",
-    category: "Respiratory",
-    rating: 4.7,
-    reviews: 43
-  },
-  {
-    id: 6,
-    name: "Laboratory Centrifuge",
-    brand: "LabTech Solutions",
-    price: 3299,
-    condition: "New",
-    image: "https://images.unsplash.com/photo-1579952363873-27d3bfad9c0d?w=400",
-    category: "Laboratory",
-    rating: 4.4,
-    reviews: 78
-  }
-];
-
-const getConditionBadge = (condition: string) => {
-  switch (condition) {
-    case "New":
-      return <Badge className="bg-medical-green text-white">New</Badge>;
-    case "Refurbished":
-      return <Badge className="bg-primary text-white">Refurbished</Badge>;
-    case "Used":
-      return <Badge variant="outline">Used</Badge>;
-    default:
-      return <Badge variant="outline">{condition}</Badge>;
-  }
-};
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const ProductGrid = () => {
+  const { t } = useLanguage();
+
+  const equipment = [
+    {
+      id: 1,
+      name: "Digital Stethoscope Pro",
+      price: "$299.99",
+      originalPrice: "$399.99",
+      image: "/placeholder.svg",
+      rating: 4.8,
+      reviews: 124,
+      condition: t('products.condition.new'),
+      conditionColor: "bg-medical-green text-white",
+      category: "Diagnostic",
+      icon: Package
+    },
+    {
+      id: 2,
+      name: "Surgical Scissors Set",
+      price: "$89.99",
+      originalPrice: null,
+      image: "/placeholder.svg",
+      rating: 4.6,
+      reviews: 89,
+      condition: t('products.condition.new'),
+      conditionColor: "bg-medical-green text-white",
+      category: "Surgical",
+      icon: Package
+    },
+    {
+      id: 3,
+      name: "Portable Ultrasound",
+      price: "$1,299.99",
+      originalPrice: "$1,599.99",
+      image: "/placeholder.svg",
+      rating: 4.9,
+      reviews: 67,
+      condition: t('products.condition.refurbished'),
+      conditionColor: "bg-medical-blue text-white",
+      category: "Imaging",
+      icon: Package
+    },
+    {
+      id: 4,
+      name: "Blood Pressure Monitor",
+      price: "$79.99",
+      originalPrice: null,
+      image: "/placeholder.svg",
+      rating: 4.7,
+      reviews: 203,
+      condition: t('products.condition.new'),
+      conditionColor: "bg-medical-green text-white",
+      category: "Monitoring",
+      icon: Package
+    }
+  ];
+
+  const consumables = [
+    {
+      id: 5,
+      name: "Disposable Syringes 10ml (100 pack)",
+      price: "$24.99",
+      originalPrice: null,
+      image: "/placeholder.svg",
+      rating: 4.9,
+      reviews: 312,
+      condition: t('products.condition.new'),
+      conditionColor: "bg-medical-green text-white",
+      category: "Disposables",
+      icon: Syringe
+    },
+    {
+      id: 6,
+      name: "Medical Grade Gloves (500 box)",
+      price: "$89.99",
+      originalPrice: "$99.99",
+      image: "/placeholder.svg",
+      rating: 4.8,
+      reviews: 456,
+      condition: t('products.condition.new'),
+      conditionColor: "bg-medical-green text-white",
+      category: "Protection",
+      icon: Package
+    },
+    {
+      id: 7,
+      name: "Surgical Sutures Multipack",
+      price: "$159.99",
+      originalPrice: null,
+      image: "/placeholder.svg",
+      rating: 4.7,
+      reviews: 89,
+      condition: t('products.condition.new'),
+      conditionColor: "bg-medical-green text-white",
+      category: "Surgical",
+      icon: Package
+    },
+    {
+      id: 8,
+      name: "Lab Test Tubes (250 pack)",
+      price: "$34.99",
+      originalPrice: "$39.99",
+      image: "/placeholder.svg",
+      rating: 4.6,
+      reviews: 178,
+      condition: t('products.condition.new'),
+      conditionColor: "bg-medical-green text-white",
+      category: "Laboratory",
+      icon: TestTube2
+    }
+  ];
+
+  const ProductCard = ({ product }: { product: any }) => (
+    <Card className="group hover:shadow-elegant transition-all duration-300 hover:scale-105 animate-fade-in">
+      <CardContent className="p-4">
+        <div className="relative mb-4">
+          <img 
+            src={product.image} 
+            alt={product.name}
+            className="w-full h-48 object-cover rounded-lg"
+          />
+          <div className="absolute top-2 left-2">
+            <Badge className={product.conditionColor}>{product.condition}</Badge>
+          </div>
+          <div className="absolute top-2 right-2">
+            <product.icon className="w-5 h-5 text-muted-foreground" />
+          </div>
+          {product.originalPrice && (
+            <div className="absolute bottom-2 right-2">
+              <Badge className="bg-medical-red text-white">
+                Save {(parseFloat(product.originalPrice.replace('$', '')) - parseFloat(product.price.replace('$', ''))).toFixed(0)}$
+              </Badge>
+            </div>
+          )}
+        </div>
+        
+        <div className="space-y-2">
+          <Badge variant="outline" className="text-xs">{product.category}</Badge>
+          <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">{product.name}</h3>
+          
+          <div className="flex items-center gap-2">
+            <div className="flex text-yellow-500 text-sm">
+              {"★".repeat(Math.floor(product.rating))}
+              {"☆".repeat(5 - Math.floor(product.rating))}
+            </div>
+            <span className="text-sm text-muted-foreground">
+              {product.rating} ({product.reviews})
+            </span>
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-xl font-bold text-primary">{product.price}</span>
+              {product.originalPrice && (
+                <span className="text-sm text-muted-foreground line-through ml-2">
+                  {product.originalPrice}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </CardContent>
+      
+      <CardFooter className="p-4 pt-0">
+        <div className="flex gap-2 w-full">
+          <Button className="flex-1 bg-gradient-hero hover:scale-105 transition-transform">
+            <ShoppingCart className="w-4 h-4 mr-2" />
+            Add to Cart
+          </Button>
+          <Button variant="outline" size="sm">
+            <Heart className="w-4 h-4" />
+          </Button>
+        </div>
+      </CardFooter>
+    </Card>
+  );
+
   return (
-    <section className="py-16 bg-gradient-subtle">
+    <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
-        {/* Section header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-foreground mb-4">
-            Featured Medical Equipment
-          </h2>
+        {/* Equipment Section */}
+        <div className="text-center mb-12 animate-fade-in">
+          <h2 className="text-4xl font-bold mb-4 font-display">{t('products.featuredEquipment')}</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover high-quality medical instruments from trusted sellers. All equipment is 
-            certified, tested, and comes with warranty protection.
+            {t('products.equipmentDescription')}
           </p>
         </div>
-
-        {/* Products grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product) => (
-            <Card key={product.id} className="group hover:shadow-medical transition-all duration-300 bg-gradient-card border-0">
-              <CardContent className="p-0">
-                {/* Product image */}
-                <div className="relative overflow-hidden rounded-t-lg">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  {/* Condition badge */}
-                  <div className="absolute top-3 left-3">
-                    {getConditionBadge(product.condition)}
-                  </div>
-                  {/* Discount badge */}
-                  {product.originalPrice && (
-                    <div className="absolute top-3 right-3">
-                      <Badge className="bg-medical-red text-white">
-                        Save ${product.originalPrice - product.price}
-                      </Badge>
-                    </div>
-                  )}
-                  {/* Hover actions */}
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
-                    <Button size="sm" variant="secondary">
-                      <Eye className="w-4 h-4" />
-                    </Button>
-                    <Button size="sm" variant="secondary">
-                      <Heart className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Product details */}
-                <div className="p-6">
-                  <div className="mb-2">
-                    <Badge variant="outline" className="text-xs">{product.category}</Badge>
-                  </div>
-                  <h3 className="font-semibold text-lg mb-1 group-hover:text-primary transition-colors">
-                    {product.name}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-3">{product.brand}</p>
-                  
-                  {/* Rating */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="flex text-yellow-500">
-                      {"★".repeat(Math.floor(product.rating))}
-                      {"☆".repeat(5 - Math.floor(product.rating))}
-                    </div>
-                    <span className="text-sm text-muted-foreground">
-                      {product.rating} ({product.reviews} reviews)
-                    </span>
-                  </div>
-
-                  {/* Price */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <span className="text-2xl font-bold text-primary">
-                        ${product.price.toLocaleString()}
-                      </span>
-                      {product.originalPrice && (
-                        <span className="text-sm text-muted-foreground line-through ml-2">
-                          ${product.originalPrice.toLocaleString()}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex gap-2">
-                    <Button className="flex-1 bg-gradient-hero">
-                      <ShoppingCart className="w-4 h-4 mr-2" />
-                      Add to Cart
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      Contact Seller
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          {equipment.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
 
-        {/* View more */}
-        <div className="text-center mt-12">
-          <Button size="lg" variant="outline" className="px-8">
-            View All Equipment
+        {/* Consumables Section */}
+        <div className="text-center mb-12 animate-fade-in">
+          <h2 className="text-4xl font-bold mb-4 font-display">{t('products.featuredConsumables')}</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            {t('products.consumablesDescription')}
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {consumables.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+
+        <div className="text-center animate-fade-in">
+          <Button size="lg" variant="outline" className="hover:scale-105 transition-transform">
+            {t('products.viewAll')}
           </Button>
         </div>
       </div>
