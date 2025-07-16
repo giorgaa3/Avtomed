@@ -36,8 +36,12 @@ const Header = () => {
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="text-2xl font-bold text-primary font-display animate-fade-in hover:scale-105 transition-transform duration-300">
-              🏥 AvtoMed
+            <Link to="/" className="flex items-center hover:scale-105 transition-transform duration-300">
+              <img 
+                src="/lovable-uploads/29063f06-8447-4719-96af-dddba4e78f67.png" 
+                alt="AvtoMed Logo" 
+                className="h-12 w-auto"
+              />
             </Link>
           </div>
 
