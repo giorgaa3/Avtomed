@@ -5,12 +5,9 @@ import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { useState } from "react";
-import Map from "@/components/Map";
 
 const Contact = () => {
   const { t, language } = useLanguage();
-  const [mapboxToken, setMapboxToken] = useState("");
 
   const contactInfo = [
     {
@@ -28,7 +25,7 @@ const Contact = () => {
     {
       icon: MapPin,
       label: language === 'ka' ? 'მისამართი' : 'Address',
-      value: language === 'ka' ? 'თბილისი, საქართველო' : 'Tbilisi, Georgia',
+      value: language === 'ka' ? 'ლუბლიანას ქ. 38ბ, თბილისი, საქართველო' : 'Lubliana St. 38b, Tbilisi, Georgia',
       color: 'text-medical-red'
     },
     {
@@ -81,6 +78,16 @@ const Contact = () => {
                         <div>
                           <h3 className="font-semibold text-lg">{info.label}</h3>
                           <p className="text-muted-foreground">{info.value}</p>
+                          {info.icon === MapPin && (
+                            <a 
+                              href="https://maps.google.com/?q=Lubliana+St.+38b,+Tbilisi,+Georgia"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary hover:text-primary/80 text-sm mt-1 inline-block transition-colors"
+                            >
+                              {language === 'ka' ? '🗺️ Google Maps-ზე ნახვა' : '🗺️ View on Google Maps'}
+                            </a>
+                          )}
                         </div>
                       </CardContent>
                     </Card>
@@ -134,68 +141,55 @@ const Contact = () => {
               </Card>
             </div>
 
-            {/* Map Section */}
-            <div className="animate-fade-in">
-              <h2 className="text-3xl font-bold mb-8 font-display">
-                {language === 'ka' ? 'ჩვენი მდებარეობა' : 'Our Location'}
-              </h2>
-              
-              {/* Mapbox Token Input */}
-              <div className="mb-6 p-4 bg-muted/50 rounded-lg">
-                <p className="text-sm text-muted-foreground mb-2">
-                  {language === 'ka' 
-                    ? 'რუკის ჩვენებისთვის შეიყვანეთ Mapbox Token'
-                    : 'Enter your Mapbox token to display the map'
-                  }
-                </p>
-                <Input 
-                  value={mapboxToken}
-                  onChange={(e) => setMapboxToken(e.target.value)}
-                  placeholder="pk.eyJ1Ijoi..."
-                  className="mb-2"
-                />
-                <p className="text-xs text-muted-foreground">
-                  {language === 'ka'
-                    ? 'Token მიიღეთ: https://mapbox.com/'
-                    : 'Get your token from: https://mapbox.com/'
-                  }
-                </p>
-              </div>
-
-              {/* Map Component */}
-              <div className="h-96 rounded-lg overflow-hidden shadow-elegant">
-                {mapboxToken ? (
-                  <Map mapboxToken={mapboxToken} />
-                ) : (
-                  <div className="w-full h-full bg-muted flex items-center justify-center text-muted-foreground">
-                    <div className="text-center">
-                      <MapPin className="w-12 h-12 mx-auto mb-4" />
-                      <p>{language === 'ka' ? 'რუკის ჩატვირთვა...' : 'Map will appear here'}</p>
-                      <p className="text-sm mt-2">
-                        {language === 'ka' 
-                          ? 'Mapbox Token-ის შეყვანის შემდეგ'
-                          : 'After entering Mapbox token above'
-                        }
-                      </p>
-                    </div>
+              {/* Map Section */}
+              <div className="animate-fade-in">
+                <h2 className="text-3xl font-bold mb-8 font-display">
+                  {language === 'ka' ? 'ჩვენი მდებარეობა' : 'Our Location'}
+                </h2>
+                
+                {/* Google Maps Embed */}
+                <div className="mb-6">
+                  <div className="h-96 rounded-lg overflow-hidden shadow-elegant">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2977.2086524932373!2d44.80008741540843!3d41.71531617923942!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40440d16aaa21b21%3A0x8f198f59b7d8b9c3!2sLubliana%20St%2038b%2C%20Tbilisi%2C%20Georgia!5e0!3m2!1sen!2sus!4v1640995200000!5m2!1sen!2sus"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="AvtoMed Location"
+                    ></iframe>
                   </div>
-                )}
-              </div>
+                  
+                  {/* Google Maps Link */}
+                  <div className="mt-4 text-center">
+                    <a 
+                      href="https://maps.google.com/?q=Lubliana+St.+38b,+Tbilisi,+Georgia"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all duration-300 hover:scale-105"
+                    >
+                      <MapPin className="w-5 h-5" />
+                      <span>{language === 'ka' ? 'Google Maps-ში გახსნა' : 'Open in Google Maps'}</span>
+                    </a>
+                  </div>
+                </div>
 
-              {/* Location Description */}
-              <Card className="mt-6 p-4">
-                <CardContent className="p-0">
-                  <h4 className="font-semibold mb-2">
-                    {language === 'ka' ? 'როგორ მოვიდეთ ჩვენთან' : 'How to Find Us'}
-                  </h4>
-                  <p className="text-muted-foreground text-sm">
-                    {language === 'ka'
-                      ? 'ჩვენი ოფისი მდებარეობს თბილისის ცენტრში, ხელმისაწვდომია საზოგადოებრივი ტრანსპორტით. დეტალური მიმართულებისთვის დაგვიკავშირდით.'
-                      : 'Our office is located in central Tbilisi, accessible by public transport. Contact us for detailed directions.'
-                    }
-                  </p>
-                </CardContent>
-              </Card>
+                {/* Location Description */}
+                <Card className="mt-6 p-4">
+                  <CardContent className="p-0">
+                    <h4 className="font-semibold mb-2">
+                      {language === 'ka' ? 'როგორ მოვიდეთ ჩვენთან' : 'How to Find Us'}
+                    </h4>
+                    <p className="text-muted-foreground text-sm">
+                      {language === 'ka'
+                        ? 'ჩვენი ოფისი მდებარეობს ლუბლიანას ქუჩაზე 38ბ-ში, თბილისის ცენტრში. ადვილად მისაღწევია საზოგადოებრივი ტრანსპორტით და მანქანით.'
+                        : 'Our office is located at Lubliana Street 38b in central Tbilisi. Easily accessible by public transport and car with nearby parking available.'
+                      }
+                    </p>
+                  </CardContent>
+                </Card>
             </div>
           </div>
         </div>
