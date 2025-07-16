@@ -1,4 +1,4 @@
-import { Heart, Scissors, Bandage, Package, Wrench, Stethoscope, Baby, Bone, HeartPulse, Zap, Activity } from "lucide-react";
+import { Heart, CircleDot, Bandage, Package, Wrench, Stethoscope, Baby, Bone, HeartPulse, Zap, Activity } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -12,7 +12,7 @@ const CategoriesDropdown = () => {
       color: "text-red-500",
     },
     {
-      icon: Scissors,
+      icon: CircleDot,
       title: t('categories.suture'),
       color: "text-blue-500",
     },

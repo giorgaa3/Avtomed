@@ -1,4 +1,4 @@
-import { Heart, Scissors, Bandage, Package, Stethoscope, Baby, Bone, HeartPulse, Zap, Activity } from "lucide-react";
+import { Heart, CircleDot, Bandage, Package, Wrench, Stethoscope, Baby, Bone, HeartPulse, Zap, Activity } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -14,7 +14,7 @@ const Categories = () => {
       bgColor: "bg-red-50"
     },
     {
-      icon: Scissors,
+      icon: CircleDot,
       title: t('categories.suture'),
       description: "Surgical sutures and materials",
       color: "text-blue-500",
@@ -37,7 +37,7 @@ const Categories = () => {
   ];
 
   const metalInstruments = {
-    icon: Scissors,
+    icon: Wrench,
     title: t('categories.metalInstruments'),
     description: "Professional surgical instruments",
     color: "text-primary",
