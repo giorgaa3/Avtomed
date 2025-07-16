@@ -2,8 +2,10 @@ import { Search, ShoppingCart, User, Menu, Facebook } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useLanguage } from "@/contexts/LanguageContext";
 import LanguageSwitcher from "./LanguageSwitcher";
+import CategoriesDropdown from "./CategoriesDropdown";
 
 const Header = () => {
   const { t } = useLanguage();
@@ -85,10 +87,17 @@ const Header = () => {
 
         {/* Navigation */}
         <nav className="flex items-center justify-between py-3 border-t border-border">
-          <Button variant="ghost" size="sm">
-            <Menu className="w-4 h-4 mr-2" />
-            {t('header.categories')}
-          </Button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" size="sm">
+                <Menu className="w-4 h-4 mr-2" />
+                {t('header.categories')}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-fit p-0" align="start">
+              <CategoriesDropdown />
+            </PopoverContent>
+          </Popover>
           <div className="flex items-center gap-6">
             <Link to="/" className="text-sm hover:text-primary transition-all duration-300 hover:scale-105 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100">{t('header.main')}</Link>
             <Link to="/about" className="text-sm hover:text-primary transition-all duration-300 hover:scale-105 relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100">{t('header.aboutUs')}</Link>
