@@ -64,10 +64,8 @@ const Footer = () => {
                 <span>0322 53 03 03</span>
               </div>
               <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4" />
-                <span className="flex items-center gap-2">
-                  📧 avtandilzviadadze@yahho.com
-                </span>
+                <span className="text-lg">📧</span>
+                <span>avtandilzviadadze@yahho.com</span>
                 <a 
                   href="mailto:avtandilzviadadze@yahho.com" 
                   className="ml-2 text-red-500 hover:text-red-600 transition-colors"
