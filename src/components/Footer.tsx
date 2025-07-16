@@ -8,9 +8,14 @@ const Footer = () => {
           
           {/* Company info */}
           <div>
-            <div className="flex items-center mb-4">
+            <div className="flex items-center gap-3 mb-4">
+              <img 
+                src="/lovable-uploads/29063f06-8447-4719-96af-dddba4e78f67.png" 
+                alt="AvtoMed Logo" 
+                className="h-8 w-auto"
+              />
               <div className="text-2xl font-bold">
-                🏥 MedicalMarket
+                AvtoMed
               </div>
             </div>
             <p className="text-background/80 mb-4">
@@ -82,7 +87,7 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="border-t border-background/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <div className="text-background/60 text-sm">
-            © 2024 MedicalMarket. All rights reserved. | ISO 13485 Certified | FDA Registered
+            © 2024 AvtoMed. All rights reserved. | ISO 13485 Certified | FDA Registered
           </div>
           <div className="flex gap-6 text-sm text-background/60 mt-4 md:mt-0">
             <a href="#" className="hover:text-background transition-colors">Privacy Policy</a>
