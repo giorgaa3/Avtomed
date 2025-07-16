@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const AboutUs = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const stats = [
     {
@@ -92,8 +92,8 @@ const AboutUs = () => {
               <div key={index} className="text-center group">
                 <div className="bg-card rounded-lg p-6 shadow-medical hover:shadow-elegant transition-all duration-300 hover:scale-105">
                   <stat.icon className={`w-12 h-12 mx-auto mb-4 ${stat.color} group-hover:animate-bounce-gentle`} />
-                  <div className="text-3xl font-bold mb-2 font-display">{stat.number}</div>
-                  <div className="text-muted-foreground">{stat.label}</div>
+                  <div className={`text-3xl font-bold mb-2 font-display ${language === 'ka' ? 'text-4xl' : ''}`}>{stat.number}</div>
+                  <div className={`text-muted-foreground ${language === 'ka' ? 'text-lg' : ''}`}>{stat.label}</div>
                 </div>
               </div>
             ))}
