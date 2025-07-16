@@ -55,12 +55,12 @@ const Header = () => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex items-center py-3 border-t border-border">
+        <nav className="flex items-center justify-between py-3 border-t border-border">
           <Button variant="ghost" size="sm">
             <Menu className="w-4 h-4 mr-2" />
             Categories
           </Button>
-          <div className="flex items-center gap-6 ml-6">
+          <div className="flex items-center gap-6">
             <a href="#" className="text-sm hover:text-primary transition-colors">Main</a>
             <a href="#" className="text-sm hover:text-primary transition-colors">About Us</a>
             <a href="#" className="text-sm hover:text-primary transition-colors">Production</a>
