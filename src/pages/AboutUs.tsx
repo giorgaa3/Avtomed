@@ -204,7 +204,7 @@ const AboutUs = () => {
             <Button size="lg" variant="secondary" className="hover:scale-105 transition-transform">
               {t('about.contactButton')}
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary hover:scale-105 transition-all">
+            <Button size="lg" variant="outline" className="border-white bg-white/10 text-white hover:bg-white hover:text-primary hover:scale-105 transition-all">
               {t('about.catalogueButton')}
             </Button>
           </div>
