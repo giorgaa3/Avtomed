@@ -17,7 +17,7 @@ const Hero = () => {
       ></div>
       
       <div className="relative container mx-auto px-4 py-20 text-center">
-        <div className="max-w-3xl animate-fade-in-up">
+        <div className="max-w-3xl mx-auto animate-fade-in-up">
           <h1 className="text-5xl font-bold mb-6 font-display leading-tight">
             {t('hero.title')} 
             <span className="text-yellow-300 animate-bounce-gentle"> {t('hero.titleHighlight')}</span>
