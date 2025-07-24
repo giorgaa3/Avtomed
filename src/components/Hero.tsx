@@ -1,27 +1,67 @@
 import { Search, Shield, Truck, Award } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/medical-hero-new.jpg";
 
 const Hero = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchSuggestions, setSearchSuggestions] = useState<any[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  // Fetch search suggestions when user types
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (searchTerm.length < 2) {
+        setSearchSuggestions([]);
+        setShowSuggestions(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('id, name, price, image_url, categories(name)')
+          .eq('is_active', true)
+          .ilike('name', `%${searchTerm}%`)
+          .limit(5);
+
+        if (error) throw error;
+        setSearchSuggestions(data || []);
+        setShowSuggestions(true);
+      } catch (error) {
+        console.error('Error fetching suggestions:', error);
+      }
+    };
+
+    const timeoutId = setTimeout(fetchSuggestions, 300);
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+      setShowSuggestions(false);
     }
   };
 
   const handleSearchClick = () => {
     if (searchTerm.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+      setShowSuggestions(false);
     }
+  };
+
+  const handleSuggestionClick = (productName: string) => {
+    setSearchTerm(productName);
+    navigate(`/products?search=${encodeURIComponent(productName)}`);
+    setShowSuggestions(false);
   };
   
   return (
@@ -44,9 +84,9 @@ const Hero = () => {
           </p>
           
           {/* Enhanced search */}
-          <div className="bg-white rounded-lg p-4 shadow-medical mb-8 animate-scale-in transition-all duration-300 hover:shadow-elegant">
+          <div className="bg-white rounded-lg p-4 shadow-medical mb-8 animate-scale-in transition-all duration-300 hover:shadow-elegant relative">
             <form onSubmit={handleSearch} className="flex gap-3">
-              <div className="flex-1">
+              <div className="flex-1 relative">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5 transition-colors duration-300" />
                   <Input 
@@ -54,8 +94,35 @@ const Hero = () => {
                     placeholder={t('hero.searchPlaceholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    onFocus={() => searchTerm.length >= 2 && setShowSuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                   />
                 </div>
+                
+                {/* Search Suggestions */}
+                {showSuggestions && searchSuggestions.length > 0 && (
+                  <div className="absolute top-full left-0 right-0 bg-background border rounded-md shadow-lg z-50 mt-1">
+                    {searchSuggestions.map((product) => (
+                      <div
+                        key={product.id}
+                        className="flex items-center gap-3 p-3 hover:bg-accent cursor-pointer border-b last:border-b-0"
+                        onClick={() => handleSuggestionClick(product.name)}
+                      >
+                        <img
+                          src={product.image_url || "/placeholder.svg"}
+                          alt={product.name}
+                          className="w-10 h-10 object-cover rounded"
+                        />
+                        <div className="flex-1">
+                          <div className="font-medium text-sm text-foreground">{product.name}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {product.categories?.name} • ₾{product.price}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               <Button 
                 type="submit"
