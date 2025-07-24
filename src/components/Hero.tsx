@@ -1,4 +1,6 @@
 import { Search, Shield, Truck, Award } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -6,6 +8,21 @@ import heroImage from "@/assets/medical-hero-new.jpg";
 
 const Hero = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+    }
+  };
+
+  const handleSearchClick = () => {
+    if (searchTerm.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+    }
+  };
   
   return (
     <section className="relative bg-gradient-hero text-primary-foreground overflow-hidden">
@@ -28,20 +45,27 @@ const Hero = () => {
           
           {/* Enhanced search */}
           <div className="bg-white rounded-lg p-4 shadow-medical mb-8 animate-scale-in transition-all duration-300 hover:shadow-elegant">
-            <div className="flex gap-3">
+            <form onSubmit={handleSearch} className="flex gap-3">
               <div className="flex-1">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5 transition-colors duration-300" />
                   <Input 
                     className="pl-12 pr-4 py-3 text-lg border-0 focus:ring-2 focus:ring-primary transition-all duration-300 focus:scale-[1.02]" 
                     placeholder={t('hero.searchPlaceholder')}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
               </div>
-              <Button size="lg" className="px-8 bg-gradient-hero hover:bg-primary-dark transition-all duration-300 hover:scale-105 hover:shadow-lg animate-glow">
+              <Button 
+                type="submit"
+                size="lg" 
+                className="px-8 bg-gradient-hero hover:bg-primary-dark transition-all duration-300 hover:scale-105 hover:shadow-lg animate-glow"
+                onClick={handleSearchClick}
+              >
                 {t('hero.searchButton')}
               </Button>
-            </div>
+            </form>
           </div>
 
           {/* Trust indicators */}
