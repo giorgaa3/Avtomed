@@ -78,7 +78,7 @@ const Hero = () => {
             <div className="flex flex-col items-center group transition-all duration-300 hover:scale-110">
               <Truck className="w-8 h-8 mb-2 text-yellow-300 group-hover:animate-bounce-gentle" />
               <div className="text-sm font-medium font-sans">{t('hero.freeShipping')}</div>
-              <div className="text-xs text-primary-foreground/80">{t('hero.freeShippingDescription')}</div>
+              
             </div>
             <div className="flex flex-col items-center group transition-all duration-300 hover:scale-110">
               <Award className="w-8 h-8 mb-2 text-yellow-300 group-hover:animate-bounce-gentle" />
