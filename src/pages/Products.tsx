@@ -10,9 +10,11 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { useCart } from "@/contexts/CartContext";
 
 const Products = () => {
   const { t } = useLanguage();
+  const { addToCart } = useCart();
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -124,62 +126,69 @@ const Products = () => {
     }
   };
 
-  const ProductCard = ({ product }: { product: any }) => (
-    <Card className="group hover:shadow-elegant transition-all duration-300 hover:scale-105 animate-fade-in">
-      <CardContent className="p-4">
-        <div className="relative mb-4">
-          <img 
-            src={product.image_url || "/placeholder.svg"} 
-            alt={product.name}
-            className="w-full h-48 object-cover rounded-lg"
-          />
-          <div className="absolute top-2 left-2">
-            <Badge className={getConditionColor(product.condition)}>
-              {product.condition === "new" ? t('products.condition.new') : t('products.condition.refurbished')}
-            </Badge>
-          </div>
-          <div className="absolute top-2 right-2">
-            <Package className="w-5 h-5 text-muted-foreground" />
-          </div>
-          {(product.stock_quantity === 0 || !product.is_active) && (
-            <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
-              <Badge variant="destructive">Out of Stock</Badge>
+  const ProductCard = ({ product }: { product: any }) => {
+    const handleAddToCart = () => {
+      addToCart(product.id);
+    };
+
+    return (
+      <Card className="group hover:shadow-elegant transition-all duration-300 hover:scale-105 animate-fade-in">
+        <CardContent className="p-4">
+          <div className="relative mb-4">
+            <img 
+              src={product.image_url || "/placeholder.svg"} 
+              alt={product.name}
+              className="w-full h-48 object-cover rounded-lg"
+            />
+            <div className="absolute top-2 left-2">
+              <Badge className={getConditionColor(product.condition)}>
+                {product.condition === "new" ? t('products.condition.new') : t('products.condition.refurbished')}
+              </Badge>
             </div>
-          )}
-        </div>
-        
-        <div className="space-y-2">
-          <Badge variant="outline" className="text-xs">{product.categories?.name || 'Uncategorized'}</Badge>
-          <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">{product.name}</h3>
-          <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
+            <div className="absolute top-2 right-2">
+              <Package className="w-5 h-5 text-muted-foreground" />
+            </div>
+            {(product.stock_quantity === 0 || !product.is_active) && (
+              <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
+                <Badge variant="destructive">Out of Stock</Badge>
+              </div>
+            )}
+          </div>
           
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="text-xl font-bold text-primary">₾{product.price}</span>
+          <div className="space-y-2">
+            <Badge variant="outline" className="text-xs">{product.categories?.name || 'Uncategorized'}</Badge>
+            <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">{product.name}</h3>
+            <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
+            
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-xl font-bold text-primary">₾{product.price}</span>
+              </div>
+              <span className="text-sm text-muted-foreground">
+                {product.stock_quantity > 0 ? `In Stock (${product.stock_quantity})` : "Out of Stock"}
+              </span>
             </div>
-            <span className="text-sm text-muted-foreground">
-              {product.stock_quantity > 0 ? `In Stock (${product.stock_quantity})` : "Out of Stock"}
-            </span>
           </div>
-        </div>
-      </CardContent>
-      
-      <CardFooter className="p-4 pt-0">
-        <div className="flex gap-2 w-full">
-          <Button 
-            className="flex-1 bg-gradient-hero hover:scale-105 transition-transform" 
-            disabled={product.stock_quantity === 0}
-          >
-            <ShoppingCart className="w-4 h-4 mr-2" />
-            {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
-          </Button>
-          <Button variant="outline" size="sm">
-            <Heart className="w-4 h-4" />
-          </Button>
-        </div>
-      </CardFooter>
-    </Card>
-  );
+        </CardContent>
+        
+        <CardFooter className="p-4 pt-0">
+          <div className="flex gap-2 w-full">
+            <Button 
+              className="flex-1 bg-gradient-hero hover:scale-105 transition-transform" 
+              disabled={product.stock_quantity === 0}
+              onClick={handleAddToCart}
+            >
+              <ShoppingCart className="w-4 h-4 mr-2" />
+              {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
+            </Button>
+            <Button variant="outline" size="sm">
+              <Heart className="w-4 h-4" />
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
+    );
+  };
 
   const ProductListItem = ({ product }: { product: any }) => (
     <Card className="group hover:shadow-elegant transition-all duration-300 animate-fade-in">

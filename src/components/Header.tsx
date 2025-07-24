@@ -13,6 +13,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 import CategoriesDropdown from "./CategoriesDropdown";
+import { CartButton } from "./Cart";
 
 const Header = () => {
   const { t } = useLanguage();
@@ -97,10 +98,7 @@ const Header = () => {
                 </Button>
               </Link>
             )}
-            <Button variant="ghost" size="sm" className="transition-all duration-300 hover:scale-105">
-              <ShoppingCart className="w-4 h-4 mr-2" />
-              {t('header.cart')} (0)
-            </Button>
+            <CartButton />
             <Button className="bg-gradient-hero transition-all duration-300 hover:scale-105 hover:shadow-lg animate-glow">
               {t('header.listEquipment')}
             </Button>
