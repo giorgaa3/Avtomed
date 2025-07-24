@@ -1,5 +1,6 @@
 import { Search, ShoppingCart, User, Menu, Facebook, LogOut } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -17,6 +18,19 @@ import CategoriesDropdown from "./CategoriesDropdown";
 const Header = () => {
   const { t } = useLanguage();
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+    }
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
   
   return (
     <header className="bg-background border-b border-border shadow-subtle">
@@ -68,13 +82,15 @@ const Header = () => {
 
           {/* Search bar */}
           <div className="flex-1 max-w-xl mx-8">
-            <div className="relative">
+            <form onSubmit={handleSearch} className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input 
                 className="pl-10 pr-4 py-2 w-full" 
                 placeholder={t('header.search')}
+                value={searchTerm}
+                onChange={handleSearchChange}
               />
-            </div>
+            </form>
           </div>
 
           {/* Right actions */}
