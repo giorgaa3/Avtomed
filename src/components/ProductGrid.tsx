@@ -1,177 +1,120 @@
+import { useState, useEffect } from "react";
 import { Star, Heart, ShoppingCart, Package } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useCart } from "@/contexts/CartContext";
 
 const ProductGrid = () => {
-  // Updated component
   const { t } = useLanguage();
+  const { addToCart } = useCart();
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const products = [
-    {
-      id: 1,
-      name: "Digital Stethoscope Pro",
-      price: "$299.99",
-      originalPrice: "$399.99",
-      image: "/placeholder.svg",
-      rating: 4.8,
-      reviews: 124,
-      condition: t('products.condition.new'),
-      conditionColor: "bg-medical-green text-white",
-      category: "Diagnostic"
-    },
-    {
-      id: 2,
-      name: "Surgical Scissors Set",
-      price: "$89.99",
-      originalPrice: null,
-      image: "/placeholder.svg",
-      rating: 4.6,
-      reviews: 89,
-      condition: t('products.condition.new'),
-      conditionColor: "bg-medical-green text-white",
-      category: "Surgical"
-    },
-    {
-      id: 3,
-      name: "Portable Ultrasound",
-      price: "$1,299.99",
-      originalPrice: "$1,599.99",
-      image: "/placeholder.svg",
-      rating: 4.9,
-      reviews: 67,
-      condition: t('products.condition.refurbished'),
-      conditionColor: "bg-medical-blue text-white",
-      category: "Imaging"
-    },
-    {
-      id: 4,
-      name: "Blood Pressure Monitor",
-      price: "$79.99",
-      originalPrice: null,
-      image: "/placeholder.svg",
-      rating: 4.7,
-      reviews: 203,
-      condition: t('products.condition.new'),
-      conditionColor: "bg-medical-green text-white",
-      category: "Monitoring"
-    },
-    {
-      id: 5,
-      name: "Defibrillator AED",
-      price: "$2,199.99",
-      originalPrice: "$2,599.99",
-      image: "/placeholder.svg",
-      rating: 4.9,
-      reviews: 45,
-      condition: t('products.condition.refurbished'),
-      conditionColor: "bg-medical-blue text-white",
-      category: "Emergency"
-    },
-    {
-      id: 6,
-      name: "X-Ray Film Viewer",
-      price: "$189.99",
-      originalPrice: null,
-      image: "/placeholder.svg",
-      rating: 4.5,
-      reviews: 78,
-      condition: t('products.condition.new'),
-      conditionColor: "bg-medical-green text-white",
-      category: "Imaging"
-    },
-    {
-      id: 7,
-      name: "Otoscope Professional",
-      price: "$149.99",
-      originalPrice: "$199.99",
-      image: "/placeholder.svg",
-      rating: 4.7,
-      reviews: 156,
-      condition: t('products.condition.new'),
-      conditionColor: "bg-medical-green text-white",
-      category: "Diagnostic"
-    },
-    {
-      id: 8,
-      name: "Thermometer Digital",
-      price: "$24.99",
-      originalPrice: null,
-      image: "/placeholder.svg",
-      rating: 4.4,
-      reviews: 234,
-      condition: t('products.condition.new'),
-      conditionColor: "bg-medical-green text-white",
-      category: "Diagnostic"
+  const fetchProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select(`
+          *,
+          categories (
+            name
+          )
+        `)
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(8);
+
+      if (error) throw error;
+      setProducts(data || []);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
-  const ProductCard = ({ product }: { product: any }) => (
-    <Card className="group hover:shadow-elegant transition-all duration-300 hover:scale-105 animate-fade-in">
-      <CardContent className="p-4">
-        <div className="relative mb-4">
-          <img 
-            src={product.image} 
-            alt={product.name}
-            className="w-full h-48 object-cover rounded-lg"
-          />
-          <div className="absolute top-2 left-2">
-            <Badge className={product.conditionColor}>{product.condition}</Badge>
-          </div>
-          <div className="absolute top-2 right-2">
-            <Package className="w-5 h-5 text-muted-foreground" />
-          </div>
-          {product.originalPrice && (
-            <div className="absolute bottom-2 right-2">
-              <Badge className="bg-medical-red text-white">
-                Save {(parseFloat(product.originalPrice.replace('$', '')) - parseFloat(product.price.replace('$', ''))).toFixed(0)}$
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const getConditionColor = (condition: string) => {
+    switch (condition) {
+      case "new":
+        return "bg-medical-green text-white";
+      case "refurbished":
+        return "bg-medical-blue text-white";
+      default:
+        return "bg-gray-500 text-white";
+    }
+  };
+
+  const ProductCard = ({ product }: { product: any }) => {
+    const handleAddToCart = () => {
+      addToCart(product.id);
+    };
+
+    return (
+      <Card className="group hover:shadow-elegant transition-all duration-300 hover:scale-105 animate-fade-in">
+        <CardContent className="p-4">
+          <div className="relative mb-4">
+            <img 
+              src={product.image_url || "/placeholder.svg"} 
+              alt={product.name}
+              className="w-full h-48 object-cover rounded-lg"
+            />
+            <div className="absolute top-2 left-2">
+              <Badge className={getConditionColor(product.condition)}>
+                {product.condition === "new" ? t('products.condition.new') : t('products.condition.refurbished')}
               </Badge>
             </div>
-          )}
-        </div>
+            <div className="absolute top-2 right-2">
+              <Package className="w-5 h-5 text-muted-foreground" />
+            </div>
+            {(product.stock_quantity === 0 || !product.is_active) && (
+              <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
+                <Badge variant="destructive">Out of Stock</Badge>
+              </div>
+            )}
+          </div>
+          
+          <div className="space-y-2">
+            <Badge variant="outline" className="text-xs">{product.categories?.name || 'Uncategorized'}</Badge>
+            <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">{product.name}</h3>
+            <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
+            
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-xl font-bold text-primary">₾{product.price}</span>
+              </div>
+              <span className="text-sm text-muted-foreground">
+                {product.stock_quantity > 0 ? `In Stock (${product.stock_quantity})` : "Out of Stock"}
+              </span>
+            </div>
+          </div>
+        </CardContent>
         
-        <div className="space-y-2">
-          <Badge variant="outline" className="text-xs">{product.category}</Badge>
-          <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">{product.name}</h3>
-          
-          <div className="flex items-center gap-2">
-            <div className="flex text-yellow-500 text-sm">
-              {"★".repeat(Math.floor(product.rating))}
-              {"☆".repeat(5 - Math.floor(product.rating))}
-            </div>
-            <span className="text-sm text-muted-foreground">
-              {product.rating} ({product.reviews})
-            </span>
+        <CardFooter className="p-4 pt-0">
+          <div className="flex gap-2 w-full">
+            <Button 
+              className="flex-1 bg-gradient-hero hover:scale-105 transition-transform" 
+              disabled={product.stock_quantity === 0}
+              onClick={handleAddToCart}
+            >
+              <ShoppingCart className="w-4 h-4 mr-2" />
+              {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
+            </Button>
+            <Button variant="outline" size="sm">
+              <Heart className="w-4 h-4" />
+            </Button>
           </div>
-          
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="text-xl font-bold text-primary">{product.price}</span>
-              {product.originalPrice && (
-                <span className="text-sm text-muted-foreground line-through ml-2">
-                  {product.originalPrice}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-      </CardContent>
-      
-      <CardFooter className="p-4 pt-0">
-        <div className="flex gap-2 w-full">
-          <Button className="flex-1 bg-gradient-hero hover:scale-105 transition-transform">
-            <ShoppingCart className="w-4 h-4 mr-2" />
-            Add to Cart
-          </Button>
-          <Button variant="outline" size="sm">
-            <Heart className="w-4 h-4" />
-          </Button>
-        </div>
-      </CardFooter>
-    </Card>
-  );
+        </CardFooter>
+      </Card>
+    );
+  };
 
   return (
     <section className="py-16 bg-background">
@@ -183,11 +126,18 @@ const ProductGrid = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="text-center py-16">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
+            <p className="mt-4 text-muted-foreground">Loading products...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
 
         <div className="text-center animate-fade-in">
           <Button size="lg" variant="outline" className="hover:scale-105 transition-transform" asChild>
