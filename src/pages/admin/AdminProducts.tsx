@@ -4,7 +4,8 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Search, Edit, Trash2, Eye } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Plus, Search, Edit, Trash2, Eye, MoreHorizontal, Copy, ExternalLink, Power, PowerOff, Download, Upload } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
@@ -14,11 +15,14 @@ import { useLanguage } from '@/contexts/LanguageContext';
 interface Product {
   id: string;
   name: string;
+  description?: string;
   price: number;
   condition: string;
   stock_quantity: number;
   is_active: boolean;
   category_id: string;
+  image_url?: string;
+  seller_id?: string;
   categories?: {
     name: string;
   };
@@ -107,6 +111,79 @@ const AdminProducts = () => {
     }
   };
 
+  const copyProductId = (productId: string) => {
+    navigator.clipboard.writeText(productId);
+    toast({
+      title: "Copied",
+      description: "Product ID copied to clipboard",
+    });
+  };
+
+  const duplicateProduct = async (product: Product) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const duplicatedProduct = {
+        name: `${product.name} (Copy)`,
+        description: product.description,
+        price: product.price,
+        condition: product.condition,
+        stock_quantity: product.stock_quantity,
+        is_active: false, // Start as inactive
+        category_id: product.category_id,
+        image_url: product.image_url,
+        seller_id: user.id
+      };
+
+      const { error } = await supabase
+        .from('products')
+        .insert(duplicatedProduct);
+
+      if (error) throw error;
+
+      await fetchProducts();
+      toast({
+        title: "Success",
+        description: "Product duplicated successfully",
+      });
+    } catch (error) {
+      console.error('Error duplicating product:', error);
+      toast({
+        title: "Error",
+        description: "Failed to duplicate product",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const exportProducts = () => {
+    const csvContent = [
+      ['Name', 'Category', 'Price', 'Stock', 'Condition', 'Status'].join(','),
+      ...filteredProducts.map(product => [
+        product.name,
+        product.categories?.name || 'Uncategorized',
+        product.price,
+        product.stock_quantity,
+        product.condition,
+        product.is_active ? 'Active' : 'Inactive'
+      ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'products.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+
+    toast({
+      title: "Success",
+      description: "Products exported successfully",
+    });
+  };
+
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -120,7 +197,7 @@ const AdminProducts = () => {
     return (
       <AdminLayout>
         <div className="flex items-center justify-center h-64">
-          <div>Loading...</div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
         </div>
       </AdminLayout>
     );
@@ -129,13 +206,18 @@ const AdminProducts = () => {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold">{t('admin.products')}</h1>
-            <p className="text-muted-foreground">
-              Manage your product catalog
-            </p>
-          </div>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold">{t('admin.products')}</h1>
+          <p className="text-muted-foreground">
+            Manage your product catalog
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={exportProducts}>
+            <Download className="h-4 w-4 mr-2" />
+            Export
+          </Button>
           <Link to="/admin/products/new">
             <Button>
               <Plus className="h-4 w-4 mr-2" />
@@ -143,14 +225,24 @@ const AdminProducts = () => {
             </Button>
           </Link>
         </div>
+      </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Product List</CardTitle>
-            <CardDescription>
-              View and manage all products in your catalog
-            </CardDescription>
-          </CardHeader>
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Product List</CardTitle>
+              <CardDescription>
+                View and manage all products in your catalog
+              </CardDescription>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">
+                {filteredProducts.length} of {products.length} products
+              </span>
+            </div>
+          </div>
+        </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-2 mb-4">
               <Search className="h-4 w-4" />
@@ -190,30 +282,62 @@ const AdminProducts = () => {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center space-x-2">
-                        <Button variant="ghost" size="sm">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Link to={`/admin/products/edit/${product.id}`}>
-                          <Button variant="ghost" size="sm">
-                            <Edit className="h-4 w-4" />
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
                           </Button>
-                        </Link>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => toggleProductStatus(product.id, product.is_active)}
-                        >
-                          {product.is_active ? 'Deactivate' : 'Activate'}
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => deleteProduct(product.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>სწრაფი მოქმედებები</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem asChild>
+                            <Link to={`/admin/products/view/${product.id}`}>
+                              <Eye className="h-4 w-4 mr-2" />
+                              View Details
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link to={`/admin/products/edit/${product.id}`}>
+                              <Edit className="h-4 w-4 mr-2" />
+                              Edit Product
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => copyProductId(product.id)}>
+                            <Copy className="h-4 w-4 mr-2" />
+                            Copy ID
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => duplicateProduct(product)}>
+                            <Upload className="h-4 w-4 mr-2" />
+                            Duplicate
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => toggleProductStatus(product.id, product.is_active)}
+                          >
+                            {product.is_active ? (
+                              <>
+                                <PowerOff className="h-4 w-4 mr-2" />
+                                Deactivate
+                              </>
+                            ) : (
+                              <>
+                                <Power className="h-4 w-4 mr-2" />
+                                Activate
+                              </>
+                            )}
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem 
+                            onClick={() => deleteProduct(product.id)}
+                            className="text-destructive"
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
