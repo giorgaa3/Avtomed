@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Star, Heart, ShoppingCart, Package, Filter, Search, Grid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Products = () => {
   const { t } = useLanguage();
+  const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedCondition, setSelectedCondition] = useState("all");
@@ -64,14 +66,37 @@ const Products = () => {
     loadData();
   }, []);
 
+  // Handle URL parameters for search and category
+  useEffect(() => {
+    const searchParam = searchParams.get('search');
+    const categoryParam = searchParams.get('category');
+    
+    if (searchParam) {
+      setSearchTerm(searchParam);
+    }
+    
+    if (categoryParam) {
+      setSelectedCategory(categoryParam);
+    }
+  }, [searchParams]);
+
   const conditions = ["all", "new", "refurbished"];
 
   const filteredProducts = products
-    .filter(product => 
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (selectedCategory === "all" || product.categories?.name === selectedCategory) &&
-      (selectedCondition === "all" || product.condition === selectedCondition)
-    )
+    .filter(product => {
+      const matchesSearch = searchTerm === "" || 
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (product.description && product.description.toLowerCase().includes(searchTerm.toLowerCase()));
+      
+      const matchesCategory = selectedCategory === "all" || 
+        selectedCategory === "All Categories" ||
+        product.categories?.name === selectedCategory;
+      
+      const matchesCondition = selectedCondition === "all" || 
+        product.condition === selectedCondition;
+        
+      return matchesSearch && matchesCategory && matchesCondition;
+    })
     .sort((a, b) => {
       switch (sortBy) {
         case "price-low":
