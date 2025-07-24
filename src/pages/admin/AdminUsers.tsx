@@ -8,6 +8,7 @@ import { Search, Edit, Trash2, UserCheck, UserX } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface User {
   id: string;
@@ -20,6 +21,7 @@ interface User {
 }
 
 const AdminUsers = () => {
+  const { t } = useLanguage();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -130,7 +132,7 @@ const AdminUsers = () => {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold">Users</h1>
+            <h1 className="text-3xl font-bold">{t('admin.users')}</h1>
             <p className="text-muted-foreground">
               Manage user accounts and permissions
             </p>

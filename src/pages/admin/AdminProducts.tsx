@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Product {
   id: string;
@@ -24,6 +25,7 @@ interface Product {
 }
 
 const AdminProducts = () => {
+  const { t } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -129,7 +131,7 @@ const AdminProducts = () => {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold">Products</h1>
+            <h1 className="text-3xl font-bold">{t('admin.products')}</h1>
             <p className="text-muted-foreground">
               Manage your product catalog
             </p>
@@ -137,7 +139,7 @@ const AdminProducts = () => {
           <Link to="/admin/products/new">
             <Button>
               <Plus className="h-4 w-4 mr-2" />
-              Add Product
+              {t('admin.addProduct')}
             </Button>
           </Link>
         </div>
@@ -177,7 +179,7 @@ const AdminProducts = () => {
                   <TableRow key={product.id}>
                     <TableCell className="font-medium">{product.name}</TableCell>
                     <TableCell>{product.categories?.name || 'Uncategorized'}</TableCell>
-                    <TableCell>${product.price}</TableCell>
+                    <TableCell>₾{product.price}</TableCell>
                     <TableCell>{product.stock_quantity}</TableCell>
                     <TableCell>
                       <Badge variant="outline">{product.condition}</Badge>

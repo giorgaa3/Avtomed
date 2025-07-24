@@ -10,14 +10,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Settings, Save, Database, Mail, ShoppingCart, Users } from 'lucide-react';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const AdminSettings = () => {
+  const { t } = useLanguage();
   const [settings, setSettings] = useState({
-    siteName: 'AvtoMed',
+    siteName: 'ავტომედი',
     siteDescription: 'Professional Medical Equipment Marketplace',
     contactEmail: 'info@avtomed.com',
     supportPhone: '+995 555 123 456',
-    currency: 'USD',
+    currency: 'GEL',
     timezone: 'Asia/Tbilisi',
     enableRegistration: true,
     requireEmailVerification: true,
@@ -51,7 +53,7 @@ const AdminSettings = () => {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold">Settings</h1>
+            <h1 className="text-3xl font-bold">{t('admin.settings')}</h1>
             <p className="text-muted-foreground">
               Configure your application settings
             </p>
@@ -101,9 +103,9 @@ const AdminSettings = () => {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="GEL">GEL - Georgian Lari</SelectItem>
                       <SelectItem value="USD">USD - US Dollar</SelectItem>
                       <SelectItem value="EUR">EUR - Euro</SelectItem>
-                      <SelectItem value="GEL">GEL - Georgian Lari</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

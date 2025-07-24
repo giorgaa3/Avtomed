@@ -3,8 +3,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Package, Users, ShoppingCart, TrendingUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const AdminDashboard = () => {
+  const { t } = useLanguage();
   const [stats, setStats] = useState({
     totalProducts: 0,
     totalUsers: 0,
@@ -48,29 +50,29 @@ const AdminDashboard = () => {
 
   const statCards = [
     {
-      title: 'Total Products',
+      title: t('admin.totalProducts'),
       value: stats.totalProducts,
       description: 'Active products in catalog',
       icon: Package,
       color: 'text-blue-600',
     },
     {
-      title: 'Total Users',
+      title: t('admin.totalUsers'),
       value: stats.totalUsers,
       description: 'Registered users',
       icon: Users,
       color: 'text-green-600',
     },
     {
-      title: 'Total Orders',
+      title: t('admin.totalOrders'),
       value: stats.totalOrders,
       description: 'Orders placed',
       icon: ShoppingCart,
       color: 'text-orange-600',
     },
     {
-      title: 'Revenue',
-      value: `$${stats.totalRevenue.toFixed(2)}`,
+      title: t('admin.revenue'),
+      value: `₾${stats.totalRevenue.toFixed(2)}`,
       description: 'Total revenue',
       icon: TrendingUp,
       color: 'text-purple-600',
@@ -81,9 +83,9 @@ const AdminDashboard = () => {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <h1 className="text-3xl font-bold">{t('admin.dashboard')}</h1>
           <p className="text-muted-foreground">
-            Welcome to your AvtoMed admin dashboard
+            {t('admin.welcome')}
           </p>
         </div>
 
@@ -109,7 +111,7 @@ const AdminDashboard = () => {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader>
-              <CardTitle>Recent Activity</CardTitle>
+              <CardTitle>{t('admin.recentActivity')}</CardTitle>
               <CardDescription>
                 Latest actions in your admin panel
               </CardDescription>
@@ -152,7 +154,7 @@ const AdminDashboard = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
+              <CardTitle>{t('admin.quickActions')}</CardTitle>
               <CardDescription>
                 Common admin tasks
               </CardDescription>
@@ -177,7 +179,7 @@ const AdminDashboard = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>System Status</CardTitle>
+              <CardTitle>{t('admin.systemStatus')}</CardTitle>
               <CardDescription>
                 Current system information
               </CardDescription>

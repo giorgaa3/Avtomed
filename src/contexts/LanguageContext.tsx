@@ -23,7 +23,7 @@ const translations = {
     'header.search': 'Search medical instruments...',
     'header.support': 'avtandilzviadadze@yahho.com',
     'header.phone': '0322 53 03 03',
-    'header.freeShipping': 'Free Shipping on Orders $500+',
+    'header.freeShipping': 'Free Shipping on Orders ₾500+',
     'header.certified': 'ISO 13485 Certified',
     
     // Hero
@@ -35,7 +35,7 @@ const translations = {
     'hero.fdaCertified': 'FDA Certified',
     'hero.fdaDescription': 'All equipment verified',
     'hero.freeShipping': 'Free Shipping',
-    'hero.freeShippingDescription': 'Orders over $500',
+    'hero.freeShippingDescription': 'Orders over ₾500',
     'hero.warranty': 'Warranty Included',
     'hero.warrantyDescription': 'Up to 2 years coverage',
     
@@ -103,6 +103,22 @@ const translations = {
     'about.ctaDescription': 'Join hundreds of satisfied healthcare providers who trust AvtoMed for their medical equipment needs.',
     'about.contactButton': 'Contact Us Today',
     'about.catalogueButton': 'View Our Catalogue',
+
+    // Admin
+    'admin.dashboard': 'Dashboard',
+    'admin.products': 'Products',
+    'admin.orders': 'Orders',
+    'admin.users': 'Users',
+    'admin.settings': 'Settings',
+    'admin.addProduct': 'Add Product',
+    'admin.welcome': 'Welcome to your AvtoMed admin dashboard',
+    'admin.totalProducts': 'Total Products',
+    'admin.totalUsers': 'Total Users',
+    'admin.totalOrders': 'Total Orders',
+    'admin.revenue': 'Revenue',
+    'admin.recentActivity': 'Recent Activity',
+    'admin.quickActions': 'Quick Actions',
+    'admin.systemStatus': 'System Status'
   },
   ka: {
     // Header
@@ -118,7 +134,7 @@ const translations = {
     'header.search': 'მოძებნეთ სამედიცინო ინსტრუმენტები...',
     'header.support': 'avtandilzviadadze@yahho.com',
     'header.phone': '0322 53 03 03',
-    'header.freeShipping': 'უფასო მიწოდება $500+ შეკვეთებზე',
+    'header.freeShipping': 'უფასო მიწოდება ₾500+ შეკვეთებზე',
     'header.certified': 'ISO 13485 სერტიფიკატი',
     
     // Hero
@@ -130,7 +146,7 @@ const translations = {
     'hero.fdaCertified': 'FDA სერტიფიკატი',
     'hero.fdaDescription': 'ყველა აღჭურვილობა ვერიფიცირებულია',
     'hero.freeShipping': 'უფასო მიწოდება',
-    'hero.freeShippingDescription': '$500-ზე მეტი შეკვეთები',
+    'hero.freeShippingDescription': '₾500-ზე მეტი შეკვეთები',
     'hero.warranty': 'გარანტია ჩართული',
     'hero.warrantyDescription': '2 წლამდე დაფარვა',
     
@@ -198,6 +214,22 @@ const translations = {
     'about.ctaDescription': 'შეუერთდით ასობით კმაყოფილ ჯანდაცვის პროვაიდერს, რომლებიც ენდობიან ავტომედს თავიანთი სამედიცინო აღჭურვილობის საჭიროებებისთვის.',
     'about.contactButton': 'დაგვიკავშირდით დღესვე',
     'about.catalogueButton': 'იხილეთ ჩვენი კატალოგი',
+
+    // Admin
+    'admin.dashboard': 'დაშბორდი',
+    'admin.products': 'პროდუქტები',
+    'admin.orders': 'შეკვეთები',
+    'admin.users': 'მომხმარებლები',
+    'admin.settings': 'პარამეტრები',
+    'admin.addProduct': 'პროდუქტის დამატება',
+    'admin.welcome': 'კეთილი იყოს თქვენი მობრძანება ავტომედის ადმინისტრაციულ პანელში',
+    'admin.totalProducts': 'სულ პროდუქტები',
+    'admin.totalUsers': 'სულ მომხმარებლები',
+    'admin.totalOrders': 'სულ შეკვეთები',
+    'admin.revenue': 'შემოსავალი',
+    'admin.recentActivity': 'ბოლოდროინდელი აქტივობა',
+    'admin.quickActions': 'სწრაფი მოქმედებები',
+    'admin.systemStatus': 'სისტემის სტატუსი'
   }
 };
 

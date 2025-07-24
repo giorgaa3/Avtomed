@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Category {
   id: string;
@@ -19,6 +20,7 @@ interface Category {
 }
 
 const AddProduct = () => {
+  const { t } = useLanguage();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -117,7 +119,7 @@ const AddProduct = () => {
             Back to Products
           </Button>
           <div>
-            <h1 className="text-3xl font-bold">Add Product</h1>
+            <h1 className="text-3xl font-bold">{t('admin.addProduct')}</h1>
             <p className="text-muted-foreground">
               Create a new product in your catalog
             </p>
@@ -159,7 +161,7 @@ const AddProduct = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="price">Price ($)</Label>
+                    <Label htmlFor="price">Price (₾)</Label>
                     <Input
                       id="price"
                       type="number"

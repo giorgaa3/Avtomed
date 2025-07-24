@@ -8,6 +8,7 @@ import { Search, Eye, Edit, Package } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Order {
   id: string;
@@ -29,6 +30,7 @@ interface Order {
 }
 
 const AdminOrders = () => {
+  const { t } = useLanguage();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -121,7 +123,7 @@ const AdminOrders = () => {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold">Orders</h1>
+            <h1 className="text-3xl font-bold">{t('admin.orders')}</h1>
             <p className="text-muted-foreground">
               Manage customer orders and track shipments
             </p>
@@ -165,7 +167,7 @@ const AdminOrders = () => {
                       {order.id.slice(0, 8)}...
                     </TableCell>
                     <TableCell>Customer #{order.user_id.slice(0, 8)}...</TableCell>
-                    <TableCell>${Number(order.total_amount).toFixed(2)}</TableCell>
+                    <TableCell>₾{Number(order.total_amount).toFixed(2)}</TableCell>
                     <TableCell>
                       <Badge className={getStatusColor(order.status)}>
                         {order.status}
