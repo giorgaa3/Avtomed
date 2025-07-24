@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -81,8 +82,8 @@ const CartContent = () => {
         </div>
         
         <div className="space-y-2">
-          <Button className="w-full bg-gradient-hero hover:bg-primary-dark">
-            Proceed to Checkout
+          <Button className="w-full bg-gradient-hero hover:bg-primary-dark" asChild>
+            <Link to="/checkout">Proceed to Checkout</Link>
           </Button>
           <Button 
             variant="outline" 

@@ -120,8 +120,13 @@ export type Database = {
       }
       orders: {
         Row: {
+          billing_address: string | null
+          bog_transaction_id: string | null
           created_at: string
+          currency: string | null
           id: string
+          payment_method: string | null
+          payment_reference: string | null
           shipping_address: string | null
           status: string
           stripe_session_id: string | null
@@ -130,8 +135,13 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          billing_address?: string | null
+          bog_transaction_id?: string | null
           created_at?: string
+          currency?: string | null
           id?: string
+          payment_method?: string | null
+          payment_reference?: string | null
           shipping_address?: string | null
           status?: string
           stripe_session_id?: string | null
@@ -140,8 +150,13 @@ export type Database = {
           user_id: string
         }
         Update: {
+          billing_address?: string | null
+          bog_transaction_id?: string | null
           created_at?: string
+          currency?: string | null
           id?: string
+          payment_method?: string | null
+          payment_reference?: string | null
           shipping_address?: string | null
           status?: string
           stripe_session_id?: string | null

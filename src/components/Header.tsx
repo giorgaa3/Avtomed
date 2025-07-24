@@ -80,6 +80,11 @@ const Header = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-background">
                   <DropdownMenuItem asChild>
+                    <Link to="/orders" className="w-full">
+                      My Orders
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link to="/admin" className="w-full">
                       Admin Panel
                     </Link>

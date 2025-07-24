@@ -73,8 +73,8 @@ const Cart = () => {
                     </div>
                   </div>
 
-                  <Button className="w-full bg-gradient-hero hover:bg-primary-dark">
-                    Proceed to Checkout
+                  <Button className="w-full bg-gradient-hero hover:bg-primary-dark" asChild>
+                    <Link to="/checkout">Proceed to Checkout</Link>
                   </Button>
 
                   <div className="text-center">
