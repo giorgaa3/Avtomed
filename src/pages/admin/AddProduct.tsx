@@ -32,6 +32,9 @@ const AddProduct = () => {
     stock_quantity: '',
     image_url: '',
     is_active: true,
+    discount_percentage: '',
+    discount_start_date: '',
+    discount_end_date: '',
   });
 
   const navigate = useNavigate();
@@ -68,16 +71,19 @@ const AddProduct = () => {
         throw new Error('Profile not found');
       }
 
+      const productData = {
+        ...formData,
+        price: parseFloat(formData.price),
+        stock_quantity: parseInt(formData.stock_quantity),
+        discount_percentage: formData.discount_percentage ? parseFloat(formData.discount_percentage) : 0,
+        discount_start_date: formData.discount_start_date || null,
+        discount_end_date: formData.discount_end_date || null,
+        seller_id: profile.id,
+      };
+
       const { error } = await supabase
         .from('products')
-        .insert([
-          {
-            ...formData,
-            price: parseFloat(formData.price),
-            stock_quantity: parseInt(formData.stock_quantity),
-            seller_id: profile.id,
-          }
-        ]);
+        .insert([productData]);
 
       if (error) throw error;
 
@@ -238,6 +244,42 @@ const AddProduct = () => {
                   <p className="text-sm text-muted-foreground">
                     Optional: Add a URL to an image for this product
                   </p>
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor="discount_percentage">Discount Percentage (%)</Label>
+                  <Input
+                    id="discount_percentage"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max="100"
+                    value={formData.discount_percentage}
+                    onChange={(e) => handleInputChange('discount_percentage', e.target.value)}
+                    placeholder="0.00"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="discount_start_date">Discount Start Date</Label>
+                    <Input
+                      id="discount_start_date"
+                      type="datetime-local"
+                      value={formData.discount_start_date}
+                      onChange={(e) => handleInputChange('discount_start_date', e.target.value)}
+                    />
+                  </div>
+
+                  <div className="grid gap-2">
+                    <Label htmlFor="discount_end_date">Discount End Date</Label>
+                    <Input
+                      id="discount_end_date"
+                      type="datetime-local"
+                      value={formData.discount_end_date}
+                      onChange={(e) => handleInputChange('discount_end_date', e.target.value)}
+                    />
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between">

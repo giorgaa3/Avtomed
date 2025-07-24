@@ -52,7 +52,10 @@ const EditProduct = () => {
     stock_quantity: '',
     is_active: true,
     category_id: '',
-    image_url: ''
+    image_url: '',
+    discount_percentage: '',
+    discount_start_date: '',
+    discount_end_date: ''
   });
 
   useEffect(() => {
@@ -86,7 +89,10 @@ const EditProduct = () => {
         stock_quantity: data.stock_quantity.toString(),
         is_active: data.is_active,
         category_id: data.category_id || '',
-        image_url: data.image_url || ''
+        image_url: data.image_url || '',
+        discount_percentage: data.discount_percentage?.toString() || '',
+        discount_start_date: data.discount_start_date ? new Date(data.discount_start_date).toISOString().slice(0, 16) : '',
+        discount_end_date: data.discount_end_date ? new Date(data.discount_end_date).toISOString().slice(0, 16) : ''
       });
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -127,7 +133,10 @@ const EditProduct = () => {
         stock_quantity: parseInt(formData.stock_quantity),
         is_active: formData.is_active,
         category_id: formData.category_id || null,
-        image_url: formData.image_url
+        image_url: formData.image_url,
+        discount_percentage: formData.discount_percentage ? parseFloat(formData.discount_percentage) : 0,
+        discount_start_date: formData.discount_start_date || null,
+        discount_end_date: formData.discount_end_date || null
       };
 
       const { error } = await supabase
@@ -303,6 +312,41 @@ const EditProduct = () => {
                   </div>
                 </div>
 
+                <div className="space-y-2">
+                  <Label htmlFor="discount_percentage">Discount Percentage (%)</Label>
+                  <Input
+                    id="discount_percentage"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max="100"
+                    value={formData.discount_percentage}
+                    onChange={(e) => setFormData({ ...formData, discount_percentage: e.target.value })}
+                    placeholder="0.00"
+                  />
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="discount_start_date">Discount Start Date</Label>
+                    <Input
+                      id="discount_start_date"
+                      type="datetime-local"
+                      value={formData.discount_start_date}
+                      onChange={(e) => setFormData({ ...formData, discount_start_date: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="discount_end_date">Discount End Date</Label>
+                    <Input
+                      id="discount_end_date"
+                      type="datetime-local"
+                      value={formData.discount_end_date}
+                      onChange={(e) => setFormData({ ...formData, discount_end_date: e.target.value })}
+                    />
+                  </div>
+                </div>
+
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="is_active"
@@ -371,7 +415,17 @@ const EditProduct = () => {
                 </Badge>
               </div>
               <div>
-                <div className="text-2xl font-bold text-primary">₾{formData.price || '0'}</div>
+                {formData.discount_percentage && parseFloat(formData.discount_percentage) > 0 ? (
+                  <div className="flex items-center gap-2">
+                    <div className="text-lg text-muted-foreground line-through">₾{formData.price || '0'}</div>
+                    <div className="text-2xl font-bold text-primary">
+                      ₾{((parseFloat(formData.price || '0') * (100 - parseFloat(formData.discount_percentage))) / 100).toFixed(2)}
+                    </div>
+                    <Badge variant="destructive">{formData.discount_percentage}% OFF</Badge>
+                  </div>
+                ) : (
+                  <div className="text-2xl font-bold text-primary">₾{formData.price || '0'}</div>
+                )}
                 <div className="text-sm text-muted-foreground">
                   Stock: {formData.stock_quantity || '0'} units
                 </div>

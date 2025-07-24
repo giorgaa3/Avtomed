@@ -37,6 +37,37 @@ const ProductGrid = () => {
     }
   };
 
+  const calculateDiscountedPrice = (product: any) => {
+    if (!product.discount_percentage || product.discount_percentage === 0) {
+      return product.price;
+    }
+    
+    const now = new Date();
+    const startDate = product.discount_start_date ? new Date(product.discount_start_date) : null;
+    const endDate = product.discount_end_date ? new Date(product.discount_end_date) : null;
+    
+    // Check if discount is currently active
+    const isDiscountActive = (!startDate || now >= startDate) && (!endDate || now <= endDate);
+    
+    if (isDiscountActive) {
+      return product.price * (100 - product.discount_percentage) / 100;
+    }
+    
+    return product.price;
+  };
+
+  const isDiscountActive = (product: any) => {
+    if (!product.discount_percentage || product.discount_percentage === 0) {
+      return false;
+    }
+    
+    const now = new Date();
+    const startDate = product.discount_start_date ? new Date(product.discount_start_date) : null;
+    const endDate = product.discount_end_date ? new Date(product.discount_end_date) : null;
+    
+    return (!startDate || now >= startDate) && (!endDate || now <= endDate);
+  };
+
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -87,8 +118,20 @@ const ProductGrid = () => {
             <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
             
             <div className="flex items-center justify-between">
-              <div>
-                <span className="text-xl font-bold text-primary">₾{product.price}</span>
+              <div className="flex flex-col">
+                {isDiscountActive(product) ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground line-through">₾{product.price}</span>
+                    <span className="text-xl font-bold text-primary">
+                      ₾{calculateDiscountedPrice(product).toFixed(2)}
+                    </span>
+                    <Badge variant="destructive" className="text-xs">
+                      {product.discount_percentage}% OFF
+                    </Badge>
+                  </div>
+                ) : (
+                  <span className="text-xl font-bold text-primary">₾{product.price}</span>
+                )}
               </div>
               <span className="text-sm text-muted-foreground">
                 {product.stock_quantity > 0 ? `In Stock (${product.stock_quantity})` : "Out of Stock"}
