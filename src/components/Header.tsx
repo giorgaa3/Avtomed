@@ -87,7 +87,12 @@ const Header = () => {
                     {user.user_metadata?.full_name || user.email}
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="bg-background">
+                  <DropdownMenuItem asChild>
+                    <Link to="/admin" className="w-full">
+                      Admin Panel
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => signOut()}>
                     <LogOut className="mr-2 h-4 w-4" />
                     Sign Out
