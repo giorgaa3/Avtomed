@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Star, Heart, ShoppingCart, Package, Filter, Search, Grid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,157 +8,76 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useLanguage } from "@/contexts/LanguageContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { supabase } from "@/integrations/supabase/client";
 
 const Products = () => {
-  console.log("Products component rendering");
-  console.log("Window location:", window.location.href);
   const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedCondition, setSelectedCondition] = useState("all");
   const [sortBy, setSortBy] = useState("name");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [products, setProducts] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const products = [
-    {
-      id: 1,
-      name: "Digital Stethoscope Pro",
-      price: 299.99,
-      originalPrice: 399.99,
-      image: "/placeholder.svg",
-      rating: 4.8,
-      reviews: 124,
-      condition: "new",
-      category: "Diagnostic",
-      description: "Professional-grade digital stethoscope with noise cancellation and recording capabilities. Perfect for cardiac and pulmonary examinations.",
-      features: ["Noise Cancellation", "Recording Function", "Wireless Connectivity", "Long Battery Life"],
-      inStock: true,
-      stockCount: 15
-    },
-    {
-      id: 2,
-      name: "Surgical Scissors Set",
-      price: 89.99,
-      originalPrice: null,
-      image: "/placeholder.svg",
-      rating: 4.6,
-      reviews: 89,
-      condition: "new",
-      category: "Surgical",
-      description: "Complete set of high-quality surgical scissors made from medical-grade stainless steel. Includes various sizes for different procedures.",
-      features: ["Stainless Steel", "Sharp Precision", "Autoclave Safe", "Ergonomic Design"],
-      inStock: true,
-      stockCount: 8
-    },
-    {
-      id: 3,
-      name: "Portable Ultrasound",
-      price: 1299.99,
-      originalPrice: 1599.99,
-      image: "/placeholder.svg",
-      rating: 4.9,
-      reviews: 67,
-      condition: "refurbished",
-      category: "Imaging",
-      description: "Compact and lightweight portable ultrasound device with high-resolution imaging. Ideal for point-of-care diagnostics.",
-      features: ["High Resolution", "Portable Design", "Multiple Probes", "Cloud Storage"],
-      inStock: true,
-      stockCount: 3
-    },
-    {
-      id: 4,
-      name: "Blood Pressure Monitor",
-      price: 79.99,
-      originalPrice: null,
-      image: "/placeholder.svg",
-      rating: 4.7,
-      reviews: 203,
-      condition: "new",
-      category: "Monitoring",
-      description: "Automatic digital blood pressure monitor with large display and memory function for tracking readings over time.",
-      features: ["Digital Display", "Memory Function", "Automatic Inflation", "Irregular Heartbeat Detection"],
-      inStock: true,
-      stockCount: 25
-    },
-    {
-      id: 5,
-      name: "Defibrillator AED",
-      price: 2199.99,
-      originalPrice: 2599.99,
-      image: "/placeholder.svg",
-      rating: 4.9,
-      reviews: 45,
-      condition: "refurbished",
-      category: "Emergency",
-      description: "Automated External Defibrillator with voice prompts and visual indicators. Essential for emergency cardiac care.",
-      features: ["Voice Prompts", "Visual Indicators", "Self-Testing", "Long Battery Life"],
-      inStock: false,
-      stockCount: 0
-    },
-    {
-      id: 6,
-      name: "X-Ray Film Viewer",
-      price: 189.99,
-      originalPrice: null,
-      image: "/placeholder.svg",
-      rating: 4.5,
-      reviews: 78,
-      condition: "new",
-      category: "Imaging",
-      description: "LED backlit X-ray film viewer with adjustable brightness and even light distribution for accurate diagnosis.",
-      features: ["LED Backlight", "Adjustable Brightness", "Even Light Distribution", "Wall Mountable"],
-      inStock: true,
-      stockCount: 12
-    },
-    {
-      id: 7,
-      name: "Otoscope Professional",
-      price: 149.99,
-      originalPrice: 199.99,
-      image: "/placeholder.svg",
-      rating: 4.7,
-      reviews: 156,
-      condition: "new",
-      category: "Diagnostic",
-      description: "Professional otoscope with high-quality optics and LED illumination for clear ear examinations.",
-      features: ["LED Illumination", "High-Quality Optics", "Disposable Specula", "Compact Design"],
-      inStock: true,
-      stockCount: 18
-    },
-    {
-      id: 8,
-      name: "Thermometer Digital",
-      price: 24.99,
-      originalPrice: null,
-      image: "/placeholder.svg",
-      rating: 4.4,
-      reviews: 234,
-      condition: "new",
-      category: "Diagnostic",
-      description: "Fast and accurate digital thermometer with flexible tip and fever alarm for reliable temperature readings.",
-      features: ["Fast Reading", "Flexible Tip", "Fever Alarm", "Memory Function"],
-      inStock: true,
-      stockCount: 50
+  const fetchProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select(`
+          *,
+          categories (
+            name
+          )
+        `)
+        .eq('is_active', true)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setProducts(data || []);
+    } catch (error) {
+      console.error('Error fetching products:', error);
     }
-  ];
+  };
 
-  const categories = ["all", "Diagnostic", "Surgical", "Imaging", "Monitoring", "Emergency"];
+  const fetchCategories = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .order('name');
+
+      if (error) throw error;
+      setCategories([{ id: 'all', name: 'All Categories' }, ...(data || [])]);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      await Promise.all([fetchProducts(), fetchCategories()]);
+      setLoading(false);
+    };
+    loadData();
+  }, []);
+
   const conditions = ["all", "new", "refurbished"];
 
   const filteredProducts = products
     .filter(product => 
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (selectedCategory === "all" || product.category === selectedCategory) &&
+      (selectedCategory === "all" || product.categories?.name === selectedCategory) &&
       (selectedCondition === "all" || product.condition === selectedCondition)
     )
     .sort((a, b) => {
       switch (sortBy) {
         case "price-low":
-          return a.price - b.price;
+          return Number(a.price) - Number(b.price);
         case "price-high":
-          return b.price - a.price;
-        case "rating":
-          return b.rating - a.rating;
+          return Number(b.price) - Number(a.price);
         case "name":
         default:
           return a.name.localeCompare(b.name);
@@ -181,7 +100,7 @@ const Products = () => {
       <CardContent className="p-4">
         <div className="relative mb-4">
           <img 
-            src={product.image} 
+            src={product.image_url || "/placeholder.svg"} 
             alt={product.name}
             className="w-full h-48 object-cover rounded-lg"
           />
@@ -193,14 +112,7 @@ const Products = () => {
           <div className="absolute top-2 right-2">
             <Package className="w-5 h-5 text-muted-foreground" />
           </div>
-          {product.originalPrice && (
-            <div className="absolute bottom-2 right-2">
-              <Badge className="bg-medical-red text-white">
-                Save ${(product.originalPrice - product.price).toFixed(0)}
-              </Badge>
-            </div>
-          )}
-          {!product.inStock && (
+          {(product.stock_quantity === 0 || !product.is_active) && (
             <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
               <Badge variant="destructive">Out of Stock</Badge>
             </div>
@@ -208,31 +120,16 @@ const Products = () => {
         </div>
         
         <div className="space-y-2">
-          <Badge variant="outline" className="text-xs">{product.category}</Badge>
+          <Badge variant="outline" className="text-xs">{product.categories?.name || 'Uncategorized'}</Badge>
           <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">{product.name}</h3>
           <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
           
-          <div className="flex items-center gap-2">
-            <div className="flex text-yellow-500 text-sm">
-              {"★".repeat(Math.floor(product.rating))}
-              {"☆".repeat(5 - Math.floor(product.rating))}
-            </div>
-            <span className="text-sm text-muted-foreground">
-              {product.rating} ({product.reviews})
-            </span>
-          </div>
-          
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-xl font-bold text-primary">${product.price}</span>
-              {product.originalPrice && (
-                <span className="text-sm text-muted-foreground line-through ml-2">
-                  ${product.originalPrice}
-                </span>
-              )}
+              <span className="text-xl font-bold text-primary">₾{product.price}</span>
             </div>
             <span className="text-sm text-muted-foreground">
-              {product.inStock ? `In Stock (${product.stockCount})` : "Out of Stock"}
+              {product.stock_quantity > 0 ? `In Stock (${product.stock_quantity})` : "Out of Stock"}
             </span>
           </div>
         </div>
@@ -242,10 +139,10 @@ const Products = () => {
         <div className="flex gap-2 w-full">
           <Button 
             className="flex-1 bg-gradient-hero hover:scale-105 transition-transform" 
-            disabled={!product.inStock}
+            disabled={product.stock_quantity === 0}
           >
             <ShoppingCart className="w-4 h-4 mr-2" />
-            {product.inStock ? "Add to Cart" : "Out of Stock"}
+            {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
           </Button>
           <Button variant="outline" size="sm">
             <Heart className="w-4 h-4" />
@@ -369,8 +266,8 @@ const Products = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map(category => (
-                    <SelectItem key={category} value={category}>
-                      {category === "all" ? "All Categories" : category}
+                    <SelectItem key={category.id || category} value={category.name || category}>
+                      {category.name || (category === "all" ? "All Categories" : category)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -431,7 +328,12 @@ const Products = () => {
           </div>
 
           {/* Products Grid/List */}
-          {viewMode === "grid" ? (
+          {loading ? (
+            <div className="text-center py-16">
+              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
+              <p className="mt-4 text-muted-foreground">Loading products...</p>
+            </div>
+          ) : viewMode === "grid" ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
@@ -445,7 +347,7 @@ const Products = () => {
             </div>
           )}
 
-          {filteredProducts.length === 0 && (
+          {!loading && filteredProducts.length === 0 && (
             <div className="text-center py-16 animate-fade-in">
               <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-2">No products found</h3>
