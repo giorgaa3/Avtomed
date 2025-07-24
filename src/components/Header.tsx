@@ -1,7 +1,8 @@
-import { ShoppingCart, User, Menu, Facebook, LogOut } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { ShoppingCart, User, Menu, Facebook, LogOut, Search } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-
+import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   DropdownMenu,
@@ -14,10 +15,58 @@ import { useAuth } from "@/contexts/AuthContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 import CategoriesDropdown from "./CategoriesDropdown";
 import { CartButton } from "./Cart";
+import { supabase } from "@/integrations/supabase/client";
 
 const Header = () => {
   const { t } = useLanguage();
   const { user, signOut } = useAuth();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchSuggestions, setSearchSuggestions] = useState<any[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const navigate = useNavigate();
+
+  // Fetch search suggestions when user types
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (searchTerm.length < 2) {
+        setSearchSuggestions([]);
+        setShowSuggestions(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('id, name, price, image_url, categories(name)')
+          .eq('is_active', true)
+          .ilike('name', `%${searchTerm}%`)
+          .limit(5);
+
+        if (error) throw error;
+        setSearchSuggestions(data || []);
+        setShowSuggestions(true);
+      } catch (error) {
+        console.error('Error fetching suggestions:', error);
+      }
+    };
+
+    const timeoutId = setTimeout(fetchSuggestions, 300);
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+      setShowSuggestions(false);
+    }
+  };
+
+  const handleSuggestionClick = (productName: string) => {
+    setSearchTerm(productName);
+    navigate(`/products?search=${encodeURIComponent(productName)}`);
+    setShowSuggestions(false);
+  };
   
   return (
     <header className="bg-background border-b border-border shadow-subtle">
@@ -67,6 +116,48 @@ const Header = () => {
             </Link>
           </div>
 
+          {/* Search Bar */}
+          <div className="relative flex-1 max-w-xl mx-8">
+            <form onSubmit={handleSearch} className="relative">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                <Input
+                  type="text"
+                  placeholder="Search medical equipment..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onFocus={() => searchTerm.length >= 2 && setShowSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                  className="pl-10 pr-4 w-full"
+                />
+              </div>
+              
+              {/* Search Suggestions */}
+              {showSuggestions && searchSuggestions.length > 0 && (
+                <div className="absolute top-full left-0 right-0 bg-background border rounded-md shadow-lg z-50 mt-1">
+                  {searchSuggestions.map((product) => (
+                    <div
+                      key={product.id}
+                      className="flex items-center gap-3 p-3 hover:bg-accent cursor-pointer border-b last:border-b-0"
+                      onClick={() => handleSuggestionClick(product.name)}
+                    >
+                      <img
+                        src={product.image_url || "/placeholder.svg"}
+                        alt={product.name}
+                        className="w-10 h-10 object-cover rounded"
+                      />
+                      <div className="flex-1">
+                        <div className="font-medium text-sm">{product.name}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {product.categories?.name} • ₾{product.price}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </form>
+          </div>
 
           {/* Right actions */}
           <div className="flex items-center gap-4">
@@ -79,6 +170,11 @@ const Header = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-background">
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="w-full">
+                      My Profile
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/orders" className="w-full">
                       My Orders

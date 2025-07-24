@@ -23,7 +23,7 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AddProduct from "./pages/admin/AddProduct";
 import EditProduct from "./pages/admin/EditProduct";
-import ViewProduct from "./pages/admin/ViewProduct";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,6 +47,7 @@ const App = () => (
               <Checkout />
             </ProtectedRoute>
           } />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/orders" element={
             <ProtectedRoute>
               <Orders />
@@ -78,11 +79,6 @@ const App = () => (
           <Route path="/admin/products/edit/:id" element={
             <ProtectedRoute requiredRole="admin">
               <EditProduct />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/products/view/:id" element={
-            <ProtectedRoute requiredRole="admin">
-              <ViewProduct />
             </ProtectedRoute>
           } />
           <Route path="/admin/orders" element={
