@@ -1,14 +1,22 @@
-import { Search, ShoppingCart, User, Menu, Facebook } from "lucide-react";
+import { Search, ShoppingCart, User, Menu, Facebook, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 import CategoriesDropdown from "./CategoriesDropdown";
 
 const Header = () => {
   const { t } = useLanguage();
+  const { user, signOut } = useAuth();
   
   return (
     <header className="bg-background border-b border-border shadow-subtle">
@@ -71,10 +79,29 @@ const Header = () => {
 
           {/* Right actions */}
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" className="transition-all duration-300 hover:scale-105">
-              <User className="w-4 h-4 mr-2" />
-              {t('header.account')}
-            </Button>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="transition-all duration-300 hover:scale-105">
+                    <User className="w-4 h-4 mr-2" />
+                    {user.user_metadata?.full_name || user.email}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => signOut()}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link to="/auth">
+                <Button variant="ghost" size="sm" className="transition-all duration-300 hover:scale-105">
+                  <User className="w-4 h-4 mr-2" />
+                  {t('header.account')}
+                </Button>
+              </Link>
+            )}
             <Button variant="ghost" size="sm" className="transition-all duration-300 hover:scale-105">
               <ShoppingCart className="w-4 h-4 mr-2" />
               {t('header.cart')} (0)
