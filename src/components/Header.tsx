@@ -23,12 +23,15 @@ const Header = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Search form submitted with term:", searchTerm);
     if (searchTerm.trim()) {
+      console.log("Navigating to products with search:", searchTerm.trim());
       navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
     }
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("Search input changed:", e.target.value);
     setSearchTerm(e.target.value);
   };
   

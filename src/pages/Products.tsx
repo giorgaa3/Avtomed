@@ -71,11 +71,15 @@ const Products = () => {
     const searchParam = searchParams.get('search');
     const categoryParam = searchParams.get('category');
     
+    console.log("URL search params:", { searchParam, categoryParam });
+    
     if (searchParam) {
+      console.log("Setting search term from URL:", searchParam);
       setSearchTerm(searchParam);
     }
     
     if (categoryParam) {
+      console.log("Setting category from URL:", categoryParam);
       setSelectedCategory(categoryParam);
     }
   }, [searchParams]);
