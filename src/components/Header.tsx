@@ -1,8 +1,7 @@
-import { Search, ShoppingCart, User, Menu, Facebook, LogOut } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { ShoppingCart, User, Menu, Facebook, LogOut } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   DropdownMenu,
@@ -18,22 +17,6 @@ import CategoriesDropdown from "./CategoriesDropdown";
 const Header = () => {
   const { t } = useLanguage();
   const { user, signOut } = useAuth();
-  const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Search form submitted with term:", searchTerm);
-    if (searchTerm.trim()) {
-      console.log("Navigating to products with search:", searchTerm.trim());
-      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
-    }
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("Search input changed:", e.target.value);
-    setSearchTerm(e.target.value);
-  };
   
   return (
     <header className="bg-background border-b border-border shadow-subtle">
@@ -83,18 +66,6 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* Search bar */}
-          <div className="flex-1 max-w-xl mx-8">
-            <form onSubmit={handleSearch} className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-              <Input 
-                className="pl-10 pr-4 py-2 w-full" 
-                placeholder={t('header.search')}
-                value={searchTerm}
-                onChange={handleSearchChange}
-              />
-            </form>
-          </div>
 
           {/* Right actions */}
           <div className="flex items-center gap-4">
