@@ -38,7 +38,6 @@ const Header = () => {
             </a>
           </div>
           <div className="flex items-center gap-4">
-            <span>{t('header.freeShipping')}</span>
             <span>{t('header.certified')}</span>
             <LanguageSwitcher />
           </div>
