@@ -1,9 +1,15 @@
 import { Heart, CircleDot, Bandage, Package, Scissors, Stethoscope, Baby, Bone, HeartPulse, Zap, Activity } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 const Categories = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
+
+  const handleCategoryClick = (categoryTitle: string) => {
+    navigate(`/products?category=${encodeURIComponent(categoryTitle)}`);
+  };
 
   const mainCategories = [
     {
@@ -90,7 +96,11 @@ const Categories = () => {
           {/* Main Categories */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {mainCategories.map((category, index) => (
-              <Card key={index} className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-elegant group animate-fade-in ${category.bgColor}`}>
+              <Card 
+                key={index} 
+                className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-elegant group animate-fade-in ${category.bgColor}`}
+                onClick={() => handleCategoryClick(category.title)}
+              >
                 <CardContent className="p-6 text-center">
                   <category.icon className={`w-12 h-12 mx-auto mb-4 ${category.color} group-hover:animate-bounce-gentle transition-colors`} />
                   <h3 className="font-semibold mb-2">{category.title}</h3>
@@ -102,7 +112,10 @@ const Categories = () => {
 
           {/* Metal Instruments Section */}
           <div className="max-w-4xl mx-auto">
-            <Card className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-elegant group animate-fade-in ${metalInstruments.bgColor} border-2 border-primary/20`}>
+            <Card 
+              className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-elegant group animate-fade-in ${metalInstruments.bgColor} border-2 border-primary/20`}
+              onClick={() => handleCategoryClick(metalInstruments.title)}
+            >
               <CardContent className="p-8 text-center">
                 <metalInstruments.icon className={`w-16 h-16 mx-auto mb-6 ${metalInstruments.color} group-hover:animate-bounce-gentle transition-colors`} />
                 <h3 className="text-2xl font-bold mb-4">{metalInstruments.title}</h3>
@@ -110,7 +123,14 @@ const Categories = () => {
                 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {metalInstruments.subcategories.map((subcategory, subIndex) => (
-                    <Card key={subIndex} className="cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg group bg-background border border-border">
+                    <Card 
+                      key={subIndex} 
+                      className="cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg group bg-background border border-border"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCategoryClick(subcategory.title);
+                      }}
+                    >
                       <CardContent className="p-6 text-center">
                         <subcategory.icon className={`w-10 h-10 mx-auto mb-3 ${subcategory.color} group-hover:animate-pulse transition-colors`} />
                         <h4 className="text-sm font-medium">{subcategory.title}</h4>
