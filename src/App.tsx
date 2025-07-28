@@ -21,6 +21,8 @@ import AdminProducts from "./pages/admin/AdminProducts";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminAnalytics from "./pages/admin/AdminAnalytics";
+import AdminInventory from "./pages/admin/AdminInventory";
 import AddProduct from "./pages/admin/AddProduct";
 import EditProduct from "./pages/admin/EditProduct";
 import Profile from "./pages/Profile";
@@ -89,6 +91,16 @@ const App = () => (
           <Route path="/admin/users" element={
             <ProtectedRoute requiredRole="admin">
               <AdminUsers />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/analytics" element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminAnalytics />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/inventory" element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminInventory />
             </ProtectedRoute>
           } />
           <Route path="/admin/settings" element={
