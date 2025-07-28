@@ -177,9 +177,37 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
       await fetchOrders();
 
+      // Send order confirmation email
+      try {
+        const orderItems = cartItems.map(item => ({
+          product_name: item.products.name,
+          quantity: item.quantity,
+          price: Number(item.products.price),
+        }));
+
+        await supabase.functions.invoke('send-order-confirmation', {
+          body: {
+            orderId: orderData.id,
+            userEmail: user.email,
+            orderDetails: {
+              id: orderData.id,
+              total_amount: totalAmount,
+              currency: 'GEL',
+              shipping_address: shippingAddress,
+              phone_number: phoneNumber,
+              items: orderItems,
+            },
+          },
+        });
+        console.log('Order confirmation email sent successfully');
+      } catch (emailError) {
+        console.error('Failed to send confirmation email:', emailError);
+        // Don't fail the order creation if email fails
+      }
+
       toast({
         title: "Order created successfully",
-        description: `Order #${orderData.id.slice(-8)} has been placed`,
+        description: `Order #${orderData.id.slice(-8)} has been placed. Confirmation email sent.`,
       });
 
       return orderData.id;

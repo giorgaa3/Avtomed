@@ -127,6 +127,7 @@ export type Database = {
           id: string
           payment_method: string | null
           payment_reference: string | null
+          phone_number: string | null
           shipping_address: string | null
           status: string
           stripe_session_id: string | null
@@ -142,6 +143,7 @@ export type Database = {
           id?: string
           payment_method?: string | null
           payment_reference?: string | null
+          phone_number?: string | null
           shipping_address?: string | null
           status?: string
           stripe_session_id?: string | null
@@ -157,6 +159,7 @@ export type Database = {
           id?: string
           payment_method?: string | null
           payment_reference?: string | null
+          phone_number?: string | null
           shipping_address?: string | null
           status?: string
           stripe_session_id?: string | null
