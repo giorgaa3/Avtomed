@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, CreditCard, MapPin, Package } from "lucide-react";
+import { ArrowLeft, CreditCard, MapPin, Package, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/contexts/CartContext";
 import { useOrders } from "@/contexts/OrderContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -17,14 +19,27 @@ const Checkout = () => {
   const { cartItems, cartTotal, clearCart } = useCart();
   const { createOrder, loading } = useOrders();
   const { t } = useLanguage();
+  const { user } = useAuth();
   
   const [shippingAddress, setShippingAddress] = useState("");
   const [billingAddress, setBillingAddress] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [useSameAddress, setUseSameAddress] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  const validatePhoneNumber = (phone: string) => {
+    // Georgian phone number validation: +995 format or local format
+    const georgianPhoneRegex = /^(\+995|995)?[0-9]{9}$/;
+    return georgianPhoneRegex.test(phone.replace(/\s+/g, ''));
+  };
+
   const handlePlaceOrder = async () => {
     if (!shippingAddress.trim()) {
+      return;
+    }
+
+    if (!phoneNumber.trim() || !validatePhoneNumber(phoneNumber)) {
+      alert('Please enter a valid phone number');
       return;
     }
 
@@ -34,7 +49,8 @@ const Checkout = () => {
       const orderId = await createOrder(
         cartItems,
         shippingAddress,
-        useSameAddress ? shippingAddress : billingAddress
+        useSameAddress ? shippingAddress : billingAddress,
+        phoneNumber
       );
 
       if (orderId) {
@@ -109,6 +125,22 @@ const Checkout = () => {
                     required
                     className="mt-1"
                   />
+                </div>
+
+                <div>
+                  <Label htmlFor="phone">Phone Number *</Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="+995 XXX XXX XXX"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    required
+                    className="mt-1"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Required for delivery coordination
+                  </p>
                 </div>
 
                 <div className="flex items-center space-x-2">
@@ -219,7 +251,7 @@ const Checkout = () => {
                 <Button 
                   className="w-full bg-gradient-hero hover:bg-primary-dark"
                   onClick={handlePlaceOrder}
-                  disabled={!shippingAddress.trim() || isProcessing || loading}
+                  disabled={!shippingAddress.trim() || !phoneNumber.trim() || !validatePhoneNumber(phoneNumber) || isProcessing || loading}
                 >
                   {isProcessing ? (
                     <>
