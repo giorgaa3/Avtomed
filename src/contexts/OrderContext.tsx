@@ -35,7 +35,7 @@ interface OrderItem {
 interface OrderContextType {
   orders: Order[];
   loading: boolean;
-  createOrder: (cartItems: any[], shippingAddress: string, billingAddress?: string) => Promise<string | null>;
+  createOrder: (cartItems: any[], shippingAddress: string, billingAddress: string, phoneNumber: string) => Promise<string | null>;
   fetchOrders: () => Promise<void>;
   getOrderById: (orderId: string) => Promise<Order | null>;
   updateOrderStatus: (orderId: string, status: string, bogTransactionId?: string) => Promise<void>;
@@ -89,7 +89,8 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const createOrder = async (
     cartItems: any[], 
     shippingAddress: string, 
-    billingAddress?: string
+    billingAddress: string,
+    phoneNumber: string
   ): Promise<string | null> => {
     if (!user) {
       toast({
@@ -128,7 +129,8 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           status: 'pending',
           payment_method: 'bog_gateway',
           shipping_address: shippingAddress,
-          billing_address: billingAddress || shippingAddress,
+          billing_address: billingAddress,
+          phone_number: phoneNumber,
         })
         .select()
         .single();
