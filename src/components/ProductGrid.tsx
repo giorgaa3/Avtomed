@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Star, Heart, ShoppingCart, Package } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -11,6 +11,7 @@ import { useCart } from "@/contexts/CartContext";
 const ProductGrid = () => {
   const { t } = useLanguage();
   const { addToCart } = useCart();
+  const navigate = useNavigate();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -89,7 +90,10 @@ const ProductGrid = () => {
     };
 
     return (
-      <Card className="group hover:shadow-elegant transition-all duration-300 hover:scale-105 animate-fade-in">
+      <Card 
+        className="group hover:shadow-elegant transition-all duration-300 hover:scale-105 animate-fade-in cursor-pointer"
+        onClick={() => navigate(`/products/${product.id}`)}
+      >
         <CardContent className="p-4">
           <div className="relative mb-4">
             <img 
@@ -145,12 +149,19 @@ const ProductGrid = () => {
             <Button 
               className="flex-1 bg-gradient-hero hover:scale-105 transition-transform" 
               disabled={product.stock_quantity === 0}
-              onClick={handleAddToCart}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAddToCart();
+              }}
             >
               <ShoppingCart className="w-4 h-4 mr-2" />
               {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
             </Button>
-            <Button variant="outline" size="sm">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={(e) => e.stopPropagation()}
+            >
               <Heart className="w-4 h-4" />
             </Button>
           </div>

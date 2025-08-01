@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Star, Heart, ShoppingCart, Package, Filter, Search, Grid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,7 @@ import { useCart } from "@/contexts/CartContext";
 const Products = () => {
   const { t } = useLanguage();
   const { addToCart } = useCart();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -132,7 +133,10 @@ const Products = () => {
     };
 
     return (
-      <Card className="group hover:shadow-elegant transition-all duration-300 hover:scale-105 animate-fade-in">
+      <Card 
+        className="group hover:shadow-elegant transition-all duration-300 hover:scale-105 animate-fade-in cursor-pointer"
+        onClick={() => navigate(`/products/${product.id}`)}
+      >
         <CardContent className="p-4">
           <div className="relative mb-4">
             <img 
@@ -176,12 +180,19 @@ const Products = () => {
             <Button 
               className="flex-1 bg-gradient-hero hover:scale-105 transition-transform" 
               disabled={product.stock_quantity === 0}
-              onClick={handleAddToCart}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAddToCart();
+              }}
             >
               <ShoppingCart className="w-4 h-4 mr-2" />
               {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
             </Button>
-            <Button variant="outline" size="sm">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={(e) => e.stopPropagation()}
+            >
               <Heart className="w-4 h-4" />
             </Button>
           </div>
