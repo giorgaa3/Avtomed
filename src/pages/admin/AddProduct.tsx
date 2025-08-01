@@ -35,6 +35,8 @@ const AddProduct = () => {
     discount_percentage: '',
     discount_start_date: '',
     discount_end_date: '',
+    manufacturer: '',
+    origin_country: ''
   });
 
   const navigate = useNavigate();
@@ -244,6 +246,34 @@ const AddProduct = () => {
                   <p className="text-sm text-muted-foreground">
                     Optional: Add a URL to an image for this product
                   </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="manufacturer">Manufacturer</Label>
+                    <Input
+                      id="manufacturer"
+                      value={formData.manufacturer}
+                      onChange={(e) => handleInputChange('manufacturer', e.target.value)}
+                      placeholder="e.g. Apple, Samsung..."
+                    />
+                    <p className="text-sm text-muted-foreground">
+                      Optional: Product manufacturer or brand
+                    </p>
+                  </div>
+
+                  <div className="grid gap-2">
+                    <Label htmlFor="origin_country">Made In</Label>
+                    <Input
+                      id="origin_country"
+                      value={formData.origin_country}
+                      onChange={(e) => handleInputChange('origin_country', e.target.value)}
+                      placeholder="e.g. China, USA, Germany..."
+                    />
+                    <p className="text-sm text-muted-foreground">
+                      Optional: Country of origin
+                    </p>
+                  </div>
                 </div>
 
                 <div className="grid gap-2">

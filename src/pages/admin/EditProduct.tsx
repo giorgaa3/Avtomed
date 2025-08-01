@@ -23,6 +23,8 @@ interface Product {
   is_active: boolean;
   category_id: string;
   image_url: string;
+  manufacturer?: string;
+  origin_country?: string;
   categories?: {
     name: string;
   };
@@ -55,7 +57,9 @@ const EditProduct = () => {
     image_url: '',
     discount_percentage: '',
     discount_start_date: '',
-    discount_end_date: ''
+    discount_end_date: '',
+    manufacturer: '',
+    origin_country: ''
   });
 
   useEffect(() => {
@@ -92,7 +96,9 @@ const EditProduct = () => {
         image_url: data.image_url || '',
         discount_percentage: data.discount_percentage?.toString() || '',
         discount_start_date: data.discount_start_date ? new Date(data.discount_start_date).toISOString().slice(0, 16) : '',
-        discount_end_date: data.discount_end_date ? new Date(data.discount_end_date).toISOString().slice(0, 16) : ''
+        discount_end_date: data.discount_end_date ? new Date(data.discount_end_date).toISOString().slice(0, 16) : '',
+        manufacturer: (data as any).manufacturer || '',
+        origin_country: (data as any).origin_country || ''
       });
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -136,7 +142,9 @@ const EditProduct = () => {
         image_url: formData.image_url,
         discount_percentage: formData.discount_percentage ? parseFloat(formData.discount_percentage) : 0,
         discount_start_date: formData.discount_start_date || null,
-        discount_end_date: formData.discount_end_date || null
+        discount_end_date: formData.discount_end_date || null,
+        manufacturer: formData.manufacturer || null,
+        origin_country: formData.origin_country || null
       };
 
       const { error } = await supabase
@@ -309,6 +317,27 @@ const EditProduct = () => {
                     <Button type="button" variant="outline">
                       <Upload className="h-4 w-4" />
                     </Button>
+                  </div>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="manufacturer">Manufacturer</Label>
+                    <Input
+                      id="manufacturer"
+                      value={formData.manufacturer}
+                      onChange={(e) => setFormData({ ...formData, manufacturer: e.target.value })}
+                      placeholder="e.g. Apple, Samsung..."
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="origin_country">Made In</Label>
+                    <Input
+                      id="origin_country"
+                      value={formData.origin_country}
+                      onChange={(e) => setFormData({ ...formData, origin_country: e.target.value })}
+                      placeholder="e.g. China, USA, Germany..."
+                    />
                   </div>
                 </div>
 
