@@ -15,7 +15,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 const AdminSettings = () => {
   const { t } = useLanguage();
   const [settings, setSettings] = useState({
-    siteName: 'ავტომედი',
+    siteName: 'ავთომედი',
     siteDescription: 'Professional Medical Equipment Marketplace',
     contactEmail: 'info@avtomed.com',
     supportPhone: '+995 555 123 456',
