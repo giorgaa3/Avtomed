@@ -21,6 +21,8 @@ interface Product {
   stock_quantity: number;
   condition: string;
   is_active: boolean;
+  manufacturer?: string;
+  origin_country?: string;
   categories?: {
     name: string;
   };
@@ -216,7 +218,31 @@ export default function ProductDetails() {
 
             {/* Product Features */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Product Features</h3>
+              <h3 className="text-lg font-semibold">Product Information</h3>
+              
+              {/* Manufacturer and Origin Info */}
+              {(product.manufacturer || product.origin_country) && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  {product.manufacturer && (
+                    <Card>
+                      <CardContent className="p-4">
+                        <h4 className="font-medium text-primary mb-2">Manufacturer</h4>
+                        <p className="text-muted-foreground">{product.manufacturer}</p>
+                      </CardContent>
+                    </Card>
+                  )}
+                  
+                  {product.origin_country && (
+                    <Card>
+                      <CardContent className="p-4">
+                        <h4 className="font-medium text-primary mb-2">Made In</h4>
+                        <p className="text-muted-foreground">{product.origin_country}</p>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              )}
+
               <div className="grid grid-cols-2 gap-4">
                 <Card>
                   <CardContent className="p-4 flex items-center gap-3">
