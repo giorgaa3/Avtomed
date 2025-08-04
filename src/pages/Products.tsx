@@ -201,86 +201,90 @@ const Products = () => {
     );
   };
 
-  const ProductListItem = ({ product }: { product: any }) => (
-    <Card className="group hover:shadow-elegant transition-all duration-300 animate-fade-in">
-      <CardContent className="p-4">
-        <div className="flex gap-4">
-          <div className="relative w-32 h-32 flex-shrink-0">
-            <img 
-              src={product.image} 
-              alt={product.name}
-              className="w-full h-full object-cover rounded-lg"
-            />
-            <div className="absolute top-1 left-1">
-              <Badge className={`${getConditionColor(product.condition)} text-xs`}>
-                {product.condition === "new" ? t('products.condition.new') : t('products.condition.refurbished')}
-              </Badge>
-            </div>
-            {!product.inStock && (
-              <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
-                <Badge variant="destructive" className="text-xs">Out of Stock</Badge>
+  const ProductListItem = ({ product }: { product: any }) => {
+    const handleAddToCart = () => {
+      addToCart(product.id);
+    };
+
+    return (
+      <Card 
+        className="group hover:shadow-elegant transition-all duration-300 animate-fade-in cursor-pointer"
+        onClick={() => navigate(`/products/${product.id}`)}
+      >
+        <CardContent className="p-4">
+          <div className="flex gap-4">
+            <div className="relative w-32 h-32 flex-shrink-0">
+              <img 
+                src={product.image_url || "/placeholder.svg"} 
+                alt={product.name}
+                className="w-full h-full object-cover rounded-lg"
+              />
+              <div className="absolute top-1 left-1">
+                <Badge className={`${getConditionColor(product.condition)} text-xs`}>
+                  {product.condition === "new" ? t('products.condition.new') : t('products.condition.refurbished')}
+                </Badge>
               </div>
-            )}
-          </div>
-          
-          <div className="flex-1 space-y-2">
-            <div className="flex items-start justify-between">
-              <div>
-                <Badge variant="outline" className="text-xs mb-1">{product.category}</Badge>
-                <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">{product.name}</h3>
-                <p className="text-sm text-muted-foreground">{product.description}</p>
-              </div>
-              <div className="text-right">
-                <div className="text-xl font-bold text-primary">${product.price}</div>
-                {product.originalPrice && (
-                  <div className="text-sm text-muted-foreground line-through">
-                    ${product.originalPrice}
-                  </div>
-                )}
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <div className="flex text-yellow-500 text-sm">
-                  {"★".repeat(Math.floor(product.rating))}
-                  {"☆".repeat(5 - Math.floor(product.rating))}
+              {(product.stock_quantity === 0 || !product.is_active) && (
+                <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
+                  <Badge variant="destructive" className="text-xs">Out of Stock</Badge>
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  {product.rating} ({product.reviews})
-                </span>
-              </div>
-              <span className="text-sm text-muted-foreground">
-                {product.inStock ? `In Stock (${product.stockCount})` : "Out of Stock"}
-              </span>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              {product.features.slice(0, 3).map((feature, index) => (
-                <Badge key={index} variant="secondary" className="text-xs">{feature}</Badge>
-              ))}
-              {product.features.length > 3 && (
-                <span className="text-xs text-muted-foreground">+{product.features.length - 3} more</span>
               )}
             </div>
             
-            <div className="flex gap-2 pt-2">
-              <Button 
-                className="bg-gradient-hero hover:scale-105 transition-transform" 
-                disabled={!product.inStock}
-              >
-                <ShoppingCart className="w-4 h-4 mr-2" />
-                {product.inStock ? "Add to Cart" : "Out of Stock"}
-              </Button>
-              <Button variant="outline" size="sm">
-                <Heart className="w-4 h-4" />
-              </Button>
+            <div className="flex-1 space-y-2">
+              <div className="flex items-start justify-between">
+                <div>
+                  <Badge variant="outline" className="text-xs mb-1">{product.categories?.name || 'Uncategorized'}</Badge>
+                  <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">{product.name}</h3>
+                  <p className="text-sm text-muted-foreground">{product.description}</p>
+                  {product.manufacturer && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      <span className="font-medium">Manufacturer:</span> {product.manufacturer}
+                    </p>
+                  )}
+                  {product.origin_country && (
+                    <p className="text-xs text-muted-foreground">
+                      <span className="font-medium">Origin:</span> {product.origin_country}
+                    </p>
+                  )}
+                </div>
+                <div className="text-right">
+                  <div className="text-xl font-bold text-primary">₾{product.price}</div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-muted-foreground">
+                  {product.stock_quantity > 0 ? `In Stock (${product.stock_quantity})` : "Out of Stock"}
+                </span>
+              </div>
+              
+              <div className="flex gap-2 pt-2">
+                <Button 
+                  className="bg-gradient-hero hover:scale-105 transition-transform" 
+                  disabled={product.stock_quantity === 0}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToCart();
+                  }}
+                >
+                  <ShoppingCart className="w-4 h-4 mr-2" />
+                  {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Heart className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
+        </CardContent>
+      </Card>
+    );
+  };
 
   return (
     <div className="min-h-screen">
