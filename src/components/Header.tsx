@@ -1,4 +1,4 @@
-import { ShoppingCart, User, Menu, Facebook, LogOut } from "lucide-react";
+import { User, Menu, Facebook, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 import CategoriesDropdown from "./CategoriesDropdown";
-import { CartButton } from "./Cart";
+
 import { supabase } from "@/integrations/supabase/client";
 
 const Header = () => {
@@ -85,11 +85,6 @@ const Header = () => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/orders" className="w-full">
-                      My Orders
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
                     <Link to="/admin" className="w-full">
                       Admin Panel
                     </Link>
@@ -108,7 +103,7 @@ const Header = () => {
                 </Button>
               </Link>
             )}
-            <CartButton />
+            
             <Button className="bg-gradient-hero transition-all duration-300 hover:scale-105 hover:shadow-lg animate-glow">
               {t('header.listEquipment')}
             </Button>

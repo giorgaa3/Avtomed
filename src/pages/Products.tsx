@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Star, Heart, ShoppingCart, Package, Filter, Search, Grid, List } from "lucide-react";
+import { Star, Heart, Package, Filter, Search, Grid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -10,11 +10,11 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
-import { useCart } from "@/contexts/CartContext";
+
 
 const Products = () => {
   const { t } = useLanguage();
-  const { addToCart } = useCart();
+  
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
@@ -128,9 +128,6 @@ const Products = () => {
   };
 
   const ProductCard = ({ product }: { product: any }) => {
-    const handleAddToCart = () => {
-      addToCart(product.id);
-    };
 
     return (
       <Card 
@@ -179,14 +176,12 @@ const Products = () => {
           <div className="flex gap-2 w-full">
             <Button 
               className="flex-1 bg-gradient-hero hover:scale-105 transition-transform" 
-              disabled={product.stock_quantity === 0}
               onClick={(e) => {
                 e.stopPropagation();
-                handleAddToCart();
+                navigate(`/products/${product.id}`);
               }}
             >
-              <ShoppingCart className="w-4 h-4 mr-2" />
-              {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
+              View Details
             </Button>
             <Button 
               variant="outline" 
@@ -202,9 +197,6 @@ const Products = () => {
   };
 
   const ProductListItem = ({ product }: { product: any }) => {
-    const handleAddToCart = () => {
-      addToCart(product.id);
-    };
 
     return (
       <Card 
@@ -262,14 +254,12 @@ const Products = () => {
               <div className="flex gap-2 pt-2">
                 <Button 
                   className="bg-gradient-hero hover:scale-105 transition-transform" 
-                  disabled={product.stock_quantity === 0}
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleAddToCart();
+                    navigate(`/products/${product.id}`);
                   }}
                 >
-                  <ShoppingCart className="w-4 h-4 mr-2" />
-                  {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
+                  View Details
                 </Button>
                 <Button 
                   variant="outline" 

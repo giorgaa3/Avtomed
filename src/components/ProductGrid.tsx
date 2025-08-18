@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import { Star, Heart, ShoppingCart, Package } from "lucide-react";
+import { Star, Heart, Package } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
-import { useCart } from "@/contexts/CartContext";
+
 
 const ProductGrid = () => {
   const { t } = useLanguage();
-  const { addToCart } = useCart();
+  
   const navigate = useNavigate();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -85,9 +85,6 @@ const ProductGrid = () => {
   };
 
   const ProductCard = ({ product }: { product: any }) => {
-    const handleAddToCart = () => {
-      addToCart(product.id);
-    };
 
     return (
       <Card 
@@ -148,14 +145,12 @@ const ProductGrid = () => {
           <div className="flex gap-2 w-full">
             <Button 
               className="flex-1 bg-gradient-hero hover:scale-105 transition-transform" 
-              disabled={product.stock_quantity === 0}
               onClick={(e) => {
                 e.stopPropagation();
-                handleAddToCart();
+                navigate(`/products/${product.id}`);
               }}
             >
-              <ShoppingCart className="w-4 h-4 mr-2" />
-              {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
+              View Details
             </Button>
             <Button 
               variant="outline" 

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { 
   Package, 
   Users, 
-  ShoppingCart, 
   BarChart3, 
   Settings,
   Plus,
@@ -27,7 +26,6 @@ import {
 const mainItems = [
   { title: "Dashboard", url: "/admin", icon: BarChart3 },
   { title: "Products", url: "/admin/products", icon: Package },
-  { title: "Orders", url: "/admin/orders", icon: ShoppingCart },
   { title: "Users", url: "/admin/users", icon: Users },
   { title: "Settings", url: "/admin/settings", icon: Settings },
 ];

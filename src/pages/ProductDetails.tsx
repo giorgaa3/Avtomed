@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, ShoppingCart, Heart, Package, Star, Shield, Truck, RotateCcw } from "lucide-react";
+import { ArrowLeft, Heart, Package, Star, Shield, Truck, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useCart } from "@/contexts/CartContext";
+
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 
@@ -31,12 +31,10 @@ interface Product {
 export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  
   const { t } = useLanguage();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
-  const [quantity, setQuantity] = useState(1);
-
   useEffect(() => {
     const fetchProduct = async () => {
       if (!id) return;
@@ -70,16 +68,6 @@ export default function ProductDetails() {
 
     fetchProduct();
   }, [id]);
-
-  const handleAddToCart = () => {
-    if (!product) return;
-    
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product.id);
-    }
-    
-    toast.success(`${quantity} item(s) added to cart`);
-  };
 
   const getConditionColor = (condition: string) => {
     return condition === "new" 
@@ -176,37 +164,12 @@ export default function ProductDetails() {
                 </div>
               </div>
 
-              {product.stock_quantity > 0 && (
-                <div className="flex items-center gap-4">
-                  <label htmlFor="quantity" className="font-medium">Quantity:</label>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    >
-                      -
-                    </Button>
-                    <span className="w-12 text-center font-medium">{quantity}</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setQuantity(Math.min(product.stock_quantity, quantity + 1))}
-                    >
-                      +
-                    </Button>
-                  </div>
-                </div>
-              )}
-
               <div className="flex gap-4">
                 <Button
                   className="flex-1 bg-gradient-hero hover:scale-105 transition-transform"
-                  disabled={product.stock_quantity === 0 || !product.is_active}
-                  onClick={handleAddToCart}
+                  onClick={() => navigate('/contact')}
                 >
-                  <ShoppingCart className="w-4 h-4 mr-2" />
-                  {product.stock_quantity > 0 ? "Add to Cart" : "Out of Stock"}
+                  Contact for Purchase
                 </Button>
                 <Button variant="outline" size="icon">
                   <Heart className="w-4 h-4" />
