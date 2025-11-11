@@ -1,0 +1,29 @@
+-- Create storage bucket for product images
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+  'product-images',
+  'product-images',
+  true,
+  5242880,
+  ARRAY['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+);
+
+-- Create RLS policies for product images bucket
+CREATE POLICY "Anyone can view product images"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'product-images');
+
+CREATE POLICY "Authenticated users can upload product images"
+ON storage.objects FOR INSERT
+TO authenticated
+WITH CHECK (bucket_id = 'product-images');
+
+CREATE POLICY "Users can update their own product images"
+ON storage.objects FOR UPDATE
+TO authenticated
+USING (bucket_id = 'product-images' AND auth.uid() IS NOT NULL);
+
+CREATE POLICY "Users can delete their own product images"
+ON storage.objects FOR DELETE
+TO authenticated
+USING (bucket_id = 'product-images' AND auth.uid() IS NOT NULL);

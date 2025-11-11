@@ -23,6 +23,9 @@ const AddProduct = () => {
   const { t } = useLanguage();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -57,11 +60,77 @@ const AddProduct = () => {
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Error",
+          description: "Please select an image file",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "Error",
+          description: "Image size should be less than 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadImage = async (): Promise<string | null> => {
+    if (!imageFile) return formData.image_url || null;
+
+    setUploading(true);
+    try {
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError, data } = await supabase.storage
+        .from('product-images')
+        .upload(filePath, imageFile);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload image",
+        variant: "destructive",
+      });
+      return null;
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      // Upload image first if there's a file
+      const uploadedImageUrl = await uploadImage();
+
       // Get user's profile to get seller_id
       const { data: profile } = await supabase
         .from('profiles')
@@ -75,6 +144,7 @@ const AddProduct = () => {
 
       const productData = {
         ...formData,
+        image_url: uploadedImageUrl || formData.image_url || null,
         price: parseFloat(formData.price),
         stock_quantity: parseInt(formData.stock_quantity),
         discount_percentage: formData.discount_percentage ? parseFloat(formData.discount_percentage) : 0,
@@ -236,16 +306,56 @@ const AddProduct = () => {
                 </div>
 
                 <div className="grid gap-2">
-                  <Label htmlFor="image_url">Image URL</Label>
-                  <Input
-                    id="image_url"
-                    value={formData.image_url}
-                    onChange={(e) => handleInputChange('image_url', e.target.value)}
-                    placeholder="https://example.com/image.jpg"
-                  />
-                  <p className="text-sm text-muted-foreground">
-                    Optional: Add a URL to an image for this product
-                  </p>
+                  <Label>Product Image</Label>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="flex-1"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        disabled={uploading}
+                      >
+                        <Upload className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    
+                    {imagePreview && (
+                      <div className="relative w-32 h-32 border rounded-lg overflow-hidden">
+                        <img 
+                          src={imagePreview} 
+                          alt="Preview" 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t" />
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-background px-2 text-muted-foreground">
+                          Or use URL
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <Input
+                      id="image_url"
+                      value={formData.image_url}
+                      onChange={(e) => handleInputChange('image_url', e.target.value)}
+                      placeholder="https://example.com/image.jpg"
+                    />
+                    <p className="text-sm text-muted-foreground">
+                      Upload an image file or provide a URL
+                    </p>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
