@@ -9,9 +9,9 @@ const AdminDashboard = () => {
   const { t } = useLanguage();
   const [stats, setStats] = useState({
     totalProducts: 0,
+    activeProducts: 0,
     totalUsers: 0,
-    totalOrders: 0,
-    totalRevenue: 0,
+    expiringProducts: 0,
   });
 
   useEffect(() => {
@@ -22,23 +22,33 @@ const AdminDashboard = () => {
           .from('products')
           .select('*', { count: 'exact', head: true });
 
+        // Fetch active products count
+        const { count: activeCount } = await supabase
+          .from('products')
+          .select('*', { count: 'exact', head: true })
+          .eq('is_active', true);
+
         // Fetch users count
         const { count: usersCount } = await supabase
           .from('profiles')
           .select('*', { count: 'exact', head: true });
 
-        // Fetch orders count and revenue
-        const { data: orders, count: ordersCount } = await supabase
-          .from('orders')
-          .select('total_amount', { count: 'exact' });
-
-        const totalRevenue = orders?.reduce((sum, order) => sum + Number(order.total_amount), 0) || 0;
+        // Fetch expiring products (discount ending in next 7 days)
+        const nextWeek = new Date();
+        nextWeek.setDate(nextWeek.getDate() + 7);
+        
+        const { count: expiringCount } = await supabase
+          .from('products')
+          .select('*', { count: 'exact', head: true })
+          .not('discount_end_date', 'is', null)
+          .lte('discount_end_date', nextWeek.toISOString())
+          .gte('discount_end_date', new Date().toISOString());
 
         setStats({
           totalProducts: productsCount || 0,
+          activeProducts: activeCount || 0,
           totalUsers: usersCount || 0,
-          totalOrders: ordersCount || 0,
-          totalRevenue,
+          expiringProducts: expiringCount || 0,
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
@@ -50,32 +60,32 @@ const AdminDashboard = () => {
 
   const statCards = [
     {
-      title: t('admin.totalProducts'),
+      title: 'Total Products',
       value: stats.totalProducts,
-      description: 'Active products in catalog',
+      description: 'All products in catalog',
       icon: Package,
       color: 'text-blue-600',
     },
     {
-      title: t('admin.totalUsers'),
-      value: stats.totalUsers,
-      description: 'Registered users',
-      icon: Users,
+      title: 'Active Products',
+      value: stats.activeProducts,
+      description: 'Currently visible products',
+      icon: Package,
       color: 'text-green-600',
     },
     {
-      title: t('admin.totalOrders'),
-      value: stats.totalOrders,
-      description: 'Orders placed',
-      icon: ShoppingCart,
-      color: 'text-orange-600',
+      title: 'Registered Users',
+      value: stats.totalUsers,
+      description: 'Total user accounts',
+      icon: Users,
+      color: 'text-purple-600',
     },
     {
-      title: t('admin.revenue'),
-      value: `₾${stats.totalRevenue.toFixed(2)}`,
-      description: 'Total revenue',
+      title: 'Expiring Soon',
+      value: stats.expiringProducts,
+      description: 'Discounts ending in 7 days',
       icon: TrendingUp,
-      color: 'text-purple-600',
+      color: stats.expiringProducts > 0 ? 'text-red-600' : 'text-orange-600',
     },
   ];
 
@@ -131,7 +141,7 @@ const AdminDashboard = () => {
                 <div className="flex items-center">
                   <div className="ml-4 space-y-1">
                     <p className="text-sm font-medium leading-none">
-                      Order processed
+                      Product inventory updated
                     </p>
                     <p className="text-sm text-muted-foreground">
                       1 hour ago
@@ -164,8 +174,8 @@ const AdminDashboard = () => {
                 <a href="/admin/products/new" className="text-sm hover:underline">
                   → Add new product
                 </a>
-                <a href="/admin/orders" className="text-sm hover:underline">
-                  → View recent orders
+                <a href="/admin/products" className="text-sm hover:underline">
+                  → View all products
                 </a>
                 <a href="/admin/users" className="text-sm hover:underline">
                   → Manage users
