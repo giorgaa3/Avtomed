@@ -19,7 +19,7 @@ const Contact = () => {
     {
       icon: Phone,
       label: language === 'ka' ? 'ტელეფონი' : 'Phone',
-      value: '0322 53 03 03',
+      value: '+995555121706',
       color: 'text-medical-green'
     },
     {
@@ -78,7 +78,16 @@ const Contact = () => {
                         </div>
                         <div>
                           <h3 className="font-semibold text-lg">{info.label}</h3>
-                          <p className="text-muted-foreground">{info.value}</p>
+                          {info.icon === Phone ? (
+                            <a 
+                              href={`tel:${info.value}`}
+                              className="text-muted-foreground hover:text-primary transition-colors"
+                            >
+                              {info.value}
+                            </a>
+                          ) : (
+                            <p className="text-muted-foreground">{info.value}</p>
+                          )}
                           {info.icon === MapPin && (
                             <a 
                               href="https://maps.google.com/?q=Lubliana+St.+38b,+Tbilisi,+Georgia"
