@@ -16,7 +16,6 @@ interface InventoryItem {
   id: string;
   name: string;
   stock_quantity: number;
-  price: number;
   condition: string;
   is_active: boolean;
   categories?: {
@@ -42,7 +41,6 @@ const AdminInventory = () => {
           id,
           name,
           stock_quantity,
-          price,
           condition,
           is_active,
           categories (
@@ -98,14 +96,13 @@ const AdminInventory = () => {
 
   const exportInventory = () => {
     const csvContent = [
-      ['Product Name', 'Category', 'Stock Quantity', 'Price', 'Condition', 'Status', 'Stock Status'].join(','),
+      ['Product Name', 'Category', 'Stock Quantity', 'Condition', 'Status', 'Stock Status'].join(','),
       ...filteredProducts.map(product => {
         const stockStatus = getStockStatus(product.stock_quantity);
         return [
           product.name,
           product.categories?.name || 'Uncategorized',
           product.stock_quantity,
-          product.price,
           product.condition,
           product.is_active ? 'Active' : 'Inactive',
           stockStatus.status
@@ -138,7 +135,6 @@ const AdminInventory = () => {
 
   const lowStockItems = products.filter(p => p.stock_quantity <= 5);
   const outOfStockItems = products.filter(p => p.stock_quantity === 0);
-  const totalValue = products.reduce((sum, product) => sum + (product.stock_quantity * product.price), 0);
 
   if (loading) {
     return (
@@ -173,7 +169,7 @@ const AdminInventory = () => {
         </div>
 
         {/* Inventory Statistics */}
-        <div className="grid gap-4 md:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Products</CardTitle>
@@ -204,17 +200,6 @@ const AdminInventory = () => {
             <CardContent>
               <div className="text-2xl font-bold">{outOfStockItems.length}</div>
               <p className="text-xs text-muted-foreground">Items unavailable</p>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Value</CardTitle>
-              <TrendingUp className="h-4 w-4 text-green-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">₾{totalValue.toFixed(2)}</div>
-              <p className="text-xs text-muted-foreground">Inventory value</p>
             </CardContent>
           </Card>
         </div>
@@ -272,8 +257,6 @@ const AdminInventory = () => {
                   <TableHead>Category</TableHead>
                   <TableHead>Stock</TableHead>
                   <TableHead>Stock Status</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Value</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -293,8 +276,6 @@ const AdminInventory = () => {
                           {stockStatus.status}
                         </Badge>
                       </TableCell>
-                      <TableCell>₾{product.price}</TableCell>
-                      <TableCell>₾{(product.stock_quantity * product.price).toFixed(2)}</TableCell>
                       <TableCell>
                         <Dialog>
                           <DialogTrigger asChild>

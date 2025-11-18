@@ -175,16 +175,12 @@ export type Database = {
           condition: string | null
           created_at: string
           description: string | null
-          discount_end_date: string | null
-          discount_percentage: number | null
-          discount_start_date: string | null
           id: string
           image_url: string | null
           is_active: boolean | null
           manufacturer: string | null
           name: string
           origin_country: string | null
-          price: number
           seller_id: string
           stock_quantity: number | null
           updated_at: string
@@ -194,16 +190,12 @@ export type Database = {
           condition?: string | null
           created_at?: string
           description?: string | null
-          discount_end_date?: string | null
-          discount_percentage?: number | null
-          discount_start_date?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean | null
           manufacturer?: string | null
           name: string
           origin_country?: string | null
-          price: number
           seller_id: string
           stock_quantity?: number | null
           updated_at?: string
@@ -213,16 +205,12 @@ export type Database = {
           condition?: string | null
           created_at?: string
           description?: string | null
-          discount_end_date?: string | null
-          discount_percentage?: number | null
-          discount_start_date?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean | null
           manufacturer?: string | null
           name?: string
           origin_country?: string | null
-          price?: number
           seller_id?: string
           stock_quantity?: number | null
           updated_at?: string

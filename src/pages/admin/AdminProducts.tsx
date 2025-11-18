@@ -16,7 +16,6 @@ interface Product {
   id: string;
   name: string;
   description?: string;
-  price: number;
   condition: string;
   stock_quantity: number;
   is_active: boolean;
@@ -127,10 +126,9 @@ const AdminProducts = () => {
       const duplicatedProduct = {
         name: `${product.name} (Copy)`,
         description: product.description,
-        price: product.price,
         condition: product.condition,
         stock_quantity: product.stock_quantity,
-        is_active: false, // Start as inactive
+        is_active: false,
         category_id: product.category_id,
         image_url: product.image_url,
         seller_id: user.id
@@ -159,11 +157,10 @@ const AdminProducts = () => {
 
   const exportProducts = () => {
     const csvContent = [
-      ['Name', 'Category', 'Price', 'Stock', 'Condition', 'Status'].join(','),
+      ['Name', 'Category', 'Stock', 'Condition', 'Status'].join(','),
       ...filteredProducts.map(product => [
         product.name,
         product.categories?.name || 'Uncategorized',
-        product.price,
         product.stock_quantity,
         product.condition,
         product.is_active ? 'Active' : 'Inactive'
@@ -259,7 +256,6 @@ const AdminProducts = () => {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Category</TableHead>
-                  <TableHead>Price</TableHead>
                   <TableHead>Stock</TableHead>
                   <TableHead>Condition</TableHead>
                   <TableHead>Status</TableHead>
@@ -271,7 +267,6 @@ const AdminProducts = () => {
                   <TableRow key={product.id}>
                     <TableCell className="font-medium">{product.name}</TableCell>
                     <TableCell>{product.categories?.name || 'Uncategorized'}</TableCell>
-                    <TableCell>₾{product.price}</TableCell>
                     <TableCell>{product.stock_quantity}</TableCell>
                     <TableCell>
                       <Badge variant="outline">{product.condition}</Badge>
