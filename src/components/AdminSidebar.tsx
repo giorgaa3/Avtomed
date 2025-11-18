@@ -6,7 +6,8 @@ import {
   Settings,
   Plus,
   Search,
-  Menu
+  Menu,
+  Mail
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 
@@ -26,6 +27,7 @@ import {
 const mainItems = [
   { title: "Dashboard", url: "/admin", icon: BarChart3 },
   { title: "Products", url: "/admin/products", icon: Package },
+  { title: "Messages", url: "/admin/messages", icon: Mail },
   { title: "Users", url: "/admin/users", icon: Users },
   { title: "Settings", url: "/admin/settings", icon: Settings },
 ];

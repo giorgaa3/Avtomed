@@ -13,12 +13,13 @@ import ProductDetails from "./pages/ProductDetails";
 import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
-
+import AdminMessages from "./pages/admin/AdminMessages";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminInventory from "./pages/admin/AdminInventory";
 import AddProduct from "./pages/admin/AddProduct";
 import EditProduct from "./pages/admin/EditProduct";
+import ViewProduct from "./pages/admin/ViewProduct";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
@@ -60,6 +61,11 @@ const App = () => (
               <EditProduct />
             </ProtectedRoute>
           } />
+          <Route path="/admin/products/view/:id" element={
+            <ProtectedRoute requiredRole="admin">
+              <ViewProduct />
+            </ProtectedRoute>
+          } />
           <Route path="/admin/users" element={
             <ProtectedRoute requiredRole="admin">
               <AdminUsers />
@@ -68,6 +74,11 @@ const App = () => (
           <Route path="/admin/inventory" element={
             <ProtectedRoute requiredRole="admin">
               <AdminInventory />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/messages" element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminMessages />
             </ProtectedRoute>
           } />
           <Route path="/admin/settings" element={
