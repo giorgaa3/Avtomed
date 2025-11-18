@@ -5,9 +5,74 @@ import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { useState } from "react";
 
 const Contact = () => {
   const { t, language } = useLanguage();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: ""
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Client-side validation
+    if (!formData.name.trim()) {
+      toast.error(language === 'ka' ? 'გთხოვთ შეიყვანოთ თქვენი სახელი' : 'Please enter your name');
+      return;
+    }
+    
+    if (!formData.email.trim() || !formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      toast.error(language === 'ka' ? 'გთხოვთ შეიყვანოთ სწორი ელ. ფოსტა' : 'Please enter a valid email');
+      return;
+    }
+    
+    if (!formData.message.trim()) {
+      toast.error(language === 'ka' ? 'გთხოვთ დაწეროთ შეტყობინება' : 'Please enter a message');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('contact-form-submission', {
+        body: {
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          message: formData.message.trim()
+        }
+      });
+
+      if (error) throw error;
+
+      toast.success(
+        language === 'ka' 
+          ? 'თქვენი შეტყობინება წარმატებით გაიგზავნა!' 
+          : 'Your message has been sent successfully!'
+      );
+      
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        message: ""
+      });
+    } catch (error: any) {
+      console.error('Error submitting form:', error);
+      toast.error(
+        language === 'ka' 
+          ? 'შეცდომა გაგზავნისას. გთხოვთ სცადოთ თავიდან.' 
+          : 'Error sending message. Please try again.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const contactInfo = [
     {
@@ -129,24 +194,43 @@ const Contact = () => {
                   <h3 className="text-xl font-semibold mb-4">
                     {language === 'ka' ? 'შეტყობინება გამოგვიგზავნეთ' : 'Send us a Message'}
                   </h3>
-                  <div className="space-y-4">
+                  <form onSubmit={handleSubmit} className="space-y-4">
                     <Input 
                       placeholder={language === 'ka' ? 'თქვენი სახელი' : 'Your Name'} 
                       className="w-full"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      maxLength={100}
+                      required
                     />
                     <Input 
                       type="email" 
                       placeholder={language === 'ka' ? 'ელ. ფოსტა' : 'Email Address'} 
                       className="w-full"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      maxLength={255}
+                      required
                     />
                     <textarea 
                       className="w-full p-3 border border-border rounded-md min-h-[120px] resize-none"
                       placeholder={language === 'ka' ? 'თქვენი შეტყობინება...' : 'Your Message...'}
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      maxLength={2000}
+                      required
                     ></textarea>
-                    <Button className="w-full bg-gradient-hero hover:scale-105 transition-transform">
-                      {language === 'ka' ? 'გაგზავნა' : 'Send Message'}
+                    <Button 
+                      type="submit"
+                      className="w-full bg-gradient-hero hover:scale-105 transition-transform"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting 
+                        ? (language === 'ka' ? 'იგზავნება...' : 'Sending...') 
+                        : (language === 'ka' ? 'გაგზავნა' : 'Send Message')
+                      }
                     </Button>
-                  </div>
+                  </form>
                 </CardContent>
               </Card>
             </div>
