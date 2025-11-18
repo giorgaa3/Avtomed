@@ -16,7 +16,6 @@ interface Product {
   id: string;
   name: string;
   description: string;
-  price: number;
   image_url: string;
   stock_quantity: number;
   condition: string;
@@ -155,7 +154,6 @@ export default function ProductDetails() {
 
             <div className="space-y-4">
               <div className="flex items-center gap-4">
-                <span className="text-4xl font-bold text-primary">₾{product.price}</span>
                 <div className="flex items-center gap-2">
                   <Package className="w-5 h-5 text-muted-foreground" />
                   <span className="text-muted-foreground">

@@ -145,11 +145,7 @@ const AddProduct = () => {
       const productData = {
         ...formData,
         image_url: uploadedImageUrl || formData.image_url || null,
-        price: parseFloat(formData.price),
         stock_quantity: parseInt(formData.stock_quantity),
-        discount_percentage: formData.discount_percentage ? parseFloat(formData.discount_percentage) : 0,
-        discount_start_date: formData.discount_start_date || null,
-        discount_end_date: formData.discount_end_date || null,
         seller_id: profile.id,
       };
 
@@ -238,21 +234,8 @@ const AddProduct = () => {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="price">Price (₾)</Label>
-                    <Input
-                      id="price"
-                      type="number"
-                      step="0.01"
-                      value={formData.price}
-                      onChange={(e) => handleInputChange('price', e.target.value)}
-                      placeholder="0.00"
-                      required
-                    />
-                  </div>
-
-                  <div className="grid gap-2">
-                    <Label htmlFor="stock">Stock Quantity</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="stock">Stock Quantity *</Label>
                     <Input
                       id="stock"
                       type="number"
@@ -261,6 +244,19 @@ const AddProduct = () => {
                       placeholder="0"
                       required
                     />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="condition">Condition</Label>
+                    <Select value={formData.condition} onValueChange={(value) => handleInputChange('condition', value)}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="new">New</SelectItem>
+                        <SelectItem value="used">Used</SelectItem>
+                        <SelectItem value="refurbished">Refurbished</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
               </CardContent>

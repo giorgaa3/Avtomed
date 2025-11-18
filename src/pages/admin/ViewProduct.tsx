@@ -12,7 +12,6 @@ interface Product {
   id: string;
   name: string;
   description: string;
-  price: number;
   condition: string;
   stock_quantity: number;
   is_active: boolean;
@@ -188,8 +187,6 @@ const ViewProduct = () => {
                     </Badge>
                   </div>
                   
-                  <div className="text-3xl font-bold text-primary">₾{product.price}</div>
-                  
                   <div className="text-sm text-muted-foreground">
                     <div>Stock: {product.stock_quantity} units</div>
                     <div>Category: {product.categories?.name || 'Uncategorized'}</div>
@@ -231,10 +228,6 @@ const ViewProduct = () => {
               </div>
 
               <div className="grid gap-4 md:grid-cols-3">
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Price</label>
-                  <div className="text-2xl font-bold text-primary">₾{product.price}</div>
-                </div>
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Stock</label>
                   <div className="text-2xl font-bold">{product.stock_quantity}</div>
