@@ -13,6 +13,18 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { z } from 'zod';
+
+// Validation schema for product data
+const productSchema = z.object({
+  name: z.string().min(1, "Product name is required").max(200, "Name must be less than 200 characters"),
+  description: z.string().max(5000, "Description must be less than 5000 characters").optional(),
+  stock_quantity: z.number().int().min(0, "Stock must be 0 or greater").max(999999, "Stock cannot exceed 999999"),
+  manufacturer: z.string().max(100, "Manufacturer must be less than 100 characters").optional(),
+  origin_country: z.string().max(100, "Country must be less than 100 characters").optional(),
+  image_url: z.string().url("Invalid URL format").max(2000, "URL too long").optional().or(z.literal("")),
+  condition: z.enum(["new", "used", "refurbished"]),
+});
 
 interface Category {
   id: string;
@@ -128,6 +140,29 @@ const AddProduct = () => {
     setLoading(true);
 
     try {
+      // Validate form data before submission
+      const stockQuantity = parseInt(formData.stock_quantity) || 0;
+      const validationResult = productSchema.safeParse({
+        name: formData.name.trim(),
+        description: formData.description.trim() || undefined,
+        stock_quantity: stockQuantity,
+        manufacturer: formData.manufacturer.trim() || undefined,
+        origin_country: formData.origin_country.trim() || undefined,
+        image_url: formData.image_url.trim() || undefined,
+        condition: formData.condition,
+      });
+
+      if (!validationResult.success) {
+        const errors = validationResult.error.errors.map(e => e.message).join(", ");
+        toast({
+          title: "Validation Error",
+          description: errors,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       // Upload image first if there's a file
       const uploadedImageUrl = await uploadImage();
 
@@ -143,9 +178,15 @@ const AddProduct = () => {
       }
 
       const productData = {
-        ...formData,
-        image_url: uploadedImageUrl || formData.image_url || null,
-        stock_quantity: parseInt(formData.stock_quantity),
+        name: formData.name.trim().substring(0, 200),
+        description: formData.description.trim().substring(0, 5000) || null,
+        category_id: formData.category_id || null,
+        condition: formData.condition,
+        stock_quantity: Math.max(0, Math.min(stockQuantity, 999999)),
+        image_url: uploadedImageUrl || formData.image_url.trim().substring(0, 2000) || null,
+        is_active: formData.is_active,
+        manufacturer: formData.manufacturer.trim().substring(0, 100) || null,
+        origin_country: formData.origin_country.trim().substring(0, 100) || null,
         seller_id: profile.id,
       };
 
