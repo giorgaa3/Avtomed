@@ -10,6 +10,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 
+interface UserRole {
+  role: 'admin' | 'seller' | 'buyer';
+}
+
 interface User {
   id: string;
   user_id: string;
@@ -29,13 +33,34 @@ const AdminUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const { data, error } = await supabase
+      // Fetch profiles
+      const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setUsers(data || []);
+      if (profilesError) throw profilesError;
+
+      // Fetch roles from user_roles table
+      const { data: roles, error: rolesError } = await supabase
+        .from('user_roles')
+        .select('user_id, role');
+
+      if (rolesError) throw rolesError;
+
+      // Create a map of user_id to role
+      const roleMap = new Map<string, 'admin' | 'seller' | 'buyer'>();
+      roles?.forEach((r: UserRole & { user_id: string }) => {
+        roleMap.set(r.user_id, r.role);
+      });
+
+      // Merge profiles with roles
+      const usersWithRoles = profiles?.map(profile => ({
+        ...profile,
+        role: roleMap.get(profile.user_id) || 'buyer'
+      })) || [];
+
+      setUsers(usersWithRoles);
     } catch (error) {
       console.error('Error fetching users:', error);
       toast({
@@ -48,12 +73,13 @@ const AdminUsers = () => {
     }
   };
 
-  const updateUserRole = async (userId: string, newRole: 'admin' | 'seller' | 'buyer') => {
+  const updateUserRole = async (profileId: string, userAuthId: string, newRole: 'admin' | 'seller' | 'buyer') => {
     try {
+      // Update role in the secure user_roles table using user's auth ID
       const { error } = await supabase
-        .from('profiles')
+        .from('user_roles')
         .update({ role: newRole })
-        .eq('id', userId);
+        .eq('user_id', userAuthId);
 
       if (error) throw error;
 
@@ -229,7 +255,7 @@ const AdminUsers = () => {
                       <div className="flex items-center space-x-2">
                         <select 
                           value={user.role}
-                          onChange={(e) => updateUserRole(user.id, e.target.value as 'admin' | 'seller' | 'buyer')}
+                          onChange={(e) => updateUserRole(user.id, user.user_id, e.target.value as 'admin' | 'seller' | 'buyer')}
                           className="text-sm border rounded px-2 py-1"
                         >
                           <option value="buyer">Buyer</option>

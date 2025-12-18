@@ -16,8 +16,9 @@ export const ProtectedRoute = ({ children, requiredRole = 'buyer' }: ProtectedRo
   useEffect(() => {
     const fetchUserRole = async () => {
       if (user) {
+        // Fetch role from the secure user_roles table
         const { data } = await supabase
-          .from('profiles')
+          .from('user_roles')
           .select('role')
           .eq('user_id', user.id)
           .single();
