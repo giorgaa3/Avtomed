@@ -62,16 +62,23 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`Found ${expiringProducts.length} expiring products`);
 
-    // Get admin users to notify
-    const { data: adminProfiles, error: adminError } = await supabase
-      .from("profiles")
-      .select("user_id, full_name")
+    // Get admin users to notify from the secure user_roles table
+    const { data: adminRoles, error: adminError } = await supabase
+      .from("user_roles")
+      .select("user_id")
       .eq("role", "admin");
 
     if (adminError) {
-      console.error("Error fetching admin profiles:", adminError);
+      console.error("Error fetching admin roles:", adminError);
       throw adminError;
     }
+
+    // Get profile info for admin users
+    const adminUserIds = adminRoles?.map(r => r.user_id) || [];
+    const { data: adminProfiles } = await supabase
+      .from("profiles")
+      .select("user_id, full_name")
+      .in("user_id", adminUserIds);
 
     if (!adminProfiles || adminProfiles.length === 0) {
       console.log("No admin users found to notify");
