@@ -10,6 +10,14 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, User, Save, Edit } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { z } from "zod";
+
+// Validation schema for profile data
+const profileSchema = z.object({
+  full_name: z.string().max(100, "Name must be less than 100 characters").optional(),
+  phone: z.string().max(20, "Phone must be less than 20 characters").regex(/^[\d\s+\-()]*$/, "Invalid phone format").optional().or(z.literal("")),
+  address: z.string().max(500, "Address must be less than 500 characters").optional(),
+});
 
 interface UserProfile {
   user_id: string;
@@ -97,12 +105,30 @@ const Profile = () => {
     setSaving(true);
 
     try {
+      // Validate form data before submission
+      const validationResult = profileSchema.safeParse({
+        full_name: formData.full_name.trim() || undefined,
+        phone: formData.phone.trim() || undefined,
+        address: formData.address.trim() || undefined,
+      });
+
+      if (!validationResult.success) {
+        const errors = validationResult.error.errors.map(e => e.message).join(", ");
+        toast({
+          title: "Validation Error",
+          description: errors,
+          variant: "destructive",
+        });
+        setSaving(false);
+        return;
+      }
+
       const { error } = await supabase
         .from('profiles')
         .update({
-          full_name: formData.full_name,
-          phone: formData.phone,
-          address: formData.address,
+          full_name: formData.full_name.trim().substring(0, 100) || null,
+          phone: formData.phone.trim().substring(0, 20) || null,
+          address: formData.address.trim().substring(0, 500) || null,
         })
         .eq('user_id', user?.id);
 

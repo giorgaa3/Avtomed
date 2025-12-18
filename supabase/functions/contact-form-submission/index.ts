@@ -25,8 +25,8 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const { name, email, message }: ContactFormRequest = await req.json();
 
-    // Validate input
-    if (!name || name.trim().length === 0) {
+    // Validate input with strict rules
+    if (!name || typeof name !== 'string' || name.trim().length === 0) {
       return new Response(
         JSON.stringify({ error: "Name is required" }),
         {
@@ -36,7 +36,17 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    if (!email || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    if (name.length > 100) {
+      return new Response(
+        JSON.stringify({ error: "Name must be less than 100 characters" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    if (!email || typeof email !== 'string' || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
       return new Response(
         JSON.stringify({ error: "Valid email is required" }),
         {
@@ -46,7 +56,17 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    if (!message || message.trim().length === 0) {
+    if (email.length > 255) {
+      return new Response(
+        JSON.stringify({ error: "Email must be less than 255 characters" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    if (!message || typeof message !== 'string' || message.trim().length === 0) {
       return new Response(
         JSON.stringify({ error: "Message is required" }),
         {
@@ -56,10 +76,28 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Sanitize inputs (trim and limit length)
-    const sanitizedName = name.trim().substring(0, 100);
+    if (message.length > 2000) {
+      return new Response(
+        JSON.stringify({ error: "Message must be less than 2000 characters" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    // Sanitize inputs - strip HTML tags and encode special characters
+    const stripHtml = (str: string) => str.replace(/<[^>]*>/g, '');
+    const encodeHtml = (str: string) => 
+      str.replace(/&/g, '&amp;')
+         .replace(/</g, '&lt;')
+         .replace(/>/g, '&gt;')
+         .replace(/"/g, '&quot;')
+         .replace(/'/g, '&#039;');
+
+    const sanitizedName = encodeHtml(stripHtml(name.trim())).substring(0, 100);
     const sanitizedEmail = email.trim().toLowerCase().substring(0, 255);
-    const sanitizedMessage = message.trim().substring(0, 2000);
+    const sanitizedMessage = encodeHtml(stripHtml(message.trim())).substring(0, 2000);
 
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
