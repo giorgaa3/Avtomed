@@ -36,4 +36,7 @@ port = 54329
 verify_jwt = true
 
 [functions.send-order-confirmation]
-verify_jwt = false
+verify_jwt = true
+
+[functions.manage-product]
+verify_jwt = true

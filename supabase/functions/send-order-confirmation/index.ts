@@ -11,19 +11,6 @@ const corsHeaders = {
 
 interface OrderConfirmationRequest {
   orderId: string;
-  userEmail: string;
-  orderDetails: {
-    id: string;
-    total_amount: number;
-    currency: string;
-    shipping_address: string;
-    phone_number: string;
-    items: Array<{
-      product_name: string;
-      quantity: number;
-      price: number;
-    }>;
-  };
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -35,12 +22,112 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     console.log("Order confirmation email request received");
 
-    const { orderId, userEmail, orderDetails }: OrderConfirmationRequest = await req.json();
+    // Verify authentication
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.error("No authorization header provided");
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized - no token provided' }),
+        { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_ANON_KEY')!,
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    // Get authenticated user
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      console.error("Auth error:", authError);
+      return new Response(
+        JSON.stringify({ error: 'Invalid auth token' }),
+        { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    console.log(`Authenticated user: ${user.id}, email: ${user.email}`);
+
+    const { orderId }: OrderConfirmationRequest = await req.json();
+
+    // Validate orderId format (UUID)
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!orderId || !uuidRegex.test(orderId)) {
+      console.error("Invalid order ID format:", orderId);
+      return new Response(
+        JSON.stringify({ error: 'Invalid order ID format' }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    // Fetch order from database - RLS will ensure user can only see their own orders
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .select(`
+        id,
+        total_amount,
+        currency,
+        shipping_address,
+        phone_number,
+        user_id,
+        order_items (
+          quantity,
+          price,
+          products (
+            name
+          )
+        )
+      `)
+      .eq('id', orderId)
+      .single();
+
+    if (orderError || !order) {
+      console.error("Order fetch error:", orderError);
+      return new Response(
+        JSON.stringify({ error: 'Order not found or access denied' }),
+        { status: 404, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    // Verify the authenticated user owns this order
+    if (order.user_id !== user.id) {
+      console.error(`User ${user.id} attempted to access order belonging to ${order.user_id}`);
+      return new Response(
+        JSON.stringify({ error: 'Access denied - order belongs to another user' }),
+        { status: 403, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    // Use authenticated user's email
+    const userEmail = user.email;
+    if (!userEmail) {
+      console.error("User has no email address");
+      return new Response(
+        JSON.stringify({ error: 'User email not found' }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    // Build order details from database
+    const orderDetails = {
+      id: order.id,
+      total_amount: order.total_amount,
+      currency: order.currency || 'GEL',
+      shipping_address: order.shipping_address || 'Not provided',
+      phone_number: order.phone_number || 'Not provided',
+      items: (order.order_items || []).map((item: any) => ({
+        product_name: item.products?.name || 'Unknown Product',
+        quantity: item.quantity,
+        price: item.price
+      }))
+    };
 
     console.log(`Sending confirmation email for order ${orderId} to ${userEmail}`);
 
     // Generate order items HTML
-    const orderItemsHtml = orderDetails.items.map(item => `
+    const orderItemsHtml = orderDetails.items.map((item: any) => `
       <tr style="border-bottom: 1px solid #eee;">
         <td style="padding: 12px 0; font-weight: 500;">${item.product_name}</td>
         <td style="padding: 12px 0; text-align: center;">${item.quantity}</td>
