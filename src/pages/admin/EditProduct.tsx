@@ -122,7 +122,7 @@ const EditProduct = () => {
     setSaving(true);
 
     try {
-      const updateData = {
+      const productData = {
         name: formData.name,
         description: formData.description,
         condition: formData.condition,
@@ -134,12 +134,13 @@ const EditProduct = () => {
         origin_country: formData.origin_country || null
       };
 
-      const { error } = await supabase
-        .from('products')
-        .update(updateData)
-        .eq('id', id);
+      // Use edge function for server-side validation
+      const { data: result, error } = await supabase.functions.invoke('manage-product', {
+        body: { action: 'update', productId: id, productData }
+      });
 
       if (error) throw error;
+      if (result?.error) throw new Error(result.error);
 
       toast({
         title: "Success",
@@ -147,11 +148,11 @@ const EditProduct = () => {
       });
 
       navigate('/admin/products');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating product:', error);
       toast({
         title: "Error",
-        description: "Failed to update product",
+        description: error?.message || "Failed to update product",
         variant: "destructive",
       });
     } finally {

@@ -166,35 +166,25 @@ const AddProduct = () => {
       // Upload image first if there's a file
       const uploadedImageUrl = await uploadImage();
 
-      // Get user's profile to get seller_id
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('user_id', user?.id)
-        .single();
-
-      if (!profile) {
-        throw new Error('Profile not found');
-      }
-
       const productData = {
-        name: formData.name.trim().substring(0, 200),
-        description: formData.description.trim().substring(0, 5000) || null,
+        name: formData.name.trim(),
+        description: formData.description.trim() || null,
         category_id: formData.category_id || null,
         condition: formData.condition,
-        stock_quantity: Math.max(0, Math.min(stockQuantity, 999999)),
-        image_url: uploadedImageUrl || formData.image_url.trim().substring(0, 2000) || null,
+        stock_quantity: stockQuantity,
+        image_url: uploadedImageUrl || formData.image_url.trim() || null,
         is_active: formData.is_active,
-        manufacturer: formData.manufacturer.trim().substring(0, 100) || null,
-        origin_country: formData.origin_country.trim().substring(0, 100) || null,
-        seller_id: profile.id,
+        manufacturer: formData.manufacturer.trim() || null,
+        origin_country: formData.origin_country.trim() || null,
       };
 
-      const { error } = await supabase
-        .from('products')
-        .insert([productData]);
+      // Use edge function for server-side validation
+      const { data: result, error } = await supabase.functions.invoke('manage-product', {
+        body: { action: 'create', productData }
+      });
 
       if (error) throw error;
+      if (result?.error) throw new Error(result.error);
 
       toast({
         title: "Success",
