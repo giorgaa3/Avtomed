@@ -73,24 +73,24 @@ const Hero = () => {
         style={{ backgroundImage: `url(${heroImage})` }}
       ></div>
       
-      <div className="relative container mx-auto px-4 py-20 text-center">
+      <div className="relative container mx-auto px-4 py-12 md:py-20 text-center">
         <div className="max-w-3xl mx-auto animate-fade-in-up">
-          <h1 className="text-5xl font-bold mb-6 font-display leading-tight">
+          <h1 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 font-display leading-tight">
             {t('hero.title')} 
             <span className="text-yellow-300 animate-bounce-gentle"> {t('hero.titleHighlight')}</span>
           </h1>
-          <p className="text-xl mb-8 text-primary-foreground/90 leading-relaxed animate-fade-in">
+          <p className="text-base md:text-xl mb-6 md:mb-8 text-primary-foreground/90 leading-relaxed animate-fade-in px-2">
             {t('hero.description')}
           </p>
           
           {/* Enhanced search */}
-          <div className="bg-white rounded-lg p-4 shadow-medical mb-8 animate-scale-in transition-all duration-300 hover:shadow-elegant relative">
-            <form onSubmit={handleSearch} className="flex gap-3">
+          <div className="bg-white rounded-lg p-3 md:p-4 shadow-medical mb-6 md:mb-8 animate-scale-in transition-all duration-300 hover:shadow-elegant relative mx-2 md:mx-0">
+            <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <div className="flex-1 relative">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5 transition-colors duration-300" />
                   <Input 
-                    className="pl-12 pr-4 py-3 text-lg border-0 focus:ring-2 focus:ring-primary transition-all duration-300 focus:scale-[1.02]" 
+                    className="pl-12 pr-4 py-3 text-base md:text-lg border-0 focus:ring-2 focus:ring-primary transition-all duration-300" 
                     placeholder={t('hero.searchPlaceholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -113,7 +113,7 @@ const Hero = () => {
                           alt={product.name}
                           className="w-10 h-10 object-cover rounded"
                         />
-                        <div className="flex-1">
+                        <div className="flex-1 text-left">
                           <div className="font-medium text-sm text-foreground">{product.name}</div>
                           <div className="text-xs text-muted-foreground">
                             {product.categories?.name} • ₾{product.price}
@@ -127,7 +127,7 @@ const Hero = () => {
               <Button 
                 type="submit"
                 size="lg" 
-                className="px-8 bg-gradient-hero hover:bg-primary-dark transition-all duration-300 hover:scale-105 hover:shadow-lg animate-glow"
+                className="px-6 md:px-8 bg-gradient-hero hover:bg-primary-dark transition-all duration-300 hover:scale-105 hover:shadow-lg w-full sm:w-auto"
                 onClick={handleSearchClick}
               >
                 {t('hero.searchButton')}
@@ -136,21 +136,20 @@ const Hero = () => {
           </div>
 
           {/* Trust indicators */}
-          <div className="grid grid-cols-3 gap-6 text-center animate-fade-in">
+          <div className="grid grid-cols-3 gap-2 md:gap-6 text-center animate-fade-in px-2">
             <div className="flex flex-col items-center group transition-all duration-300 hover:scale-110">
-              <Shield className="w-8 h-8 mb-2 text-yellow-300 group-hover:animate-bounce-gentle" />
-              <div className="text-sm font-medium font-sans">{t('hero.fdaCertified')}</div>
-              <div className="text-xs text-primary-foreground/80">{t('hero.fdaDescription')}</div>
+              <Shield className="w-6 h-6 md:w-8 md:h-8 mb-1 md:mb-2 text-yellow-300 group-hover:animate-bounce-gentle" />
+              <div className="text-xs md:text-sm font-medium font-sans">{t('hero.fdaCertified')}</div>
+              <div className="text-[10px] md:text-xs text-primary-foreground/80 hidden sm:block">{t('hero.fdaDescription')}</div>
             </div>
             <div className="flex flex-col items-center group transition-all duration-300 hover:scale-110">
-              <Truck className="w-8 h-8 mb-2 text-yellow-300 group-hover:animate-bounce-gentle" />
-              <div className="text-sm font-medium font-sans">{t('hero.freeShipping')}</div>
-              
+              <Truck className="w-6 h-6 md:w-8 md:h-8 mb-1 md:mb-2 text-yellow-300 group-hover:animate-bounce-gentle" />
+              <div className="text-xs md:text-sm font-medium font-sans">{t('hero.freeShipping')}</div>
             </div>
             <div className="flex flex-col items-center group transition-all duration-300 hover:scale-110">
-              <Award className="w-8 h-8 mb-2 text-yellow-300 group-hover:animate-bounce-gentle" />
-              <div className="text-sm font-medium font-sans">{t('hero.warranty')}</div>
-              <div className="text-xs text-primary-foreground/80">{t('hero.warrantyDescription')}</div>
+              <Award className="w-6 h-6 md:w-8 md:h-8 mb-1 md:mb-2 text-yellow-300 group-hover:animate-bounce-gentle" />
+              <div className="text-xs md:text-sm font-medium font-sans">{t('hero.warranty')}</div>
+              <div className="text-[10px] md:text-xs text-primary-foreground/80 hidden sm:block">{t('hero.warrantyDescription')}</div>
             </div>
           </div>
         </div>
