@@ -49,7 +49,7 @@ const Header = () => {
         <div className="flex items-center justify-between py-3 md:py-4">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="group flex items-center gap-2 md:gap-3 transition-all duration-300 ease-in-out">
+            <Link to="/" className="group flex items-center gap-1 md:gap-1.5 transition-all duration-300 ease-in-out">
               <div className="relative">
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-150"></div>
                 <img 
