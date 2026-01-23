@@ -49,17 +49,23 @@ const Header = () => {
         <div className="flex items-center justify-between py-3 md:py-4">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="group flex items-center gap-2 md:gap-3 hover:scale-105 active:scale-95 transition-all duration-300 ease-in-out">
+            <Link to="/" className="group flex items-center gap-2 md:gap-3 transition-all duration-300 ease-in-out">
               <div className="relative">
+                <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-150"></div>
                 <img 
                   src="/lovable-uploads/29063f06-8447-4719-96af-dddba4e78f67.png" 
                   alt="AvtoMed Logo" 
-                  className="h-8 md:h-12 w-auto transform transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110 group-active:rotate-0 group-active:scale-95"
+                  className="h-8 md:h-12 w-auto relative transform transition-all duration-500 group-hover:rotate-6 group-hover:scale-125 group-active:rotate-0 group-active:scale-95 drop-shadow-md group-hover:drop-shadow-xl"
                 />
               </div>
-              <span className="text-xl md:text-2xl font-bold text-primary font-display transition-all duration-200 group-active:text-primary/80">
-                AvtoMed
-              </span>
+              <div className="flex flex-col">
+                <span className="text-xl md:text-2xl font-bold text-primary font-display transition-all duration-300 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-medical-blue group-active:text-primary/80">
+                  AvtoMed
+                </span>
+                <span className="text-[10px] text-muted-foreground opacity-0 group-hover:opacity-100 transition-all duration-300 -mt-1 tracking-wide">
+                  Medical Equipment
+                </span>
+              </div>
             </Link>
           </div>
 
