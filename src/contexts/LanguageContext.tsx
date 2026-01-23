@@ -22,7 +22,7 @@ const translations = {
     'header.contact': 'Contact',
     'header.search': 'Search medical instruments...',
     'header.support': 'avtandilzviadadze@yahho.com',
-    'header.phone': '0322 53 03 03',
+    'header.phone': '577 31-35-58',
     'header.freeShipping': 'Free Shipping on Orders ₾500+',
     'header.certified': 'ISO 13485 Certified',
     
@@ -133,7 +133,7 @@ const translations = {
     'header.contact': 'კონტაქტი',
     'header.search': 'მოძებნეთ სამედიცინო ინსტრუმენტები...',
     'header.support': 'avtandilzviadadze@yahho.com',
-    'header.phone': '0322 53 03 03',
+    'header.phone': '577 31-35-58',
     'header.freeShipping': 'უფასო მიწოდება ₾500+ შეკვეთებზე',
     'header.certified': 'ISO 13485 სერტიფიკატი',
     
