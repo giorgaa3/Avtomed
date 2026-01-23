@@ -49,15 +49,15 @@ const Header = () => {
         <div className="flex items-center justify-between py-3 md:py-4">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="group flex items-center gap-2 md:gap-3 hover:scale-105 transition-all duration-300 ease-in-out">
+            <Link to="/" className="group flex items-center gap-2 md:gap-3 hover:scale-105 active:scale-95 transition-all duration-300 ease-in-out">
               <div className="relative">
                 <img 
                   src="/lovable-uploads/29063f06-8447-4719-96af-dddba4e78f67.png" 
                   alt="AvtoMed Logo" 
-                  className="h-8 md:h-12 w-auto transform transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110"
+                  className="h-8 md:h-12 w-auto transform transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110 group-active:rotate-0 group-active:scale-95"
                 />
               </div>
-              <span className="text-xl md:text-2xl font-bold text-primary font-display">
+              <span className="text-xl md:text-2xl font-bold text-primary font-display transition-all duration-200 group-active:text-primary/80">
                 AvtoMed
               </span>
             </Link>
