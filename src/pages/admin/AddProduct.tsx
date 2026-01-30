@@ -19,7 +19,7 @@ import { z } from 'zod';
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required").max(200, "Name must be less than 200 characters"),
   description: z.string().max(5000, "Description must be less than 5000 characters").optional(),
-  stock_quantity: z.number().int().min(0, "Stock must be 0 or greater").max(999999, "Stock cannot exceed 999999"),
+  stock_quantity: z.number().int().min(0, "Stock must be 0 or greater").max(999999, "Stock cannot exceed 999999").optional(),
   manufacturer: z.string().max(100, "Manufacturer must be less than 100 characters").optional(),
   origin_country: z.string().max(100, "Country must be less than 100 characters").optional(),
   image_url: z.string().url("Invalid URL format").max(2000, "URL too long").optional().or(z.literal("")),
@@ -141,7 +141,7 @@ const AddProduct = () => {
 
     try {
       // Validate form data before submission
-      const stockQuantity = parseInt(formData.stock_quantity) || 0;
+      const stockQuantity = formData.stock_quantity ? parseInt(formData.stock_quantity) : undefined;
       const validationResult = productSchema.safeParse({
         name: formData.name.trim(),
         description: formData.description.trim() || undefined,
@@ -171,7 +171,7 @@ const AddProduct = () => {
         description: formData.description.trim() || null,
         category_id: formData.category_id || null,
         condition: formData.condition,
-        stock_quantity: stockQuantity,
+        stock_quantity: stockQuantity ?? 0,
         image_url: uploadedImageUrl || formData.image_url.trim() || null,
         is_active: formData.is_active,
         manufacturer: formData.manufacturer.trim() || null,
@@ -266,14 +266,13 @@ const AddProduct = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="stock">Stock Quantity *</Label>
+                    <Label htmlFor="stock">Stock Quantity</Label>
                     <Input
                       id="stock"
                       type="number"
                       value={formData.stock_quantity}
                       onChange={(e) => handleInputChange('stock_quantity', e.target.value)}
                       placeholder="0"
-                      required
                     />
                   </div>
                   <div className="space-y-2">
