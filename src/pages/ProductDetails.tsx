@@ -134,7 +134,7 @@ export default function ProductDetails() {
                   {product.condition === "new" ? t('products.condition.new') : t('products.condition.refurbished')}
                 </Badge>
               </div>
-              {(product.stock_quantity === 0 || !product.is_active) && (
+              {(!product.stock_quantity || product.stock_quantity <= 0 || !product.is_active) && (
                 <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
                   <Badge variant="destructive" className="text-lg">Out of Stock</Badge>
                 </div>

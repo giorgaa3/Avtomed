@@ -76,7 +76,7 @@ const ProductGrid = () => {
             <div className="absolute top-2 right-2">
               <Package className="w-5 h-5 text-muted-foreground" />
             </div>
-            {(product.stock_quantity === 0 || !product.is_active) && (
+            {(!product.stock_quantity || product.stock_quantity <= 0 || !product.is_active) && (
               <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
                 <Badge variant="destructive">Out of Stock</Badge>
               </div>
