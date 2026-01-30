@@ -122,11 +122,11 @@ export default function ProductDetails() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Product Image */}
           <div className="space-y-4">
-            <div className="relative">
+            <div className="relative bg-muted/30 rounded-lg">
               <img
                 src={product.image_url || "/placeholder.svg"}
                 alt={product.name}
-                className="w-full h-[500px] object-cover rounded-lg shadow-lg"
+                className="w-full h-[500px] object-contain rounded-lg"
               />
               <div className="absolute top-4 left-4">
                 <Badge className={getConditionColor(product.condition)}>
