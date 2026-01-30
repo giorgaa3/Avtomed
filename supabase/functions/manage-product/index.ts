@@ -26,12 +26,14 @@ function validateProductData(data: any): { valid: boolean; errors: string[]; san
     errors.push("Description must be less than 5000 characters");
   }
 
-  // Stock quantity validation
-  const stockQuantity = parseInt(data.stock_quantity);
-  if (isNaN(stockQuantity) || stockQuantity < 0) {
-    errors.push("Stock quantity must be a non-negative number");
-  } else if (stockQuantity > 999999) {
-    errors.push("Stock quantity cannot exceed 999999");
+  // Stock quantity validation (optional)
+  if (data.stock_quantity !== undefined && data.stock_quantity !== null && data.stock_quantity !== '') {
+    const stockQuantity = parseInt(data.stock_quantity);
+    if (isNaN(stockQuantity) || stockQuantity < 0) {
+      errors.push("Stock quantity must be a non-negative number");
+    } else if (stockQuantity > 999999) {
+      errors.push("Stock quantity cannot exceed 999999");
+    }
   }
 
   // Condition validation
@@ -82,7 +84,9 @@ function validateProductData(data: any): { valid: boolean; errors: string[]; san
   const sanitized = {
     name: String(data.name).trim().substring(0, 200),
     description: data.description ? String(data.description).trim().substring(0, 5000) : null,
-    stock_quantity: Math.max(0, Math.min(parseInt(data.stock_quantity) || 0, 999999)),
+    stock_quantity: data.stock_quantity !== undefined && data.stock_quantity !== null && data.stock_quantity !== '' 
+      ? Math.max(0, Math.min(parseInt(data.stock_quantity) || 0, 999999)) 
+      : 0,
     condition: data.condition || 'new',
     manufacturer: data.manufacturer ? String(data.manufacturer).trim().substring(0, 100) : null,
     origin_country: data.origin_country ? String(data.origin_country).trim().substring(0, 100) : null,
