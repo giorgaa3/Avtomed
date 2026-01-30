@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Heart, Package } from "lucide-react";
+import { Heart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -66,33 +66,19 @@ const ProductGrid = () => {
             <img 
               src={product.image_url || "/placeholder.svg"} 
               alt={product.name}
-              className="w-full h-48 object-cover rounded-lg"
+              className="w-full h-64 object-cover rounded-lg"
             />
             <div className="absolute top-2 left-2">
               <Badge className={getConditionColor(product.condition)}>
                 {product.condition === "new" ? t('products.condition.new') : t('products.condition.refurbished')}
               </Badge>
             </div>
-            <div className="absolute top-2 right-2">
-              <Package className="w-5 h-5 text-muted-foreground" />
-            </div>
-            {(!product.stock_quantity || product.stock_quantity <= 0 || !product.is_active) && (
-              <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
-                <Badge variant="destructive">Out of Stock</Badge>
-              </div>
-            )}
           </div>
           
           <div className="space-y-2">
             <Badge variant="outline" className="text-xs">{product.categories?.name || 'Uncategorized'}</Badge>
             <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">{product.name}</h3>
             <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
-            
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">
-                {product.stock_quantity > 0 ? `In Stock (${product.stock_quantity})` : "Out of Stock"}
-              </span>
-            </div>
           </div>
         </CardContent>
         
