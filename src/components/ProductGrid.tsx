@@ -66,7 +66,7 @@ const ProductGrid = () => {
             <img 
               src={product.image_url || "/placeholder.svg"} 
               alt={product.name}
-              className="w-full h-64 object-cover rounded-lg"
+              className="w-full h-80 object-cover rounded-lg"
             />
             <div className="absolute top-2 left-2">
               <Badge className={getConditionColor(product.condition)}>
@@ -122,7 +122,7 @@ const ProductGrid = () => {
             <p className="mt-4 text-muted-foreground">Loading products...</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
