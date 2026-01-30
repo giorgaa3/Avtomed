@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Star, Heart, Package, Filter, Search, Grid, List } from "lucide-react";
+import { Heart, Filter, Search, Grid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -106,10 +106,8 @@ const Products = () => {
     })
     .sort((a, b) => {
       switch (sortBy) {
-        case "price-low":
-          return Number(a.price) - Number(b.price);
-        case "price-high":
-          return Number(b.price) - Number(a.price);
+        case "newest":
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
         case "name":
         default:
           return a.name.localeCompare(b.name);
@@ -139,36 +137,19 @@ const Products = () => {
             <img 
               src={product.image_url || "/placeholder.svg"} 
               alt={product.name}
-              className="w-full h-48 object-cover rounded-lg"
+              className="w-full h-80 object-cover rounded-lg"
             />
             <div className="absolute top-2 left-2">
               <Badge className={getConditionColor(product.condition)}>
                 {product.condition === "new" ? t('products.condition.new') : t('products.condition.refurbished')}
               </Badge>
             </div>
-            <div className="absolute top-2 right-2">
-              <Package className="w-5 h-5 text-muted-foreground" />
-            </div>
-            {(product.stock_quantity === 0 || !product.is_active) && (
-              <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
-                <Badge variant="destructive">Out of Stock</Badge>
-              </div>
-            )}
           </div>
           
           <div className="space-y-2">
             <Badge variant="outline" className="text-xs">{product.categories?.name || 'Uncategorized'}</Badge>
             <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">{product.name}</h3>
             <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
-            
-            <div className="flex items-center justify-between">
-              <div>
-                <span className="text-xl font-bold text-primary">₾{product.price}</span>
-              </div>
-              <span className="text-sm text-muted-foreground">
-                {product.stock_quantity > 0 ? `In Stock (${product.stock_quantity})` : "Out of Stock"}
-              </span>
-            </div>
           </div>
         </CardContent>
         
@@ -205,7 +186,7 @@ const Products = () => {
       >
         <CardContent className="p-4">
           <div className="flex gap-4">
-            <div className="relative w-32 h-32 flex-shrink-0">
+            <div className="relative w-40 h-40 flex-shrink-0">
               <img 
                 src={product.image_url || "/placeholder.svg"} 
                 alt={product.name}
@@ -216,11 +197,6 @@ const Products = () => {
                   {product.condition === "new" ? t('products.condition.new') : t('products.condition.refurbished')}
                 </Badge>
               </div>
-              {(product.stock_quantity === 0 || !product.is_active) && (
-                <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
-                  <Badge variant="destructive" className="text-xs">Out of Stock</Badge>
-                </div>
-              )}
             </div>
             
             <div className="flex-1 space-y-2">
@@ -240,15 +216,6 @@ const Products = () => {
                     </p>
                   )}
                 </div>
-                <div className="text-right">
-                  <div className="text-xl font-bold text-primary">₾{product.price}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-4">
-                <span className="text-sm text-muted-foreground">
-                  {product.stock_quantity > 0 ? `In Stock (${product.stock_quantity})` : "Out of Stock"}
-                </span>
               </div>
               
               <div className="flex gap-2 pt-2">
@@ -335,9 +302,7 @@ const Products = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="name">Name</SelectItem>
-                  <SelectItem value="price-low">Price: Low to High</SelectItem>
-                  <SelectItem value="price-high">Price: High to Low</SelectItem>
-                  <SelectItem value="rating">Highest Rated</SelectItem>
+                  <SelectItem value="newest">Newest First</SelectItem>
                 </SelectContent>
               </Select>
               
@@ -377,7 +342,7 @@ const Products = () => {
               <p className="mt-4 text-muted-foreground">Loading products...</p>
             </div>
           ) : viewMode === "grid" ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
@@ -392,7 +357,6 @@ const Products = () => {
 
           {!loading && filteredProducts.length === 0 && (
             <div className="text-center py-16 animate-fade-in">
-              <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-2">No products found</h3>
               <p className="text-muted-foreground">Try adjusting your search or filter criteria</p>
             </div>

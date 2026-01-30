@@ -13,12 +13,13 @@ interface Product {
   name: string;
   description: string;
   condition: string;
-  stock_quantity: number;
   is_active: boolean;
   category_id: string;
   image_url: string;
   created_at: string;
   updated_at: string;
+  manufacturer?: string;
+  origin_country?: string;
   categories?: {
     name: string;
   };
@@ -188,7 +189,6 @@ const ViewProduct = () => {
                   </div>
                   
                   <div className="text-sm text-muted-foreground">
-                    <div>Stock: {product.stock_quantity} units</div>
                     <div>Category: {product.categories?.name || 'Uncategorized'}</div>
                   </div>
                 </div>
@@ -227,11 +227,7 @@ const ViewProduct = () => {
                 </div>
               </div>
 
-              <div className="grid gap-4 md:grid-cols-3">
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Stock</label>
-                  <div className="text-2xl font-bold">{product.stock_quantity}</div>
-                </div>
+              <div className="grid gap-4 md:grid-cols-2">
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Condition</label>
                   <div className="text-sm capitalize">{product.condition}</div>

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Heart, Package, Shield, Truck, RotateCcw } from "lucide-react";
+import { ArrowLeft, Heart, Shield, Truck, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -17,7 +17,6 @@ interface Product {
   name: string;
   description: string;
   image_url: string;
-  stock_quantity: number;
   condition: string;
   is_active: boolean;
   manufacturer?: string;
@@ -127,18 +126,13 @@ export default function ProductDetails() {
               <img
                 src={product.image_url || "/placeholder.svg"}
                 alt={product.name}
-                className="w-full h-96 object-cover rounded-lg shadow-lg"
+                className="w-full h-[500px] object-cover rounded-lg shadow-lg"
               />
               <div className="absolute top-4 left-4">
                 <Badge className={getConditionColor(product.condition)}>
                   {product.condition === "new" ? t('products.condition.new') : t('products.condition.refurbished')}
                 </Badge>
               </div>
-              {(!product.stock_quantity || product.stock_quantity <= 0 || !product.is_active) && (
-                <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
-                  <Badge variant="destructive" className="text-lg">Out of Stock</Badge>
-                </div>
-              )}
             </div>
           </div>
 
@@ -152,27 +146,16 @@ export default function ProductDetails() {
               <p className="text-lg text-muted-foreground">{product.description}</p>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <Package className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-muted-foreground">
-                    {product.stock_quantity > 0 ? `${product.stock_quantity} in stock` : "Out of stock"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <Button
-                  className="flex-1 bg-gradient-hero hover:scale-105 transition-transform"
-                  onClick={() => navigate('/contact')}
-                >
-                  Contact for Purchase
-                </Button>
-                <Button variant="outline" size="icon">
-                  <Heart className="w-4 h-4" />
-                </Button>
-              </div>
+            <div className="flex gap-4">
+              <Button
+                className="flex-1 bg-gradient-hero hover:scale-105 transition-transform"
+                onClick={() => navigate('/contact')}
+              >
+                Contact for Information
+              </Button>
+              <Button variant="outline" size="icon">
+                <Heart className="w-4 h-4" />
+              </Button>
             </div>
 
             <Separator />
@@ -227,7 +210,7 @@ export default function ProductDetails() {
 
                 <Card>
                   <CardContent className="p-4 flex items-center gap-3">
-                    <Package className="w-8 h-8 text-primary" />
+                    <Shield className="w-8 h-8 text-primary" />
                     <div>
                       <p className="font-medium">Product Catalog</p>
                       <p className="text-sm text-muted-foreground">Browse our selection</p>
