@@ -19,7 +19,6 @@ import { z } from 'zod';
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required").max(200, "Name must be less than 200 characters"),
   description: z.string().max(5000, "Description must be less than 5000 characters").optional(),
-  stock_quantity: z.number().int().min(0, "Stock must be 0 or greater").max(999999, "Stock cannot exceed 999999").optional(),
   manufacturer: z.string().max(100, "Manufacturer must be less than 100 characters").optional(),
   origin_country: z.string().max(100, "Country must be less than 100 characters").optional(),
   image_url: z.string().url("Invalid URL format").max(2000, "URL too long").optional().or(z.literal("")),
@@ -41,15 +40,10 @@ const AddProduct = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    price: '',
     category_id: '',
     condition: 'new',
-    stock_quantity: '',
     image_url: '',
     is_active: true,
-    discount_percentage: '',
-    discount_start_date: '',
-    discount_end_date: '',
     manufacturer: '',
     origin_country: ''
   });
@@ -141,11 +135,9 @@ const AddProduct = () => {
 
     try {
       // Validate form data before submission
-      const stockQuantity = formData.stock_quantity ? parseInt(formData.stock_quantity) : undefined;
       const validationResult = productSchema.safeParse({
         name: formData.name.trim(),
         description: formData.description.trim() || undefined,
-        stock_quantity: stockQuantity,
         manufacturer: formData.manufacturer.trim() || undefined,
         origin_country: formData.origin_country.trim() || undefined,
         image_url: formData.image_url.trim() || undefined,
@@ -171,7 +163,6 @@ const AddProduct = () => {
         description: formData.description.trim() || null,
         category_id: formData.category_id || null,
         condition: formData.condition,
-        stock_quantity: stockQuantity ?? 0,
         image_url: uploadedImageUrl || formData.image_url.trim() || null,
         is_active: formData.is_active,
         manufacturer: formData.manufacturer.trim() || null,
@@ -264,30 +255,18 @@ const AddProduct = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="stock">Stock Quantity</Label>
-                    <Input
-                      id="stock"
-                      type="number"
-                      value={formData.stock_quantity}
-                      onChange={(e) => handleInputChange('stock_quantity', e.target.value)}
-                      placeholder="0"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="condition">Condition</Label>
-                    <Select value={formData.condition} onValueChange={(value) => handleInputChange('condition', value)}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="new">New</SelectItem>
-                        <SelectItem value="used">Used</SelectItem>
-                        <SelectItem value="refurbished">Refurbished</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="condition">Condition</Label>
+                  <Select value={formData.condition} onValueChange={(value) => handleInputChange('condition', value)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="new">New</SelectItem>
+                      <SelectItem value="used">Used</SelectItem>
+                      <SelectItem value="refurbished">Refurbished</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </CardContent>
             </Card>
@@ -313,20 +292,6 @@ const AddProduct = () => {
                           {category.name}
                         </SelectItem>
                       ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="grid gap-2">
-                  <Label htmlFor="condition">Condition</Label>
-                  <Select value={formData.condition} onValueChange={(value) => handleInputChange('condition', value)}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="new">New</SelectItem>
-                      <SelectItem value="used">Used</SelectItem>
-                      <SelectItem value="refurbished">Refurbished</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -412,42 +377,6 @@ const AddProduct = () => {
                   </div>
                 </div>
 
-                <div className="grid gap-2">
-                  <Label htmlFor="discount_percentage">Discount Percentage (%)</Label>
-                  <Input
-                    id="discount_percentage"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    max="100"
-                    value={formData.discount_percentage}
-                    onChange={(e) => handleInputChange('discount_percentage', e.target.value)}
-                    placeholder="0.00"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="discount_start_date">Discount Start Date</Label>
-                    <Input
-                      id="discount_start_date"
-                      type="datetime-local"
-                      value={formData.discount_start_date}
-                      onChange={(e) => handleInputChange('discount_start_date', e.target.value)}
-                    />
-                  </div>
-
-                  <div className="grid gap-2">
-                    <Label htmlFor="discount_end_date">Discount End Date</Label>
-                    <Input
-                      id="discount_end_date"
-                      type="datetime-local"
-                      value={formData.discount_end_date}
-                      onChange={(e) => handleInputChange('discount_end_date', e.target.value)}
-                    />
-                  </div>
-                </div>
-
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label>Active Product</Label>
@@ -472,10 +401,18 @@ const AddProduct = () => {
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={loading}>
-              {loading && <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-b-transparent" />}
-              <Save className="h-4 w-4 mr-2" />
-              Create Product
+            <Button type="submit" disabled={loading || uploading}>
+              {loading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2"></div>
+                  Creating...
+                </>
+              ) : (
+                <>
+                  <Save className="h-4 w-4 mr-2" />
+                  Create Product
+                </>
+              )}
             </Button>
           </div>
         </form>

@@ -18,7 +18,6 @@ interface Product {
   name: string;
   description: string;
   condition: string;
-  stock_quantity: number;
   is_active: boolean;
   category_id: string;
   image_url: string;
@@ -49,7 +48,6 @@ const EditProduct = () => {
     name: '',
     description: '',
     condition: 'new',
-    stock_quantity: '',
     is_active: true,
     category_id: '',
     image_url: '',
@@ -84,7 +82,6 @@ const EditProduct = () => {
         name: data.name,
         description: data.description || '',
         condition: data.condition,
-        stock_quantity: data.stock_quantity.toString(),
         is_active: data.is_active,
         category_id: data.category_id || '',
         image_url: data.image_url || '',
@@ -126,7 +123,6 @@ const EditProduct = () => {
         name: formData.name,
         description: formData.description,
         condition: formData.condition,
-        stock_quantity: parseInt(formData.stock_quantity),
         is_active: formData.is_active,
         category_id: formData.category_id || null,
         image_url: formData.image_url,
@@ -255,16 +251,6 @@ const EditProduct = () => {
 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="stock">Stock Quantity *</Label>
-                    <Input
-                      id="stock"
-                      type="number"
-                      value={formData.stock_quantity}
-                      onChange={(e) => setFormData({ ...formData, stock_quantity: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
                     <Label htmlFor="condition">Condition</Label>
                     <Select
                       value={formData.condition}
@@ -384,11 +370,6 @@ const EditProduct = () => {
                 <Badge variant={formData.is_active ? 'default' : 'destructive'}>
                   {formData.is_active ? 'Active' : 'Inactive'}
                 </Badge>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">
-                  Stock: {formData.stock_quantity || '0'} units
-                </p>
               </div>
               {formData.description && (
                 <p className="text-sm text-muted-foreground">
