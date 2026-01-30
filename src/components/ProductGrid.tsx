@@ -62,11 +62,11 @@ const ProductGrid = () => {
         onClick={() => navigate(`/products/${product.id}`)}
       >
         <CardContent className="p-4">
-          <div className="relative mb-4">
+          <div className="relative mb-4 bg-muted/30 rounded-lg">
             <img 
               src={product.image_url || "/placeholder.svg"} 
               alt={product.name}
-              className="w-full h-80 object-cover rounded-lg"
+              className="w-full h-72 object-contain rounded-lg"
             />
             <div className="absolute top-2 left-2">
               <Badge className={getConditionColor(product.condition)}>

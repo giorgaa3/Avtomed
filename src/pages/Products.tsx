@@ -133,11 +133,11 @@ const Products = () => {
         onClick={() => navigate(`/products/${product.id}`)}
       >
         <CardContent className="p-4">
-          <div className="relative mb-4">
+          <div className="relative mb-4 bg-muted/30 rounded-lg">
             <img 
               src={product.image_url || "/placeholder.svg"} 
               alt={product.name}
-              className="w-full h-80 object-cover rounded-lg"
+              className="w-full h-72 object-contain rounded-lg"
             />
             <div className="absolute top-2 left-2">
               <Badge className={getConditionColor(product.condition)}>
@@ -186,11 +186,11 @@ const Products = () => {
       >
         <CardContent className="p-4">
           <div className="flex gap-4">
-            <div className="relative w-40 h-40 flex-shrink-0">
+            <div className="relative w-48 h-48 flex-shrink-0 bg-muted/30 rounded-lg">
               <img 
                 src={product.image_url || "/placeholder.svg"} 
                 alt={product.name}
-                className="w-full h-full object-cover rounded-lg"
+                className="w-full h-full object-contain rounded-lg"
               />
               <div className="absolute top-1 left-1">
                 <Badge className={`${getConditionColor(product.condition)} text-xs`}>
