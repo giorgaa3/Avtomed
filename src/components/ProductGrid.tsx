@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Star, Heart, Package } from "lucide-react";
+import { Heart, Package } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

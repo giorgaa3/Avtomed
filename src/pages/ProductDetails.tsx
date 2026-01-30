@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Heart, Package, Star, Shield, Truck, RotateCcw } from "lucide-react";
+import { ArrowLeft, Heart, Package, Shield, Truck, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -209,8 +209,8 @@ export default function ProductDetails() {
                   <CardContent className="p-4 flex items-center gap-3">
                     <Shield className="w-8 h-8 text-primary" />
                     <div>
-                      <p className="font-medium">Quality Assured</p>
-                      <p className="text-sm text-muted-foreground">Medical grade equipment</p>
+                      <p className="font-medium">Medical Equipment</p>
+                      <p className="text-sm text-muted-foreground">Professional instruments</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -219,18 +219,18 @@ export default function ProductDetails() {
                   <CardContent className="p-4 flex items-center gap-3">
                     <Truck className="w-8 h-8 text-primary" />
                     <div>
-                      <p className="font-medium">Fast Delivery</p>
-                      <p className="text-sm text-muted-foreground">2-5 business days</p>
+                      <p className="font-medium">Delivery Available</p>
+                      <p className="text-sm text-muted-foreground">Contact for details</p>
                     </div>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardContent className="p-4 flex items-center gap-3">
-                    <Star className="w-8 h-8 text-primary" />
+                    <Package className="w-8 h-8 text-primary" />
                     <div>
-                      <p className="font-medium">Professional Grade</p>
-                      <p className="text-sm text-muted-foreground">Hospital quality standards</p>
+                      <p className="font-medium">Product Catalog</p>
+                      <p className="text-sm text-muted-foreground">Browse our selection</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -239,8 +239,8 @@ export default function ProductDetails() {
                   <CardContent className="p-4 flex items-center gap-3">
                     <RotateCcw className="w-8 h-8 text-primary" />
                     <div>
-                      <p className="font-medium">Return Policy</p>
-                      <p className="text-sm text-muted-foreground">30-day return guarantee</p>
+                      <p className="font-medium">Inquiries Welcome</p>
+                      <p className="text-sm text-muted-foreground">Contact us for info</p>
                     </div>
                   </CardContent>
                 </Card>
