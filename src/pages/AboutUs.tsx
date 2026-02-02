@@ -60,7 +60,7 @@ const AboutUs = () => {
     { name: "TMS Medical", url: "https://tms-medical.com/en/" },
     { name: "Greetmed Medical", url: "https://www.china-greetmed.com/" },
     { name: "Nubeno", url: "https://www.nubeno.com/#" },
-    { name: "Hunkar Medical" },
+    { name: "Hunkar Medical", url: "https://www.hunkarmedikal.com/" },
     { name: "Biomedical" }
   ];
 
