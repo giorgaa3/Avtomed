@@ -1,6 +1,9 @@
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Footer = () => {
+  const { t } = useLanguage();
+
   return (
     <footer className="bg-foreground text-background py-8 md:py-12">
       <div className="container mx-auto px-4">
@@ -19,8 +22,7 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-background/80 mb-4 text-sm md:text-base">
-              Your trusted partner for certified medical equipment. Quality instruments 
-              from verified sellers with full warranty support.
+              {t('footer.description')}
             </p>
             <div className="flex gap-4">
               <a href="https://www.facebook.com/anarmedgeorgia" target="_blank" rel="noopener noreferrer">
@@ -33,31 +35,31 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold mb-3 md:mb-4 text-sm md:text-base">Quick Links</h3>
+            <h3 className="font-semibold mb-3 md:mb-4 text-sm md:text-base">{t('footer.quickLinks')}</h3>
             <ul className="space-y-2 text-background/80 text-sm">
-              <li><a href="#" className="hover:text-background transition-colors">Browse Equipment</a></li>
-              <li><a href="#" className="hover:text-background transition-colors">Sell Equipment</a></li>
-              <li><a href="#" className="hover:text-background transition-colors">Financing Options</a></li>
-              <li><a href="#" className="hover:text-background transition-colors">Warranty Info</a></li>
-              <li><a href="#" className="hover:text-background transition-colors">Support Center</a></li>
+              <li><a href="#" className="hover:text-background transition-colors">{t('footer.browseEquipment')}</a></li>
+              <li><a href="#" className="hover:text-background transition-colors">{t('footer.sellEquipment')}</a></li>
+              <li><a href="#" className="hover:text-background transition-colors">{t('footer.financingOptions')}</a></li>
+              <li><a href="#" className="hover:text-background transition-colors">{t('footer.warrantyInfo')}</a></li>
+              <li><a href="#" className="hover:text-background transition-colors">{t('footer.supportCenter')}</a></li>
             </ul>
           </div>
 
           {/* Categories */}
           <div>
-            <h3 className="font-semibold mb-3 md:mb-4 text-sm md:text-base">Popular Categories</h3>
+            <h3 className="font-semibold mb-3 md:mb-4 text-sm md:text-base">{t('footer.popularCategories')}</h3>
             <ul className="space-y-2 text-background/80 text-sm">
-              <li><a href="#" className="hover:text-background transition-colors">Diagnostic Equipment</a></li>
-              <li><a href="#" className="hover:text-background transition-colors">Patient Monitoring</a></li>
-              <li><a href="#" className="hover:text-background transition-colors">Laboratory</a></li>
-              <li><a href="#" className="hover:text-background transition-colors">Imaging Equipment</a></li>
-              <li><a href="#" className="hover:text-background transition-colors">Surgical Instruments</a></li>
+              <li><a href="#" className="hover:text-background transition-colors">{t('footer.diagnosticEquipment')}</a></li>
+              <li><a href="#" className="hover:text-background transition-colors">{t('footer.patientMonitoring')}</a></li>
+              <li><a href="#" className="hover:text-background transition-colors">{t('footer.laboratory')}</a></li>
+              <li><a href="#" className="hover:text-background transition-colors">{t('footer.imagingEquipment')}</a></li>
+              <li><a href="#" className="hover:text-background transition-colors">{t('footer.surgicalInstruments')}</a></li>
             </ul>
           </div>
 
           {/* Contact info */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <h3 className="font-semibold mb-3 md:mb-4 text-sm md:text-base">Contact Us</h3>
+            <h3 className="font-semibold mb-3 md:mb-4 text-sm md:text-base">{t('footer.contactUs')}</h3>
             <div className="space-y-3 text-background/80 text-sm">
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 flex-shrink-0" />
@@ -69,16 +71,16 @@ const Footer = () => {
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="w-4 h-4 flex-shrink-0" />
-                <span>Lubliana St. 38b, Tbilisi, Georgia</span>
+                <span>{t('footer.address')}</span>
               </div>
             </div>
             
             <div className="mt-4 md:mt-6">
-              <h4 className="font-medium mb-2 text-sm">Business Hours</h4>
+              <h4 className="font-medium mb-2 text-sm">{t('footer.businessHours')}</h4>
               <div className="text-xs md:text-sm text-background/80">
-                <div>Monday - Friday: 8:00 AM - 6:00 PM EST</div>
-                <div>Saturday: Closed</div>
-                <div>Sunday: Closed</div>
+                <div>{t('footer.mondayFriday')}</div>
+                <div>{t('footer.saturday')}</div>
+                <div>{t('footer.sunday')}</div>
               </div>
             </div>
           </div>
@@ -87,12 +89,12 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="border-t border-background/20 mt-6 md:mt-8 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-background/60 text-xs md:text-sm text-center md:text-left">
-            © 2024 AvtoMed. All rights reserved. | ISO 13485 Certified | FDA Registered
+            {t('footer.copyright')}
           </div>
           <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-xs md:text-sm text-background/60">
-            <a href="#" className="hover:text-background transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-background transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-background transition-colors">Cookie Policy</a>
+            <a href="#" className="hover:text-background transition-colors">{t('footer.privacyPolicy')}</a>
+            <a href="#" className="hover:text-background transition-colors">{t('footer.termsOfService')}</a>
+            <a href="#" className="hover:text-background transition-colors">{t('footer.cookiePolicy')}</a>
           </div>
         </div>
       </div>
