@@ -2,6 +2,7 @@ import { Award, Users, Globe, Shield, Heart, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -219,8 +220,8 @@ const AboutUs = () => {
             {t('about.ctaDescription')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-scale-in">
-            <Button size="lg" variant="secondary" className="hover:scale-105 transition-transform">
-              {t('about.contactButton')}
+            <Button size="lg" variant="secondary" className="hover:scale-105 transition-transform" asChild>
+              <Link to="/contact">{t('about.contactButton')}</Link>
             </Button>
             <Button size="lg" variant="outline" className="border-white bg-white/10 text-white hover:bg-white hover:text-primary hover:scale-105 transition-all">
               {t('about.catalogueButton')}
