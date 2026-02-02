@@ -55,7 +55,7 @@ const AboutUs = () => {
 
   const partners = [
     { name: "Altera (Meditera)", url: "https://www.meditera.com.tr/en" },
-    { name: "Yilcal Medical" },
+    { name: "Yilcal Medical", url: "https://www.yilkal.com/anasayfa/en" },
     { name: "Beybi" },
     { name: "TMS Medical" },
     { name: "Greetmed Medical" },
