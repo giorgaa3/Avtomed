@@ -54,8 +54,14 @@ const AboutUs = () => {
   ];
 
   const partners = [
-    "Altera (Meditera)", "Yilcal Medical", "Beybi", "TMS Medical", 
-    "Greetmed Medical", "Nubeno", "Hunkar Medical", "Biomedical"
+    { name: "Altera (Meditera)", url: "https://www.meditera.com.tr/en" },
+    { name: "Yilcal Medical" },
+    { name: "Beybi" },
+    { name: "TMS Medical" },
+    { name: "Greetmed Medical" },
+    { name: "Nubeno" },
+    { name: "Hunkar Medical" },
+    { name: "Biomedical" }
   ];
 
   return (
@@ -165,9 +171,21 @@ const AboutUs = () => {
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {partners.map((partner, index) => (
-                <div key={index} className="bg-card p-4 rounded-lg text-center shadow-card hover:shadow-medical transition-all duration-300 hover:scale-105 animate-fade-in">
-                  <div className="font-medium text-sm">{partner}</div>
-                </div>
+                partner.url ? (
+                  <a 
+                    key={index} 
+                    href={partner.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="bg-card p-4 rounded-lg text-center shadow-card hover:shadow-medical transition-all duration-300 hover:scale-105 animate-fade-in cursor-pointer"
+                  >
+                    <div className="font-medium text-sm">{partner.name}</div>
+                  </a>
+                ) : (
+                  <div key={index} className="bg-card p-4 rounded-lg text-center shadow-card hover:shadow-medical transition-all duration-300 hover:scale-105 animate-fade-in">
+                    <div className="font-medium text-sm">{partner.name}</div>
+                  </div>
+                )
               ))}
             </div>
             
