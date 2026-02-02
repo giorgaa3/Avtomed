@@ -59,7 +59,7 @@ const AboutUs = () => {
     { name: "Beybi", url: "https://beybi.com.tr/en" },
     { name: "TMS Medical", url: "https://tms-medical.com/en/" },
     { name: "Greetmed Medical", url: "https://www.china-greetmed.com/" },
-    { name: "Nubeno" },
+    { name: "Nubeno", url: "https://www.nubeno.com/#" },
     { name: "Hunkar Medical" },
     { name: "Biomedical" }
   ];
