@@ -57,7 +57,7 @@ const AboutUs = () => {
     { name: "Altera (Meditera)", url: "https://www.meditera.com.tr/en" },
     { name: "Yilcal Medical", url: "https://www.yilkal.com/anasayfa/en" },
     { name: "Beybi", url: "https://beybi.com.tr/en" },
-    { name: "TMS Medical" },
+    { name: "TMS Medical", url: "https://tms-medical.com/en/" },
     { name: "Greetmed Medical" },
     { name: "Nubeno" },
     { name: "Hunkar Medical" },
