@@ -324,17 +324,44 @@ const EditProduct = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="image_url">Image URL</Label>
-                  <div className="flex gap-2">
+                  <Label>Product Image</Label>
+                  <div className="space-y-3">
+                    {(imagePreview || formData.image_url) && (
+                      <div className="relative w-32 h-32 border rounded-lg overflow-hidden">
+                        <img
+                          src={imagePreview || formData.image_url}
+                          alt="Preview"
+                          className="w-full h-full object-cover"
+                          onError={(e) => { e.currentTarget.src = '/placeholder.svg'; }}
+                        />
+                      </div>
+                    )}
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Upload a new image (JPG, PNG, WEBP, max 5MB) to replace the current one
+                    </p>
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t" />
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-background px-2 text-muted-foreground">Or use URL</span>
+                      </div>
+                    </div>
                     <Input
                       id="image_url"
                       value={formData.image_url}
-                      onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, image_url: e.target.value });
+                        setImageFile(null);
+                        setImagePreview('');
+                      }}
                       placeholder="https://example.com/image.jpg"
                     />
-                    <Button type="button" variant="outline">
-                      <Upload className="h-4 w-4" />
-                    </Button>
                   </div>
                 </div>
 
