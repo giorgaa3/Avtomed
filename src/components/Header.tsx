@@ -140,7 +140,6 @@ const Header = () => {
             <Link to="/" className="text-sm hover:text-primary transition-all duration-300 hover:scale-105">{t('header.main')}</Link>
             <Link to="/about" className="text-sm hover:text-primary transition-all duration-300 hover:scale-105">{t('header.aboutUs')}</Link>
             <Link to="/products" className="text-sm hover:text-primary transition-all duration-300 hover:scale-105">{t('header.products')}</Link>
-            <a href="#" className="text-sm hover:text-primary transition-all duration-300 hover:scale-105">{t('header.catalogue')}</a>
             <Link to="/contact" className="text-sm hover:text-primary transition-all duration-300 hover:scale-105">{t('header.contact')}</Link>
           </div>
         </nav>
@@ -152,7 +151,6 @@ const Header = () => {
               <Link to="/" className="text-sm py-2 hover:text-primary" onClick={() => setMobileMenuOpen(false)}>{t('header.main')}</Link>
               <Link to="/about" className="text-sm py-2 hover:text-primary" onClick={() => setMobileMenuOpen(false)}>{t('header.aboutUs')}</Link>
               <Link to="/products" className="text-sm py-2 hover:text-primary" onClick={() => setMobileMenuOpen(false)}>{t('header.products')}</Link>
-              <a href="#" className="text-sm py-2 hover:text-primary">{t('header.catalogue')}</a>
               <Link to="/contact" className="text-sm py-2 hover:text-primary" onClick={() => setMobileMenuOpen(false)}>{t('header.contact')}</Link>
               
               <div className="pt-3 border-t border-border flex flex-col gap-2">
