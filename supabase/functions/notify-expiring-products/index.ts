@@ -24,10 +24,18 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // Authenticate caller — only the service role (used by pg_cron) may invoke this function.
-  const authHeader = req.headers.get("Authorization") ?? "";
-  const expected = `Bearer ${supabaseServiceKey}`;
-  if (authHeader !== expected) {
+  // Authenticate caller via the cron-only shared secret stored in internal_secrets.
+  // Only the pg_cron job can read this value (RLS blocks all client roles).
+  const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+  const providedSecret = req.headers.get("x-cron-secret") ?? "";
+  const { data: secretRow, error: secretError } = await supabase
+    .from("internal_secrets")
+    .select("value")
+    .eq("key", "notify_expiring_products_cron_secret")
+    .maybeSingle();
+
+  if (secretError || !secretRow?.value || providedSecret !== secretRow.value) {
     console.warn("Unauthorized invocation attempt");
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
@@ -36,7 +44,6 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Calculate date range (next 7 days)
     const now = new Date();
