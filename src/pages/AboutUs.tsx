@@ -223,9 +223,6 @@ const AboutUs = () => {
             <Button size="lg" variant="secondary" className="hover:scale-105 transition-transform" asChild>
               <Link to="/contact">{t('about.contactButton')}</Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-white bg-white/10 text-white hover:bg-white hover:text-primary hover:scale-105 transition-all">
-              {t('about.catalogueButton')}
-            </Button>
           </div>
         </div>
       </section>
