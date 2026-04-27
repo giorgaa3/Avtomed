@@ -396,7 +396,7 @@ const EditProduct = () => {
                 </div>
 
                 <div className="flex gap-2 pt-4">
-                  <Button type="submit" disabled={saving}>
+                  <Button type="submit" disabled={saving || uploading}>
                     {saving ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2"></div>
