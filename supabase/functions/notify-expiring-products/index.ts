@@ -24,6 +24,17 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Authenticate caller — only the service role (used by pg_cron) may invoke this function.
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const expected = `Bearer ${supabaseServiceKey}`;
+  if (authHeader !== expected) {
+    console.warn("Unauthorized invocation attempt");
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
+  }
+
   try {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
