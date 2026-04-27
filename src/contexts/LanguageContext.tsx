@@ -108,7 +108,7 @@ const translations = {
     'about.countries': 'Partner Countries',
     'about.certified': 'Quality Certified',
     'about.storyTitle': 'Our Story',
-    'about.companyStory': 'LLC "Anarmed" was established in the Georgian market in 2012. The company\'s main business area includes the sale of disposable medical consumables, surgical sutures, resuscitation and electrical goods, and equipment. Since its establishment, the company has been supplying hospitals and pharmacy networks in Tbilisi and other cities of Georgia with high-quality products manufactured abroad. LLC "Anarmed" constantly expands its assortment according to the needs of its customers.',
+    'about.companyStory': 'LLC "AvtoMed" was established in the Georgian market in 2012. The company\'s main business area includes the sale of disposable medical consumables, surgical sutures, resuscitation and electrical goods, and equipment. Since its establishment, the company has been supplying hospitals and pharmacy networks in Tbilisi and other cities of Georgia with high-quality products manufactured abroad. LLC "AvtoMed" constantly expands its assortment according to the needs of its customers.',
     'about.missionTitle': 'Our Mission',
     'about.mission': 'To provide Georgian healthcare institutions with the highest quality medical equipment and supplies, ensuring patient safety and medical excellence through reliable partnerships and certified products.',
     'about.valuesTitle': 'Our Values',
