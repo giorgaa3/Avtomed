@@ -117,18 +117,70 @@ const EditProduct = () => {
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        toast({ title: "Error", description: "Please select an image file", variant: "destructive" });
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast({ title: "Error", description: "Image size should be less than 5MB", variant: "destructive" });
+        return;
+      }
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setImagePreview(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadImage = async (): Promise<string | null> => {
+    if (!imageFile) return null;
+    setUploading(true);
+    try {
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const { error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(fileName, imageFile);
+      if (uploadError) throw uploadError;
+      const { data: { publicUrl } } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(fileName);
+      return publicUrl;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast({ title: "Error", description: "Failed to upload image", variant: "destructive" });
+      return null;
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
 
     try {
+      // Upload new image if a file was selected
+      let imageUrl = formData.image_url;
+      if (imageFile) {
+        const uploaded = await uploadImage();
+        if (!uploaded) {
+          setSaving(false);
+          return;
+        }
+        imageUrl = uploaded;
+      }
+
       const productData = {
         name: formData.name,
         description: formData.description,
         condition: formData.condition,
         is_active: formData.is_active,
         category_id: formData.category_id || null,
-        image_url: formData.image_url,
+        image_url: imageUrl,
         manufacturer: formData.manufacturer || null,
         origin_country: formData.origin_country || null
       };
