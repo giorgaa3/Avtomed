@@ -117,9 +117,6 @@ const Header = () => {
               </Link>
             )}
             
-            <Button className="bg-gradient-hero transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              {t('header.listEquipment')}
-            </Button>
           </div>
         </div>
 
@@ -175,9 +172,6 @@ const Header = () => {
                     </Button>
                   </Link>
                 )}
-                <Button className="bg-gradient-hero w-full">
-                  {t('header.listEquipment')}
-                </Button>
               </div>
               
               <div className="pt-3 border-t border-border">
