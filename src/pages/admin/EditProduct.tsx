@@ -43,7 +43,10 @@ const EditProduct = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  
+  const [uploading, setUploading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
+
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -114,18 +117,70 @@ const EditProduct = () => {
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        toast({ title: "Error", description: "Please select an image file", variant: "destructive" });
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast({ title: "Error", description: "Image size should be less than 5MB", variant: "destructive" });
+        return;
+      }
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setImagePreview(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadImage = async (): Promise<string | null> => {
+    if (!imageFile) return null;
+    setUploading(true);
+    try {
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const { error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(fileName, imageFile);
+      if (uploadError) throw uploadError;
+      const { data: { publicUrl } } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(fileName);
+      return publicUrl;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast({ title: "Error", description: "Failed to upload image", variant: "destructive" });
+      return null;
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
 
     try {
+      // Upload new image if a file was selected
+      let imageUrl = formData.image_url;
+      if (imageFile) {
+        const uploaded = await uploadImage();
+        if (!uploaded) {
+          setSaving(false);
+          return;
+        }
+        imageUrl = uploaded;
+      }
+
       const productData = {
         name: formData.name,
         description: formData.description,
         condition: formData.condition,
         is_active: formData.is_active,
         category_id: formData.category_id || null,
-        image_url: formData.image_url,
+        image_url: imageUrl,
         manufacturer: formData.manufacturer || null,
         origin_country: formData.origin_country || null
       };
@@ -269,17 +324,44 @@ const EditProduct = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="image_url">Image URL</Label>
-                  <div className="flex gap-2">
+                  <Label>Product Image</Label>
+                  <div className="space-y-3">
+                    {(imagePreview || formData.image_url) && (
+                      <div className="relative w-32 h-32 border rounded-lg overflow-hidden">
+                        <img
+                          src={imagePreview || formData.image_url}
+                          alt="Preview"
+                          className="w-full h-full object-cover"
+                          onError={(e) => { e.currentTarget.src = '/placeholder.svg'; }}
+                        />
+                      </div>
+                    )}
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Upload a new image (JPG, PNG, WEBP, max 5MB) to replace the current one
+                    </p>
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t" />
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-background px-2 text-muted-foreground">Or use URL</span>
+                      </div>
+                    </div>
                     <Input
                       id="image_url"
                       value={formData.image_url}
-                      onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, image_url: e.target.value });
+                        setImageFile(null);
+                        setImagePreview('');
+                      }}
                       placeholder="https://example.com/image.jpg"
                     />
-                    <Button type="button" variant="outline">
-                      <Upload className="h-4 w-4" />
-                    </Button>
                   </div>
                 </div>
 
@@ -314,7 +396,7 @@ const EditProduct = () => {
                 </div>
 
                 <div className="flex gap-2 pt-4">
-                  <Button type="submit" disabled={saving}>
+                  <Button type="submit" disabled={saving || uploading}>
                     {saving ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2"></div>
