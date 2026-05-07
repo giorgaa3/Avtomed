@@ -83,7 +83,20 @@ const Auth = () => {
     const { error } = await signInWithGoogle();
     
     if (error) {
-      setError(error.message);
+      const msg = (error.message || '').toLowerCase();
+      if (msg.includes('provider is not enabled') || msg.includes('unsupported provider') || msg.includes('validation_failed')) {
+        setError(
+          'Google sign-in is not enabled yet. To enable it:\n' +
+          '1. Open Supabase Dashboard → Authentication → Providers → Google\n' +
+          '2. Toggle "Enable Sign in with Google" on\n' +
+          '3. In Google Cloud Console, create an OAuth 2.0 Client ID (Web application)\n' +
+          '4. Copy the Client ID and Client Secret into Supabase\n' +
+          '5. Add the Supabase callback URL (shown in the Google provider page) as an Authorized redirect URI in Google\n' +
+          '6. Save and try again'
+        );
+      } else {
+        setError(error.message);
+      }
     }
     
     setIsLoading(false);
