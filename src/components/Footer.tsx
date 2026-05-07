@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin } from "lucide-react";
+import { Mail, Phone, MapPin, Facebook } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Footer = () => {
@@ -28,8 +28,6 @@ const Footer = () => {
               <a href="https://www.facebook.com/anarmedgeorgia" target="_blank" rel="noopener noreferrer">
                 <Facebook className="w-5 h-5 text-background/60 hover:text-background cursor-pointer" />
               </a>
-              <Twitter className="w-5 h-5 text-background/60 hover:text-background cursor-pointer" />
-              <Linkedin className="w-5 h-5 text-background/60 hover:text-background cursor-pointer" />
             </div>
           </div>
 
