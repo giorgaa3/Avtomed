@@ -52,6 +52,25 @@ const Profile = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    const loadFavs = async () => {
+      setFavLoading(true);
+      const ids = Array.from(favorites);
+      if (ids.length === 0) {
+        setFavProducts([]);
+        setFavLoading(false);
+        return;
+      }
+      const { data } = await supabase
+        .from("products")
+        .select("id, name, image_url, description, condition")
+        .in("id", ids);
+      setFavProducts(data || []);
+      setFavLoading(false);
+    };
+    loadFavs();
+  }, [favorites]);
+
   const fetchProfile = async () => {
     try {
       const { data, error } = await supabase
