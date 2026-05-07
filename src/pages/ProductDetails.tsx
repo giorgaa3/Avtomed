@@ -35,6 +35,7 @@ export default function ProductDetails() {
   const { t } = useLanguage();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const { isFavorite, toggleFavorite } = useFavorites();
   useEffect(() => {
     const fetchProduct = async () => {
       if (!id) return;
