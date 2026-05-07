@@ -249,7 +249,7 @@ const Auth = () => {
           
           {error && (
             <Alert className="mt-4 border-destructive/50 text-destructive">
-              <AlertDescription>{error}</AlertDescription>
+              <AlertDescription className="whitespace-pre-line">{error}</AlertDescription>
             </Alert>
           )}
           
