@@ -7,9 +7,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, User, Save, Edit } from "lucide-react";
+import { Loader2, User, Save, Edit, Heart, Trash2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useFavorites } from "@/hooks/useFavorites";
+import { useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
 import { z } from "zod";
 
 // Validation schema for profile data
@@ -33,6 +36,10 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [favProducts, setFavProducts] = useState<any[]>([]);
+  const [favLoading, setFavLoading] = useState(true);
+  const { favorites, toggleFavorite } = useFavorites();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     full_name: "",
     phone: "",
@@ -44,6 +51,25 @@ const Profile = () => {
       fetchProfile();
     }
   }, [user]);
+
+  useEffect(() => {
+    const loadFavs = async () => {
+      setFavLoading(true);
+      const ids = Array.from(favorites);
+      if (ids.length === 0) {
+        setFavProducts([]);
+        setFavLoading(false);
+        return;
+      }
+      const { data } = await supabase
+        .from("products")
+        .select("id, name, image_url, description, condition")
+        .in("id", ids);
+      setFavProducts(data || []);
+      setFavLoading(false);
+    };
+    loadFavs();
+  }, [favorites]);
 
   const fetchProfile = async () => {
     try {
@@ -315,6 +341,45 @@ const Profile = () => {
               </Card>
             </div>
           )}
+
+          {/* Favorite Products */}
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Heart className="h-5 w-5 text-red-500 fill-red-500" />
+                Favorite Products
+              </CardTitle>
+              <CardDescription>Products you've saved for later</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {favLoading ? (
+                <div className="flex justify-center py-8"><Loader2 className="h-6 w-6 animate-spin" /></div>
+              ) : favProducts.length === 0 ? (
+                <p className="text-center text-muted-foreground py-8">
+                  No favorites yet. Browse <button onClick={() => navigate('/products')} className="text-primary underline">products</button> and tap the heart to save them.
+                </p>
+              ) : (
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {favProducts.map((p) => (
+                    <Card key={p.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate(`/products/${p.id}`)}>
+                      <CardContent className="p-3">
+                        <img src={p.image_url || "/placeholder.svg"} alt={p.name} className="w-full h-40 object-contain rounded mb-2 bg-muted/30" />
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-sm truncate">{p.name}</h4>
+                            <Badge variant="outline" className="text-xs mt-1">{p.condition}</Badge>
+                          </div>
+                          <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); toggleFavorite(p.id); }}>
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </main>
       
