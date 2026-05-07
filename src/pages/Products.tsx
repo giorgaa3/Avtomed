@@ -105,8 +105,10 @@ const Products = () => {
       
       const matchesCondition = selectedCondition === "all" || 
         product.condition === selectedCondition;
+
+      const matchesFavorite = !favoritesOnly || isFavorite(product.id);
         
-      return matchesSearch && matchesCategory && matchesCondition;
+      return matchesSearch && matchesCategory && matchesCondition && matchesFavorite;
     })
     .sort((a, b) => {
       switch (sortBy) {
