@@ -36,6 +36,10 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [favProducts, setFavProducts] = useState<any[]>([]);
+  const [favLoading, setFavLoading] = useState(true);
+  const { favorites, toggleFavorite } = useFavorites();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     full_name: "",
     phone: "",
