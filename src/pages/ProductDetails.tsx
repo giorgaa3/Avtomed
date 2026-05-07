@@ -8,6 +8,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Heart, Shield, Truck, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useFavorites } from "@/hooks/useFavorites";
+import { cn } from "@/lib/utils";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
@@ -33,6 +35,7 @@ export default function ProductDetails() {
   const { t } = useLanguage();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const { isFavorite, toggleFavorite } = useFavorites();
   useEffect(() => {
     const fetchProduct = async () => {
       if (!id) return;
@@ -153,8 +156,8 @@ export default function ProductDetails() {
               >
                 Contact for Information
               </Button>
-              <Button variant="outline" size="icon">
-                <Heart className="w-4 h-4" />
+              <Button variant="outline" size="icon" onClick={() => product && toggleFavorite(product.id)}>
+                <Heart className={cn("w-4 h-4", product && isFavorite(product.id) && "fill-red-500 text-red-500")} />
               </Button>
             </div>
 

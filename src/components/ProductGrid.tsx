@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
+import { useFavorites } from "@/hooks/useFavorites";
+import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +14,7 @@ const ProductGrid = () => {
   const { t } = useLanguage();
   
   const navigate = useNavigate();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -96,9 +99,9 @@ const ProductGrid = () => {
             <Button 
               variant="outline" 
               size="sm"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }}
             >
-              <Heart className="w-4 h-4" />
+              <Heart className={cn("w-4 h-4", isFavorite(product.id) && "fill-red-500 text-red-500")} />
             </Button>
           </div>
         </CardFooter>

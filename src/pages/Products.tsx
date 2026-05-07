@@ -10,6 +10,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { useFavorites } from "@/hooks/useFavorites";
+import { cn } from "@/lib/utils";
 
 
 const Products = () => {
@@ -25,6 +27,7 @@ const Products = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   const fetchProducts = async () => {
     try {
@@ -167,9 +170,9 @@ const Products = () => {
             <Button 
               variant="outline" 
               size="sm"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }}
             >
-              <Heart className="w-4 h-4" />
+              <Heart className={cn("w-4 h-4", isFavorite(product.id) && "fill-red-500 text-red-500")} />
             </Button>
           </div>
         </CardFooter>
@@ -231,9 +234,9 @@ const Products = () => {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }}
                 >
-                  <Heart className="w-4 h-4" />
+                  <Heart className={cn("w-4 h-4", isFavorite(product.id) && "fill-red-500 text-red-500")} />
                 </Button>
               </div>
             </div>
