@@ -7,9 +7,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, User, Save, Edit } from "lucide-react";
+import { Loader2, User, Save, Edit, Heart, Trash2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useFavorites } from "@/hooks/useFavorites";
+import { useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
 import { z } from "zod";
 
 // Validation schema for profile data
