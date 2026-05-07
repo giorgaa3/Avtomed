@@ -24,6 +24,7 @@ const Products = () => {
   const [selectedCondition, setSelectedCondition] = useState("all");
   const [sortBy, setSortBy] = useState("name");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [favoritesOnly, setFavoritesOnly] = useState(false);
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
