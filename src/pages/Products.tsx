@@ -334,10 +334,20 @@ const Products = () => {
             
             <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span>Showing {filteredProducts.length} of {products.length} products</span>
-              <Button variant="ghost" size="sm">
-                <Filter className="w-4 h-4 mr-2" />
-                Clear Filters
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant={favoritesOnly ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setFavoritesOnly(v => !v)}
+                >
+                  <Heart className={cn("w-4 h-4 mr-2", favoritesOnly && "fill-current")} />
+                  {favoritesOnly ? "Showing Favorites" : "Favorites Only"}
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => { setSearchTerm(""); setSelectedCategory("all"); setSelectedCondition("all"); setFavoritesOnly(false); }}>
+                  <Filter className="w-4 h-4 mr-2" />
+                  Clear Filters
+                </Button>
+              </div>
             </div>
           </div>
 
