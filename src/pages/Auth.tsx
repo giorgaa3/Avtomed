@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
 import { Loader2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { Helmet } from 'react-helmet-async';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -103,12 +104,20 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 flex items-center justify-center p-4">
+    <main className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 flex items-center justify-center p-4">
+      <Helmet>
+        <title>Sign In or Create Account – AvtoMed</title>
+        <meta name="description" content="Sign in to your AvtoMed account or create a new one to manage favorites and access your medical equipment catalog." />
+        <link rel="canonical" href="https://avtomed.ge/auth" />
+        <meta property="og:title" content="Sign In or Create Account – AvtoMed" />
+        <meta property="og:description" content="Sign in to your AvtoMed account or create a new one to manage favorites and access your medical equipment catalog." />
+        <meta property="og:url" content="https://avtomed.ge/auth" />
+      </Helmet>
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Welcome to AvtoMed</CardTitle>
+          <h1 className="text-2xl font-bold">Sign In or Create an Account</h1>
           <CardDescription>
-            Sign in to your account or create a new one
+            Welcome to AvtoMed — sign in or register to continue
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -260,7 +269,7 @@ const Auth = () => {
           )}
         </CardContent>
       </Card>
-    </div>
+    </main>
   );
 };
 
