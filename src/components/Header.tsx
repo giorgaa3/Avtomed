@@ -34,6 +34,7 @@ const Header = () => {
               href="https://www.facebook.com/anarmedgeorgia" 
               target="_blank" 
               rel="noopener noreferrer"
+              aria-label="AvtoMed on Facebook"
               className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors duration-300 hover:scale-105"
             >
               <Facebook className="w-4 h-4" />
@@ -74,6 +75,8 @@ const Header = () => {
             variant="ghost" 
             size="sm" 
             className="md:hidden"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileMenuOpen}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             <Menu className="w-6 h-6" />
