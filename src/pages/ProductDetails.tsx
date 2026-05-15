@@ -10,6 +10,7 @@ import { ArrowLeft, Heart, Shield, Truck, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useFavorites } from "@/hooks/useFavorites";
 import { cn } from "@/lib/utils";
+import { Helmet } from "react-helmet-async";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
@@ -108,11 +109,35 @@ export default function ProductDetails() {
     );
   }
 
+  const productDescription = (product.description || `${product.name} — medical equipment available from AvtoMed.`).slice(0, 160);
+
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>{`${product.name} – AvtoMed`}</title>
+        <meta name="description" content={productDescription} />
+        <link rel="canonical" href={`https://avtomed.ge/products/${product.id}`} />
+        <meta property="og:title" content={`${product.name} – AvtoMed`} />
+        <meta property="og:description" content={productDescription} />
+        <meta property="og:url" content={`https://avtomed.ge/products/${product.id}`} />
+        {product.image_url && <meta property="og:image" content={product.image_url} />}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": product.name,
+            "description": product.description,
+            "image": product.image_url,
+            "category": product.categories?.name,
+            "brand": product.manufacturer ? { "@type": "Brand", "name": product.manufacturer } : undefined,
+            "countryOfOrigin": product.origin_country,
+            "itemCondition": product.condition === "new" ? "https://schema.org/NewCondition" : "https://schema.org/RefurbishedCondition"
+          })}
+        </script>
+      </Helmet>
       <Header />
       
-      <div className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8">
         <Button 
           variant="ghost" 
           onClick={() => navigate('/products')}
@@ -156,7 +181,7 @@ export default function ProductDetails() {
               >
                 Contact for Information
               </Button>
-              <Button variant="outline" size="icon" onClick={() => product && toggleFavorite(product.id)}>
+              <Button variant="outline" size="icon" aria-label={product && isFavorite(product.id) ? `Remove ${product.name} from favorites` : `Add ${product.name} to favorites`} onClick={() => product && toggleFavorite(product.id)}>
                 <Heart className={cn("w-4 h-4", product && isFavorite(product.id) && "fill-red-500 text-red-500")} />
               </Button>
             </div>
@@ -165,7 +190,7 @@ export default function ProductDetails() {
 
             {/* Product Features */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Product Information</h3>
+              <h2 className="text-lg font-semibold">Product Information</h2>
               
               {/* Manufacturer and Origin Info */}
               {(product.manufacturer || product.origin_country) && (
