@@ -100,9 +100,13 @@ const Products = () => {
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (product.description && product.description.toLowerCase().includes(searchTerm.toLowerCase()));
       
-      const matchesCategory = selectedCategory === "all" || 
+      const knownCategoryNames = categories.map((c: any) => (c.name || '').toLowerCase());
+      const selectedLower = (selectedCategory || '').toLowerCase();
+      const categoryIsKnown = knownCategoryNames.includes(selectedLower);
+      const matchesCategory = selectedCategory === "all" ||
         selectedCategory === "All Categories" ||
-        product.categories?.name === selectedCategory;
+        !categoryIsKnown ||
+        (product.categories?.name || '').toLowerCase() === selectedLower;
       
       const matchesCondition = selectedCondition === "all" || 
         product.condition === selectedCondition;
