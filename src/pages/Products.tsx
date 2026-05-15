@@ -12,6 +12,7 @@ import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useFavorites } from "@/hooks/useFavorites";
 import { cn } from "@/lib/utils";
+import { Helmet } from "react-helmet-async";
 
 
 const Products = () => {
@@ -173,6 +174,7 @@ const Products = () => {
             <Button 
               variant="outline" 
               size="sm"
+              aria-label={isFavorite(product.id) ? `Remove ${product.name} from favorites` : `Add ${product.name} to favorites`}
               onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }}
             >
               <Heart className={cn("w-4 h-4", isFavorite(product.id) && "fill-red-500 text-red-500")} />
@@ -237,6 +239,7 @@ const Products = () => {
                 <Button 
                   variant="outline" 
                   size="sm"
+                  aria-label={isFavorite(product.id) ? `Remove ${product.name} from favorites` : `Add ${product.name} to favorites`}
                   onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }}
                 >
                   <Heart className={cn("w-4 h-4", isFavorite(product.id) && "fill-red-500 text-red-500")} />
@@ -251,6 +254,14 @@ const Products = () => {
 
   return (
     <div className="min-h-screen">
+      <Helmet>
+        <title>Medical Equipment Catalog – AvtoMed</title>
+        <meta name="description" content="Browse AvtoMed's full catalog of medical equipment — diagnostic, surgical, laboratory, and patient monitoring instruments from certified manufacturers." />
+        <link rel="canonical" href="https://avtomed.ge/products" />
+        <meta property="og:title" content="Medical Equipment Catalog – AvtoMed" />
+        <meta property="og:description" content="Browse our full catalog of medical equipment from certified manufacturers." />
+        <meta property="og:url" content="https://avtomed.ge/products" />
+      </Helmet>
       <Header />
       
       <main className="py-8 bg-background">
@@ -265,11 +276,13 @@ const Products = () => {
 
           {/* Filters and Search */}
           <div className="bg-card rounded-lg p-6 mb-8 animate-fade-in">
+            <h2 className="sr-only">Filter and search products</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input
                   placeholder="Search products..."
+                  aria-label="Search products"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
