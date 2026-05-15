@@ -57,7 +57,7 @@ export function AdminSidebar() {
 
   return (
     <Sidebar className="w-60">
-      <SidebarContent>
+      <SidebarContent className="pt-14">
         <SidebarGroup>
           <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>
           <SidebarGroupContent>
