@@ -25,7 +25,7 @@ const Footer = () => {
               {t('footer.description')}
             </p>
             <div className="flex gap-4">
-              <a href="https://www.facebook.com/anarmedgeorgia" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.facebook.com/anarmedgeorgia" target="_blank" rel="noopener noreferrer" aria-label="AvtoMed on Facebook">
                 <Facebook className="w-5 h-5 text-background/60 hover:text-background cursor-pointer" />
               </a>
             </div>

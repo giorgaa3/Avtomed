@@ -99,6 +99,7 @@ const ProductGrid = () => {
             <Button 
               variant="outline" 
               size="sm"
+              aria-label={isFavorite(product.id) ? `Remove ${product.name} from favorites` : `Add ${product.name} to favorites`}
               onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }}
             >
               <Heart className={cn("w-4 h-4", isFavorite(product.id) && "fill-red-500 text-red-500")} />

@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 
 const Contact = () => {
   const { t, language } = useLanguage();
@@ -103,8 +104,17 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen">
+      <Helmet>
+        <title>Contact AvtoMed – Medical Equipment Inquiries</title>
+        <meta name="description" content="Contact AvtoMed for medical equipment inquiries, quotes, and consultation. Visit our office at Lubliana St. 38b, Tbilisi, or call +995 577 31-35-58." />
+        <link rel="canonical" href="https://avtomed.ge/contact" />
+        <meta property="og:title" content="Contact AvtoMed – Medical Equipment Inquiries" />
+        <meta property="og:description" content="Contact AvtoMed for medical equipment inquiries, quotes, and consultation in Tbilisi, Georgia." />
+        <meta property="og:url" content="https://avtomed.ge/contact" />
+      </Helmet>
       <Header />
       
+      <main>
       {/* Hero Section */}
       <section className="relative bg-gradient-hero text-primary-foreground py-20 overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center opacity-50" style={{ backgroundImage: 'url(/lovable-uploads/d9102eed-b6d7-4377-b46d-94339fab845f.png)' }}></div>
@@ -197,6 +207,7 @@ const Contact = () => {
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <Input 
                       placeholder={language === 'ka' ? 'თქვენი სახელი' : 'Your Name'} 
+                      aria-label={language === 'ka' ? 'თქვენი სახელი' : 'Your Name'}
                       className="w-full"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -206,6 +217,7 @@ const Contact = () => {
                     <Input 
                       type="email" 
                       placeholder={language === 'ka' ? 'ელ. ფოსტა' : 'Email Address'} 
+                      aria-label={language === 'ka' ? 'ელ. ფოსტა' : 'Email Address'}
                       className="w-full"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -215,6 +227,7 @@ const Contact = () => {
                     <textarea 
                       className="w-full p-3 border border-border rounded-md min-h-[120px] resize-none"
                       placeholder={language === 'ka' ? 'თქვენი შეტყობინება...' : 'Your Message...'}
+                      aria-label={language === 'ka' ? 'თქვენი შეტყობინება' : 'Your Message'}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       maxLength={2000}
@@ -288,6 +301,7 @@ const Contact = () => {
           </div>
         </div>
       </section>
+      </main>
 
       <Footer />
     </div>

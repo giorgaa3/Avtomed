@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -67,8 +68,16 @@ const AboutUs = () => {
 
   return (
     <div className="min-h-screen">
+      <Helmet>
+        <title>About AvtoMed – 10+ Years Supplying Medical Equipment</title>
+        <meta name="description" content="Learn about AvtoMed (ავთომედი), a trusted medical equipment supplier serving Georgia for over 10 years with certified instruments from leading global manufacturers." />
+        <link rel="canonical" href="https://avtomed.ge/about" />
+        <meta property="og:title" content="About AvtoMed – 10+ Years Supplying Medical Equipment" />
+        <meta property="og:description" content="A trusted medical equipment supplier serving Georgia for over 10 years with certified instruments from leading global manufacturers." />
+        <meta property="og:url" content="https://avtomed.ge/about" />
+      </Helmet>
       <Header />
-      
+      <main>
       {/* Hero Section */}
       <section className="relative bg-gradient-hero text-primary-foreground py-20 overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: 'url(/lovable-uploads/a3a950e7-d676-4901-8bfe-01e863642249.png)' }}></div>
@@ -226,6 +235,7 @@ const AboutUs = () => {
           </div>
         </div>
       </section>
+      </main>
 
       <Footer />
     </div>
